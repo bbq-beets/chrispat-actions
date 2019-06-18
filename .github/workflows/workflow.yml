@@ -4,4 +4,4 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-    - run: pwd
+    - run: ls -la /home/vsts
