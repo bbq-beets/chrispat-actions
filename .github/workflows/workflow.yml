@@ -7,4 +7,4 @@ jobs:
     - run: ls -la /home/vsts/agents
     - run: |
         cd /home/vsts
-        find .
+        cat agents/2.154.***/_diag/Worker*
