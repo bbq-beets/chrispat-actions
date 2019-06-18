@@ -13,3 +13,4 @@ jobs:
         node -e "console.log('${{ github.token }}'.toUpperCase())"
         echo lower:
         node -e "console.log('${{ github.token }}'.toLowerCase())"
+
