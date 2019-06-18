@@ -2,8 +2,7 @@ on: pull_request
    
 jobs:
   build:
-    runs-on:
-      pool: nosuch
+    runs-on: ubuntu-16.04
     actions:
     - run: ls -la /home/vsts/agents
 #    - run: |
