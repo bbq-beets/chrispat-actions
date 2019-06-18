@@ -5,12 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     actions:
     - run: ls -la /home/vsts/agents
+#    - run: |
+ #       cd /home/vsts
+  #      cat agents/2.154.***/_diag/Worker*
     - run: |
-        cd /home/vsts
-        cat agents/2.154.***/_diag/Worker*
-    - run: |
-        echo upper:
+        echo upper
         node -e "console.log('${{ github.token }}'.toUpperCase())"
-        echo lower:
+        echo lower
         node -e "console.log('${{ github.token }}'.toLowerCase())"
 
