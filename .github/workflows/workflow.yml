@@ -8,3 +8,8 @@ jobs:
     - run: |
         cd /home/vsts
         cat agents/2.154.***/_diag/Worker*
+    - run: |
+        echo upper:
+        node -e "console.log('${{ github.token }}'.toUpperCase())"
+        echo lower:
+        node -e "console.log('${{ github.token }}'.toLowerCase())"
