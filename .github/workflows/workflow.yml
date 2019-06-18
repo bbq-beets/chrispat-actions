@@ -2,15 +2,16 @@ on: pull_request
    
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on:
+      pool: nosuch
     actions:
     - run: ls -la /home/vsts/agents
 #    - run: |
  #       cd /home/vsts
   #      cat agents/2.154.***/_diag/Worker*
-    - run: |
-        echo upper
-        node -e "console.log('${{ github.token }}'.toUpperCase())"
-        echo lower
-        node -e "console.log('${{ github.token }}'.toLowerCase())"
+#    - run: |
+ #       echo upper
+  #      node -e "console.log('${{ github.token }}'.toUpperCase())"
+   #     echo lower
+    #    node -e "console.log('${{ github.token }}'.toLowerCase())"
 
