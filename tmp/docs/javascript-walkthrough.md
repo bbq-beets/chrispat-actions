@@ -97,7 +97,26 @@ Create a new directory `src` with a file called `hello-world.ts`.
 Its contents should be:
 
 ```typescript
-...
+import * as core from '@actions/core';
+
+async function run() {
+  try {
+    const nameToGreet = core.getInput('who-to-greet');
+    if (nameToGreet == 'Octocat') {
+        // the Octocat doesn't want to be greeted here!
+        core.setFailed("No Octocat greetings, please.");
+    } else {
+        console.log(`Hello {nameToGreet}!`);
+        const time = (new Date()).toTimeString();
+        // **ALPHA** we will have a core wrapper around this
+        console.log(`##[set-output name=time]{time}`);
+    }
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+run();
 ```
 
 This code won't compile yet, as we also need the Actions Toolkit `core` package.
