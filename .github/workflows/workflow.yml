@@ -10,4 +10,4 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-    - run: echo Hello World change in a PR
+    - run: echo Hello World change
