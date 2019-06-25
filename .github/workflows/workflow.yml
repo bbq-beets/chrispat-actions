@@ -11,3 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     actions:
     - run: echo Hello World change
+    - uses: ./hello-world-action
+      with:
+        who-to-greet: 'Mundo'
