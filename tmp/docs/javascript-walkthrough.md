@@ -9,7 +9,7 @@ For demo purposes, if <name> is set to "Octocat", then the action will fail the 
 ## Get the tools you need
 
 You will need:
-- Node 10.x
+- Node 12.x
 - npm 6.x or higher
 
 ## Initialize the action directory
@@ -31,6 +31,7 @@ Create a new file `action.yml` in the `hello-world-action` directory you created
 It should contain:
 
 ```yaml
+# action.yml
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs: 
@@ -56,14 +57,15 @@ It also tells the action runner how to start running this JavaScript action.
 Open `package.json` and find the `scripts` section.
 Add a new key `build` with value `tsc`:
 
-```yaml
+```json
+// package.json
 {
   "name": "hello-world-action",
   "version": "1.0.0",
   "description": "",
   "main": "lib/hello-world.js",
   "scripts": {
-    "build": "tsc", # <-- add this line
+    "build": "tsc", // <-- add this line
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -97,7 +99,26 @@ Create a new directory `src` with a file called `hello-world.ts`.
 Its contents should be:
 
 ```typescript
-...
+// src/hello-world.ts
+import * as core from '@actions/core';
+
+async function run() {
+  try {
+    const nameToGreet = core.getInput('who-to-greet');
+    if (nameToGreet == 'Octocat') {
+        // the Octocat doesn't want to be greeted here!
+        throw new Error("No Octocat greetings, please.");
+    } else {
+        console.log(`Hello ${nameToGreet}!`);
+        const time = (new Date()).toTimeString();
+        core.setOutput("time", time);
+    }
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+run();
 ```
 
 This code won't compile yet, as we also need the Actions Toolkit `core` package.
@@ -105,9 +126,9 @@ This code won't compile yet, as we also need the Actions Toolkit `core` package.
 ## Add @actions/core and compile the action
 
 **ALPHA**: the below instructions won't work yet, as we haven't made the Toolkit public.
-Instead, you'll need to `npm pack` the `core` and `exit` packages, commit them, and `npm install <the tarballs>`.
-You can grab the tarballs from https://github.com/actions/setup-node (toolkit directory).
-Put them in a `toolkit` directory in your repo, then run: `npm install file:toolkit/actions-exit-<version>.tgz` followed by `npm install file:toolkit/actions-core-<version>.tgz`.
+Instead, you'll need to `npm pack` the `core` package, commit it, and `npm install <the tarball>`.
+You can grab the tarball from https://github.com/actions/node12-template (toolkit directory).
+Put it in a `toolkit` directory in your repo, then run: `npm install file:toolkit/actions-exit-<version>.tgz` followed by `npm install file:toolkit/actions-core-<version>.tgz`.
 Make sure you commit these files; many .gitignores will not check in TGZs by default.
 
 At your terminal:
@@ -132,4 +153,39 @@ git add .
 git commit -m "My first action is ready"
 ```
 
-_TODO_: Push to GitHub, use in a workflow
+Now you're ready to push the action to GitHub.
+Assuming your action will live in a repo called `octocat/hello-action`, your next steps are:
+
+```bash
+git remote add origin ssh://git@github.com/octocat/hello-action.git
+git push --all origin
+```
+
+## Use your action in a workflow
+
+Now let's use this action in a workflow for another repo.
+For this walkthrough, we'll pretend the repo is called `octocat/my-first-workflow`.
+In that repo, create a `.github` folder, and inside it, create a `workflows` folder.
+Inside the `workflows` folder, create a new file called `workflow.yml` with these contents:
+
+```yaml
+# .github/workflows/workflow.yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    actions:
+    - uses: octocat/hello-action
+      with:
+        who-to-greet: 'Mundo'
+      id: hello
+    - run: echo "The time was ${{ actions.hello.outputs.time }}"
+```
+
+GitHub Actions will pick up your workflow file and run it.
+In the logs, you will see "Hello Mundo" as the output from your new action.
+Also, the `run` step after it will echo the value set in the new action.
+
+Congratulations, you've written your first action!
+Next, you should look at the [Actions Toolkit](actions-toolkit.md) to learn more about how actions interact with workflows.

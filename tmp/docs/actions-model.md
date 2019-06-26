@@ -27,7 +27,7 @@ JavaScript actions:
   - proxy
   - problem matchers
 - Make simple scripts reusable / distributable
-- Can be run on different operating systems and different versions of Linux
+- Can be run on different operating systems and different distributions of Linux
 
 ### Shell actions
 
@@ -51,7 +51,7 @@ Ensure your Dockerfile does not set the USER instruction.
 Otherwise you will not be able to access the workspace._
 
 For a JavaScript action, the runner starts a new process with the right environment variables and working directory.
-This new process is a Node LTS executable running the entrypoint JavaScript (as defined in the [metadata](#metadata)).
+This new process is an LTS `node` executable running the entrypoint JavaScript (as defined in the [metadata](#metadata)).
 When Node completes, the action is complete.
 The exit code indicates success or failure.
 
@@ -73,9 +73,10 @@ These environment variables are available by default to all three kinds of actio
 | `GITHUB_SHA` |	The commit SHA that triggered the workflow. | ffac537e6cbbf934b08745a378932722df287a53 | ffac537e6cbbf934b08745a378932722df287a53
 | `GITHUB_REF` |	The branch or tag ref that triggered the workflow. | refs/heads/feature-branch-1 | refs/heads/feature-branch-1
 
-Additionally, there is a secret called `github_token` available to workflows.
-It is not available as an environment variable by default.
-If an action needs this token, by convention, it should be mapped in as `GITHUB_TOKEN`.
+Additionally, there is a secret called `github_token` available to workflows in the `secrets` context.
+It's not available to actions by default.
+If an action needs this token, then it must accept it as an input.
+The workflow author will need to explicitly map in the secret.
 
 Note: For JavaScript actions running in host jobs, `HOME` is the host homedir.
 For JavaScript actions running in container jobs, the home directory is mapped in at `/github/home`.
@@ -198,7 +199,7 @@ If an undeclared input or output is accessed, the runner will raise an error.
 
 [A full walkthrough of creating a container action](container-walkthrough.md) is available.
 
-You can create container actions in a repository you own by adding a `action.yml`.
+You can create container actions in a repository you own by adding an `action.yml`.
 All container actions require an `action.yml`.
 An action may also include a Dockerfile as the entry point and any other files that contain the action's code.
 For example, a container action called `container-action` might have this directory structure:
@@ -215,7 +216,7 @@ For example, a container action called `container-action` might have this direct
 
 [A full walkthrough of creating a JavaScript action](javascript-walkthrough.md) is available.
 
-You can create JavaScript actions in a repository you own by adding a `action.yml`.
+You can create JavaScript actions in a repository you own by adding an `action.yml`.
 All JavaScript actions require an `action.yml`.
 An action must also include a JavaScript file as the entry point, and may contain any other files that contain the action's code.
 For example, a JavaScript action called `js-action` might have this directory structure:
