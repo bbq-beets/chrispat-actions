@@ -25,10 +25,10 @@ function run() {
                 core.setFailed("No Octocat greetings, please.");
             }
             else {
-                console.log(`Hello {nameToGreet}!`);
+                console.log(`Hello ${nameToGreet}!`);
                 const time = (new Date()).toTimeString();
                 // **ALPHA** we will have a core wrapper around this
-                console.log(`##[set-output name=time]{time}`);
+                console.log(`##[set-output name=time]${time}`);
             }
         }
         catch (error) {
