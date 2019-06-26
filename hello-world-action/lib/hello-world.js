@@ -22,7 +22,7 @@ function run() {
             const nameToGreet = core.getInput('who-to-greet');
             if (nameToGreet == 'Octocat') {
                 // the Octocat doesn't want to be greeted here!
-                core.setFailed("No Octocat greetings, please.");
+                throw "No Octocat greetings, please.";
             }
             else {
                 console.log(`Hello ${nameToGreet}!`);
