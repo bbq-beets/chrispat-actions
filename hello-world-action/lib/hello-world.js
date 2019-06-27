@@ -27,8 +27,7 @@ function run() {
             else {
                 console.log(`Hello ${nameToGreet}!`);
                 const time = (new Date()).toTimeString();
-                // **ALPHA** we will have a core wrapper around this
-                console.log(`##[set-output name=time]${time}`);
+                core.setOutput('time', time);
             }
         }
         catch (error) {
