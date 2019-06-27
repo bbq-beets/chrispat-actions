@@ -7,6 +7,6 @@ jobs:
     - run: echo Hello World change
     - uses: ./hello-world-action
       with:
-        who-to-greet: 'Octocat'
+        who-to-greet: 'Mundo'
       id: hello
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
