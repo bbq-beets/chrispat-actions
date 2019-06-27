@@ -6,6 +6,10 @@ For instance, we'll take an input, offer an output, and report success or failur
 Our action will print "Hello, <name>" and report the time.
 For demo purposes, if <name> is set to "Octocat", then the action will fail the workflow.
 
+_Note:_ we recommend starting from the [Node12 action template repo](https://github.com/actions/node12-template) for actions you intend to make public.
+This walkthrough does everything "from scratch" so you can see what's going on.
+The template comes preconfigured with a lot of nice tools ready for you.
+
 ## Get the tools you need
 
 You will need:
@@ -80,9 +84,10 @@ Add a new key `build` with value `tsc`:
 Next, in your terminal, run:
 
 ```bash
-tsc -t es6 --rootDir ./src --outDir ./lib --init
+./node_modules/tsc/bin/tsc -t es6 --rootDir ./src --outDir ./lib --init
 ```
 
+(If you have `tsc` installed globally, you can use your global `tsc` install instead.)
 This will set up the TypeScript compiler to read sources from `/src`, write outputs to `/lib`, and target ES6.
 It will write down this configuration in `tsconfig.json` so that these options will be used every time.
 
