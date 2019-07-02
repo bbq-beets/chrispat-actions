@@ -2,7 +2,8 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: default
+    runs-on: 
+      pool: default
     actions:
     - run: echo Hello World change
     - uses: ./hello-world-action
