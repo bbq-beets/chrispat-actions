@@ -1,0 +1,14 @@
+name: 'Azure webapp deploy'
+description: 'Deploy to azure webapp'
+inputs:
+  appName:
+    description: 'Name of webapp'
+    required: 'true'
+  package:
+    description: 'Path for the package to be deployed'
+outputs:
+  resourceGroupName:
+    description: Rescource group name in which web app resides'
+runs:
+  using: 'node'
+  main: 'lib/webapp-deploy.js'

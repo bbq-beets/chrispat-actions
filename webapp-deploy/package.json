@@ -1,0 +1,21 @@
+{
+  "name": "webapp-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@actions/core": "file:../tmp/toolkit/actions-core-0.0.0.tgz",
+    "@types/q": "^1.5.2",
+    "vsts-task-lib": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.10",
+    "typescript": "^3.5.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
