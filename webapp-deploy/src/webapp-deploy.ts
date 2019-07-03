@@ -8,9 +8,9 @@ export class deploy {
     try{
       this.throwIfError(tl.execSync("az", "--version"));
       let appName: string = tl.getInput('appName', true);
-      let resourceGroup = tl.execSync("az", "resource list -n \"" + appName + "\" --resource-type \"Microsoft.Web/Sites\"");
-      this.throwIfError(resourceGroup);
-      console.log(JSON.parse(resourceGroup.stdout)[0].resourceGroup);
+      let resourceGroupOutput = tl.execSync("az", "resource list -n \"" + appName + "\" --resource-type \"Microsoft.Web/Sites\"");
+      this.throwIfError(resourceGroupOutput);
+      console.log((JSON.parse(resourceGroupOutput.stdout))[0].resourceGroup);
       //let resourceGroupName = tl.getInput('resourceGroupname', false);
       //if (!resourceGroupName) {
 
