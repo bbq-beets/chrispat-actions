@@ -23,10 +23,9 @@ class deploy {
             try {
                 this.throwIfError(tl.execSync("az", "--version"));
                 let appName = tl.getInput('appName', true);
-                let resourceGroupName = tl.execSync("az", "resource list -n \"" + appName + "\" --resource-type \"Microsoft.Web/Sites\"");
-                console.log(JSON.stringify(resourceGroupName));
-                this.throwIfError(resourceGroupName);
-                console.log(resourceGroupName.stdout);
+                let resourceGroupOutput = tl.execSync("az", "resource list -n \"" + appName + "\" --resource-type \"Microsoft.Web/Sites\"");
+                this.throwIfError(resourceGroupOutput);
+                console.log((JSON.parse(resourceGroupOutput.stdout))[0].resourceGroup);
                 //let resourceGroupName = tl.getInput('resourceGroupname', false);
                 //if (!resourceGroupName) {
                 //}
