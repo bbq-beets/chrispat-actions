@@ -1,4 +1,3 @@
-version: 1.0
 on: [push, pull_request]
 
 jobs:
@@ -11,3 +10,5 @@ jobs:
         who-to-greet: 'Octocat'
       id: hello
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
+
+
