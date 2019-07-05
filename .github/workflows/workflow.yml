@@ -11,15 +11,3 @@ jobs:
         who-to-greet: 'Mundo'
       id: hello
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
-    - uses: ./azure-login
-      with:
-        azureServicePrincipalId: '586a5f0f-3720-42b2-82ef-d4479d53a0a5'
-        azureServicePrincipalKey: '/gk+ZqLp7E2PDrzuTvRg0Zju67ExLgAZ0wJisZaV6OM='
-        azureServiceTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
-        azureSubscription: 'DTLQA'
-      id: 'login'
-    - uses: ./webapp-deploy
-      with:
-        appName: 'suaggarTest1'
-      id: 'deploy'
-    - uses: ./webapp-deploy-docker

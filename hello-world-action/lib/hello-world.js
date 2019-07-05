@@ -25,6 +25,7 @@ function run() {
                 throw new Error("No Octocat greetings, please.");
             }
             else {
+                console.log(env.$(GITHUB_REPOSITORY));
                 console.log(`Hello ${nameToGreet}!`);
                 const time = (new Date()).toTimeString();
                 core.setOutput('time', time);
