@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tl = require("vsts-task-lib/task");
 const webClient = require("./webClient");
 class ApiResult {
     constructor(error, result, request, response) {
@@ -85,7 +84,7 @@ class ServiceClient {
                 if (exceptionString.indexOf("Hostname/IP doesn't match certificates's altnames") != -1
                     || exceptionString.indexOf("unable to verify the first certificate") != -1
                     || exceptionString.indexOf("unable to get local issuer certificate") != -1) {
-                    tl.warning(tl.loc('ASE_SSLIssueRecommendation'));
+                    console.log('Warning:' + 'ASE_SSLIssueRecommendation');
                 }
                 throw exception;
             }

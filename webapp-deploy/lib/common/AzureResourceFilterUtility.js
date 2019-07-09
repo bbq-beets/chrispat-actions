@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tl = require("vsts-task-lib/task");
 const azure_arm_resource_1 = require("./azure-arm-resource");
 class AzureResourceFilterUtility {
     static getAppDetails(endpoint, resourceName) {
@@ -18,14 +17,14 @@ class AzureResourceFilterUtility {
             let resourceGroupName;
             let kind;
             if (!filteredResources || filteredResources.length == 0) {
-                throw new Error(tl.loc('ResourceDoesntExist', resourceName));
+                throw new Error('ResourceDoesntExist');
             }
             else if (filteredResources.length == 1) {
                 resourceGroupName = filteredResources[0].id.split("/")[4];
                 kind = filteredResources[0].kind;
             }
             else {
-                throw new Error(tl.loc('MultipleResourceGroupFoundForAppService', resourceName));
+                throw new Error('MultipleResourceGroupFoundForAppService');
             }
             return {
                 resourceGroupName: resourceGroupName,

@@ -1,4 +1,3 @@
-import tl = require('vsts-task-lib/task');
 import { AzureEndpoint } from './AzureEndpoint';
 import { Resources } from './azure-arm-resource';
 
@@ -9,14 +8,14 @@ export class AzureResourceFilterUtility {
         let resourceGroupName: string;
         let kind: string;
         if(!filteredResources || filteredResources.length == 0) {
-            throw new Error(tl.loc('ResourceDoesntExist', resourceName));
+            throw new Error('ResourceDoesntExist');
         }
         else if(filteredResources.length == 1) {
             resourceGroupName = filteredResources[0].id.split("/")[4];
             kind = filteredResources[0].kind;
         }
         else {
-            throw new Error(tl.loc('MultipleResourceGroupFoundForAppService', resourceName));
+            throw new Error('MultipleResourceGroupFoundForAppService');
         }
 
         return {

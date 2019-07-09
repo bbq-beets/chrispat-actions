@@ -8,22 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tl = require("vsts-task-lib/task");
 const util = require("util");
 const fs = require("fs");
 const httpClient = require("typed-rest-client/HttpClient");
-let proxyUrl = tl.getVariable("agent.proxyurl");
-var requestOptions = proxyUrl ? {
-    proxy: {
-        proxyUrl: proxyUrl,
-        proxyUsername: tl.getVariable("agent.proxyusername"),
-        proxyPassword: tl.getVariable("agent.proxypassword"),
-        proxyBypassHosts: tl.getVariable("agent.proxybypasslist") ? JSON.parse(tl.getVariable("agent.proxybypasslist")) : null
-    }
-} : {};
-let ignoreSslErrors = tl.getVariable("VSTS_ARM_REST_IGNORE_SSL_ERRORS");
-requestOptions.ignoreSslError = !!ignoreSslErrors && ignoreSslErrors.toLowerCase() == "true";
-var httpCallbackClient = new httpClient.HttpClient(tl.getVariable("AZURE_HTTP_USER_AGENT"), undefined, requestOptions);
+var requestOptions = {};
+var httpCallbackClient = new httpClient.HttpClient("suaggar_actions", undefined, requestOptions);
 function sendRequest(request, options) {
     return __awaiter(this, void 0, void 0, function* () {
         let i = 0;
@@ -39,7 +28,7 @@ function sendRequest(request, options) {
                 }
                 let response = yield sendRequestInternal(request);
                 if (response && retriableStatusCodes.indexOf(response.statusCode) != -1 && ++i < retryCount) {
-                    tl.debug(util.format("Encountered a retriable status code: %s. Message: '%s'.", response.statusCode, response.statusMessage));
+                    console.log(util.format("Encountered a retriable status code: %s. Message: '%s'.", response.statusCode, response.statusMessage));
                     yield sleepFor(timeToWait);
                     timeToWait = timeToWait * retryIntervalInSeconds + retryIntervalInSeconds;
                     continue;
@@ -48,7 +37,7 @@ function sendRequest(request, options) {
             }
             catch (error) {
                 if (retriableErrorCodes.indexOf(error.code) != -1 && ++i < retryCount) {
-                    tl.debug(util.format("Encountered a retriable error:%s. Message: %s.", error.code, error.message));
+                    console.log(util.format("Encountered a retriable error:%s. Message: %s.", error.code, error.message));
                     yield sleepFor(timeToWait);
                     timeToWait = timeToWait * retryIntervalInSeconds + retryIntervalInSeconds;
                 }
@@ -71,7 +60,7 @@ function sleepFor(sleepDurationInSeconds) {
 exports.sleepFor = sleepFor;
 function sendRequestInternal(request) {
     return __awaiter(this, void 0, void 0, function* () {
-        tl.debug(util.format("[%s]%s", request.method, request.uri));
+        console.log(util.format("[%s]%s", request.method, request.uri));
         var response = yield httpCallbackClient.request(request.method, request.uri, request.body || "", request.headers);
         return yield toWebResponse(response);
     });
@@ -87,8 +76,8 @@ function toWebResponse(response) {
                     resBody = JSON.parse(body);
                 }
                 catch (error) {
-                    tl.debug("Could not parse response: " + JSON.stringify(error));
-                    tl.debug("Response: " + JSON.stringify(resBody));
+                    console.log("Could not parse response: " + JSON.stringify(error));
+                    console.log("Response: " + JSON.stringify(resBody));
                     resBody = body;
                 }
             }

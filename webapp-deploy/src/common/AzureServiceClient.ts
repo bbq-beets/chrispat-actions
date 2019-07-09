@@ -1,4 +1,3 @@
-import tl = require('vsts-task-lib/task');
 import { AzureEndpoint } from "./AzureEndpoint";
 import webClient = require("./webClient");
 
@@ -106,7 +105,7 @@ export class ServiceClient {
             if(exceptionString.indexOf("Hostname/IP doesn't match certificates's altnames") != -1
                 || exceptionString.indexOf("unable to verify the first certificate") != -1
                 || exceptionString.indexOf("unable to get local issuer certificate") != -1) {
-                    tl.warning(tl.loc('ASE_SSLIssueRecommendation'));
+                    console.log('Warning:' + 'ASE_SSLIssueRecommendation');
             } 
 
             throw exception;

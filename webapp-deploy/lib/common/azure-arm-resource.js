@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tl = require("vsts-task-lib/task");
 const AzureServiceClient_1 = require("./AzureServiceClient");
 class Resources {
     constructor(endpoint) {
@@ -37,7 +36,7 @@ class Resources {
                 return result;
             }
             catch (error) {
-                throw Error(tl.loc('FailedToGetResourceID', resourceType, resourceName, this._client.getFormattedError(error)));
+                throw Error('FailedToGetResourceID' + this._client.getFormattedError(error));
             }
         });
     }

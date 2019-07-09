@@ -1,23 +1,11 @@
-import tl = require('vsts-task-lib/task');
 import util = require("util");
 import fs = require('fs');
 import httpClient = require("typed-rest-client/HttpClient");
 import httpInterfaces = require("typed-rest-client/Interfaces");
 
-let proxyUrl: string = tl.getVariable("agent.proxyurl");
-var requestOptions: httpInterfaces.IRequestOptions = proxyUrl ? {
-    proxy: {
-        proxyUrl: proxyUrl,
-        proxyUsername: tl.getVariable("agent.proxyusername"),
-        proxyPassword: tl.getVariable("agent.proxypassword"),
-        proxyBypassHosts: tl.getVariable("agent.proxybypasslist") ? JSON.parse(tl.getVariable("agent.proxybypasslist")) : null
-    }
-} : {};
+var requestOptions: httpInterfaces.IRequestOptions = {};
 
-let ignoreSslErrors: string = tl.getVariable("VSTS_ARM_REST_IGNORE_SSL_ERRORS");
-requestOptions.ignoreSslError = !!ignoreSslErrors && ignoreSslErrors.toLowerCase() == "true";
-
-var httpCallbackClient = new httpClient.HttpClient(tl.getVariable("AZURE_HTTP_USER_AGENT"), undefined, requestOptions);
+var httpCallbackClient = new httpClient.HttpClient("suaggar_actions", undefined, requestOptions);
 
 export interface WebRequest {
     method: string;
@@ -57,7 +45,7 @@ export async function sendRequest(request: WebRequest, options?: WebRequestOptio
             
             let response: WebResponse | undefined = await sendRequestInternal(request);
             if (response && retriableStatusCodes.indexOf(response.statusCode) != -1 && ++i < retryCount) {
-                tl.debug(util.format("Encountered a retriable status code: %s. Message: '%s'.", response.statusCode, response.statusMessage));
+                console.log(util.format("Encountered a retriable status code: %s. Message: '%s'.", response.statusCode, response.statusMessage));
                 await sleepFor(timeToWait);
                 timeToWait = timeToWait * retryIntervalInSeconds + retryIntervalInSeconds;
                 continue;
@@ -67,7 +55,7 @@ export async function sendRequest(request: WebRequest, options?: WebRequestOptio
         }
         catch (error) {
             if (retriableErrorCodes.indexOf(error.code) != -1 && ++i < retryCount) {
-                tl.debug(util.format("Encountered a retriable error:%s. Message: %s.", error.code, error.message));
+                console.log(util.format("Encountered a retriable error:%s. Message: %s.", error.code, error.message));
                 await sleepFor(timeToWait);
                 timeToWait = timeToWait * retryIntervalInSeconds + retryIntervalInSeconds;
             }
@@ -89,7 +77,7 @@ export function sleepFor(sleepDurationInSeconds: number): Promise<any> {
 }
 
 async function sendRequestInternal(request: WebRequest): Promise<WebResponse | undefined> {
-    tl.debug(util.format("[%s]%s", request.method, request.uri));
+    console.log(util.format("[%s]%s", request.method, request.uri));
     var response: httpClient.HttpClientResponse = await httpCallbackClient.request(request.method, request.uri, request.body || "", request.headers);
     return await toWebResponse(response);
 }
@@ -104,8 +92,8 @@ async function toWebResponse(response: httpClient.HttpClientResponse): Promise<W
                 resBody = JSON.parse(body);
             }
             catch (error) {
-                tl.debug("Could not parse response: " + JSON.stringify(error));
-                tl.debug("Response: " + JSON.stringify(resBody));
+                console.log("Could not parse response: " + JSON.stringify(error));
+                console.log("Response: " + JSON.stringify(resBody));
                 resBody = body;
             }
         }

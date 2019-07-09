@@ -1,4 +1,3 @@
-import tl = require('vsts-task-lib/task');
 import { ToError, ServiceClient } from './AzureServiceClient';
 import { AzureEndpoint } from './AzureEndpoint';
 import webClient = require('./webClient');
@@ -37,7 +36,7 @@ export class Resources {
             return result;
         }
         catch (error) {
-            throw Error(tl.loc('FailedToGetResourceID', resourceType, resourceName, this._client.getFormattedError(error)))
+            throw Error('FailedToGetResourceID' + this._client.getFormattedError(error));
         }
     }
 }

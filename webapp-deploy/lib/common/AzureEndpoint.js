@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tl = require("vsts-task-lib/task");
 const Q = require("q");
 const webClient = require("./webClient");
 const querystring = require("querystring");
@@ -55,10 +54,10 @@ class AzureEndpoint {
                 deferred.resolve(response.body.access_token);
             }
             else if ([400, 401, 403].indexOf(response.statusCode) != -1) {
-                deferred.reject(tl.loc('ExpiredServicePrincipal'));
+                deferred.reject('ExpiredServicePrincipal');
             }
             else {
-                deferred.reject(tl.loc('CouldNotFetchAccessTokenforAzureStatusCode', response.statusCode, response.statusMessage));
+                deferred.reject('CouldNotFetchAccessTokenforAzureStatusCode');
             }
         }, (error) => {
             deferred.reject(error);

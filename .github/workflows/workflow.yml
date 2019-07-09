@@ -5,12 +5,6 @@ jobs:
     runs-on:
       pool: default
     actions:
-    - run: echo Hello World change
-    - uses: ./hello-world-action
-      with:
-        who-to-greet: 'Mundo'
-      id: hello
-    - run: echo "The time was ${{ actions.hello.outputs.time }}"
     - uses: ./webapp-deploy
       with:
         app-name: 'suaggarTest1'
