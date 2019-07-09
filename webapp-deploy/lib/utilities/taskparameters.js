@@ -30,17 +30,21 @@ class TaskParameters {
     get package() {
         return this._package;
     }
-    get resourceGroupName() {
-        if (!this._resourceGroupName) {
-            this._getResourceDetails();
-        }
-        return this._resourceGroupName;
+    getResourceGroupName() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this._resourceGroupName) {
+                yield this._getResourceDetails();
+            }
+            return this._resourceGroupName;
+        });
     }
-    get kind() {
-        if (!this._kind) {
-            this._getResourceDetails();
-        }
-        return this._kind;
+    getKind() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this._kind) {
+                yield this._getResourceDetails();
+            }
+            return this._kind;
+        });
     }
     _getResourceDetails() {
         return __awaiter(this, void 0, void 0, function* () {

@@ -7,7 +7,8 @@ async function main() {
   var deploymentFactory: DeploymentFactory = new DeploymentFactory(taskParams);
   var deploymentProvider = await deploymentFactory.GetDeploymentProvider();
 
-  console.log(taskParams.kind);
+  let kind = await taskParams.getKind();
+  console.log(kind);
 
   console.log("Predeployment Step Started");
   //await deploymentProvider.PreDeploymentStep();

@@ -23,7 +23,8 @@ function main() {
         var taskParams = new taskparameters_1.TaskParameters();
         var deploymentFactory = new DeploymentFactory_1.DeploymentFactory(taskParams);
         var deploymentProvider = yield deploymentFactory.GetDeploymentProvider();
-        console.log(taskParams.kind);
+        let kind = yield taskParams.getKind();
+        console.log(kind);
         console.log("Predeployment Step Started");
         //await deploymentProvider.PreDeploymentStep();
         console.log("Deployment Step Started");

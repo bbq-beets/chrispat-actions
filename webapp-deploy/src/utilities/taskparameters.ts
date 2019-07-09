@@ -23,16 +23,16 @@ export class TaskParameters {
         return this._package;
     }
 
-    public get resourceGroupName() {
+    public async getResourceGroupName() {
         if(!this._resourceGroupName) {
-            this._getResourceDetails();
+            await this._getResourceDetails();
         }
         return this._resourceGroupName;
     }
 
-    public get kind() {
+    public async getKind() {
         if(!this._kind) {
-            this._getResourceDetails();
+            await this._getResourceDetails();
         }
         return this._kind;
     }
