@@ -2,7 +2,7 @@
 name: 'Azure WebApp'
 description: 'Deploy Web Apps to Azure'
 inputs: 
-  appname: # id of input
+  app-name: # id of input
     description: 'Name of the Azure Web App'
     required: true
   package: # id of input

@@ -10,7 +10,7 @@ export class TaskParameters {
     private endpoint: AzureEndpoint;
 
     constructor() {
-        this._appName = core.getInput('appname', { required: true });
+        this._appName = core.getInput('app-name', { required: true });
         this._package = core.getInput('package', { required: true });
         this.endpoint = AzureEndpoint.getEndpoint();
     }

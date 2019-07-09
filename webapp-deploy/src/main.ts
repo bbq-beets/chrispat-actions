@@ -3,6 +3,7 @@ import { DeploymentFactory } from "./deploymentProvider/DeploymentFactory";
 import * as core from '@actions/core';
 
 async function main() {
+  console.log(process.env);
   var taskParams = new TaskParameters();
   var deploymentFactory: DeploymentFactory = new DeploymentFactory(taskParams);
   var deploymentProvider = await deploymentFactory.GetDeploymentProvider();
