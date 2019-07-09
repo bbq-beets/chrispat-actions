@@ -1,6 +1,6 @@
 import { TaskParameters } from "./utilities/taskparameters";
 import { DeploymentFactory } from "./deploymentProvider/DeploymentFactory";
-import tl = require('vsts-task-lib/task');
+import * as core from '@actions/core';
 
 async function main() {
   var taskParams = new TaskParameters();
@@ -9,11 +9,15 @@ async function main() {
 
   console.log(taskParams.kind);
 
-  tl.debug("Predeployment Step Started");
+  console.log("Predeployment Step Started");
   //await deploymentProvider.PreDeploymentStep();
 
-  tl.debug("Deployment Step Started");
+  console.log("Deployment Step Started");
   //await deploymentProvider.DeployWebAppStep();
 }
 
-main();
+try {
+  main();
+} catch (ex) {
+  core.setFailed(ex);
+}

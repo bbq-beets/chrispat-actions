@@ -20,7 +20,7 @@ const AzureResourceFilterUtility_1 = require("../common/AzureResourceFilterUtili
 const AzureEndpoint_1 = require("../common/AzureEndpoint");
 class TaskParameters {
     constructor() {
-        this._appName = core.getInput('app-name', { required: true });
+        this._appName = core.getInput('appname', { required: true });
         this._package = core.getInput('package', { required: true });
         this.endpoint = AzureEndpoint_1.AzureEndpoint.getEndpoint();
     }

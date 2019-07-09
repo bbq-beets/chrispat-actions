@@ -13,5 +13,5 @@ jobs:
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
     - uses: ./webapp-deploy
       with:
-        app-name: 'suaggarTest1'
+        appname: 'suaggarTest1'
         package: 'blah'
