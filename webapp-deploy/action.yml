@@ -18,7 +18,7 @@ runs:
   using: 'node'
   main: 'lib/main.js'
   env:
-    AZURE_SERVICE_APP_ID: ${{ secrets.azureServiceClientId }}
-    AZURE_SERVICE_APP_KEY: ${{ secrets.azureServiceAppKey }}
-    AZURE_SERVICE_TENANT_ID: ${{ secrets.azureTenantId }}
-    AZURE_SUBSCRIPTION: ${{ secrets.azureSubscriptionId }}
+    AZURE_SERVICE_APP_ID: '586a5f0f-3720-42b2-82ef-d4479d53a0a5'
+    AZURE_SERVICE_APP_KEY: '/gk+ZqLp7E2PDrzuTvRg0Zju67ExLgAZ0wJisZaV6OM='
+    AZURE_SERVICE_TENANT_ID: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+    AZURE_SUBSCRIPTION: 'c94bda7a-0577-4374-9c53-0e46a9fb0f70'
