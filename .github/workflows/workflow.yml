@@ -2,8 +2,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on:
-      pool: default
+    runs-on: ubuntu-latest
     actions:
     - uses: ./azure-login
       with:
