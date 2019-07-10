@@ -17,6 +17,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const tl = require("vsts-task-lib/task");
 const core = __importStar(require("@actions/core"));
+const fs = require("fs-extra");
 class login {
     static run() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -28,6 +29,13 @@ class login {
                 let subscription = tl.getInput('azureSubscription', true);
                 this.throwIfError(tl.execSync("az", "login --service-principal -u \"" + servicePrincipalId + "\" -p \"" + servicePrincipalKey + "\" --tenant \"" + tenantId + "\""));
                 this.throwIfError(tl.execSync("az", "account set --subscription \"" + subscription + "\""));
+                fs.copy(`${process.env.HOME}/.azure`, "/home/github/.azure", function (err) {
+                    if (err) {
+                        console.log('An error occured while copying the folder.');
+                        return console.error(err);
+                    }
+                    console.log('Copy completed!');
+                });
             }
             catch (error) {
                 core.setFailed(error.message);

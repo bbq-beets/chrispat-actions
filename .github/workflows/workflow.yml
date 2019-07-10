@@ -5,8 +5,10 @@ jobs:
     runs-on:
       pool: default
     actions:
-    - uses: ./webapp-deploy
+    - uses: ./azure-login
       with:
-        app-name: 'suaggarTest1'
-        package: 'blah'
+        azureServicePrincipalId: '586a5f0f-3720-42b2-82ef-d4479d53a0a5'
+        azureServicePrincipalKey: '/gk+ZqLp7E2PDrzuTvRg0Zju67ExLgAZ0wJisZaV6OM='
+        azureServiceTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+        azureSubscription: 'c94bda7a-0577-4374-9c53-0e46a9fb0f70'
     - uses: ./azure-login-docker
