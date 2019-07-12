@@ -11,8 +11,11 @@ jobs:
         who-to-greet: 'Stephen'
       id: hello
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
-    - name: Deploy to Azure Web App for Containers
+    
+    - name: Login Azure
       run: |
         az login --service-principal --username ${{ secrets.AZURE_SERVICE_APP_ID }} --password ${{ secrets.AZURE_SERVICE_APP_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
+
+    - name: Show WebApp details
+      run: |
         az webapp show --resource-group ronai-dnd --name ronailinux
-  
