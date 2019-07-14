@@ -15,16 +15,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const taskparameters_1 = require("./utilities/taskparameters");
+const taskparameters_1 = require("./taskparameters");
 const DeploymentFactory_1 = require("./deploymentProvider/DeploymentFactory");
 const core = __importStar(require("@actions/core"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         var taskParams = new taskparameters_1.TaskParameters();
+        yield taskParams.getResourceDetails();
         var deploymentFactory = new DeploymentFactory_1.DeploymentFactory(taskParams);
         var deploymentProvider = yield deploymentFactory.GetDeploymentProvider();
-        let kind = yield taskParams.getKind();
-        console.log(kind);
         console.log("Predeployment Step Started");
         //await deploymentProvider.PreDeploymentStep();
         console.log("Deployment Step Started");

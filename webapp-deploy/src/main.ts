@@ -1,14 +1,12 @@
-import { TaskParameters } from "./utilities/taskparameters";
+import { TaskParameters } from "./taskparameters";
 import { DeploymentFactory } from "./deploymentProvider/DeploymentFactory";
 import * as core from '@actions/core';
 
 async function main() {
   var taskParams = new TaskParameters();
+  await taskParams.getResourceDetails();
   var deploymentFactory: DeploymentFactory = new DeploymentFactory(taskParams);
   var deploymentProvider = await deploymentFactory.GetDeploymentProvider();
-
-  let kind = await taskParams.getKind();
-  console.log(kind);
 
   console.log("Predeployment Step Started");
   //await deploymentProvider.PreDeploymentStep();
