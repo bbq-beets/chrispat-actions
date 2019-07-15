@@ -1,11 +1,8 @@
 import { WebAppDeploymentProvider } from "./WebAppDeploymentProvider";
 import { PackageType } from "../common/Utilities/packageUtility";
 import { parse } from "../common/Utilities/parameterParserUtility";
-var fs = require('fs');
-
-var webCommonUtility = require('azurermdeploycommon/webdeployment-common/utility.js');
-var deployUtility = require('azurermdeploycommon/webdeployment-common/utility.js');
-var zipUtility = require('azurermdeploycommon/webdeployment-common/ziputility.js');
+import * as utility from '../common/Utilities/utility.js';
+import * as zipUtility from '../common/Utilities/ziputility.js';
 
 const removeRunFromZipAppSetting: string = '-WEBSITE_RUN_FROM_PACKAGE 0';
 const runFromZipAppSetting: string = '-WEBSITE_RUN_FROM_PACKAGE 1';
@@ -29,7 +26,7 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
                 deploymentMethodtelemetry = '{"deploymentMethod":"War Deploy"}';
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 await this.kuduServiceUtility.warmpUp();
-                var warName = webCommonUtility.getFileNameFromPath(webPackage, ".war");
+                var warName = utility.getFileNameFromPath(webPackage, ".war");
                 this.zipDeploymentID = await this.kuduServiceUtility.deployUsingWarDeploy(webPackage, 
                     { slotName: this.appService.getSlot() }, warName);
                 this.updateStatus = true;
@@ -49,8 +46,8 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
                 break;
 
             case PackageType.folder:
-                let tempPackagePath = deployUtility.generateTemporaryFolderOrZipPath(`${process.env.TEMPDIRECTORY}`, false);
-                webPackage = await zipUtility.archiveFolder(webPackage, "", tempPackagePath);
+                let tempPackagePath = utility.generateTemporaryFolderOrZipPath(`${process.env.TEMPDIRECTORY}`, false);
+                webPackage = await zipUtility.archiveFolder(webPackage, "", tempPackagePath) as string;
                 console.log("Compressed folder into zip " +  webPackage);
                 
             case PackageType.zip:

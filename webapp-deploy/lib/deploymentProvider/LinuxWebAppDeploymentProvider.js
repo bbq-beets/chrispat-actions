@@ -7,12 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const WebAppDeploymentProvider_1 = require("./WebAppDeploymentProvider");
 const packageUtility_1 = require("../common/Utilities/packageUtility");
-var webCommonUtility = require('azurermdeploycommon/webdeployment-common/utility.js');
-var deployUtility = require('azurermdeploycommon/webdeployment-common/utility.js');
-var zipUtility = require('azurermdeploycommon/webdeployment-common/ziputility.js');
+const utility = __importStar(require("../common/Utilities/utility.js"));
+const zipUtility = __importStar(require("../common/Utilities/ziputility.js"));
 class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDeploymentProvider {
     DeployWebAppStep() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -23,7 +29,7 @@ class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDep
             yield this.kuduServiceUtility.warmpUp();
             switch (packageType) {
                 case packageUtility_1.PackageType.folder:
-                    let tempPackagePath = deployUtility.generateTemporaryFolderOrZipPath(`${process.env.TEMPDIRECTORY}`, false);
+                    let tempPackagePath = utility.generateTemporaryFolderOrZipPath(`${process.env.TEMPDIRECTORY}`, false);
                     let archivedWebPackage = yield zipUtility.archiveFolder(this.taskParams.package.getPath(), "", tempPackagePath);
                     console.log("Compressed folder into zip " + archivedWebPackage);
                     this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingZipDeploy(archivedWebPackage);
@@ -33,15 +39,15 @@ class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDep
                     break;
                 case packageUtility_1.PackageType.jar:
                     console.log("Initiated deployment via kudu service for webapp jar package : " + this.taskParams.package.getPath());
-                    let folderPath = yield webCommonUtility.generateTemporaryFolderForDeployment(false, this.taskParams.package.getPath(), packageUtility_1.PackageType.jar);
-                    let output = yield webCommonUtility.archiveFolderForDeployment(false, folderPath);
+                    let folderPath = yield utility.generateTemporaryFolderForDeployment(false, this.taskParams.package.getPath(), packageUtility_1.PackageType.jar);
+                    let output = yield utility.archiveFolderForDeployment(false, folderPath);
                     let webPackage = output.webDeployPkg;
                     console.log("Initiated deployment via kudu service for webapp jar package : " + webPackage);
                     this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingZipDeploy(webPackage);
                     break;
                 case packageUtility_1.PackageType.war:
                     console.log("Initiated deployment via kudu service for webapp war package : " + this.taskParams.package.getPath());
-                    let warName = webCommonUtility.getFileNameFromPath(this.taskParams.package.getPath(), ".war");
+                    let warName = utility.getFileNameFromPath(this.taskParams.package.getPath(), ".war");
                     this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingWarDeploy(this.taskParams.package.getPath(), { slotName: this.appService.getSlot() }, warName);
                     break;
                 default:

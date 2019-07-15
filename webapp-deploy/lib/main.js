@@ -25,9 +25,9 @@ function main() {
         var deploymentFactory = new DeploymentFactory_1.DeploymentFactory(taskParams);
         var deploymentProvider = yield deploymentFactory.GetDeploymentProvider();
         console.log("Predeployment Step Started");
-        //await deploymentProvider.PreDeploymentStep();
+        yield deploymentProvider.PreDeploymentStep();
         console.log("Deployment Step Started");
-        //await deploymentProvider.DeployWebAppStep();
+        yield deploymentProvider.DeployWebAppStep();
     });
 }
 try {
