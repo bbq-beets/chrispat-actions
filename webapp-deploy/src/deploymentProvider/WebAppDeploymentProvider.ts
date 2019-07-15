@@ -4,8 +4,8 @@ import { KuduServiceUtility } from '../common/RestUtilities/KuduServiceUtility';
 import { AzureAppService } from '../common/ArmRest/azure-app-service';
 import { Kudu } from '../common/KuduRest/azure-app-kudu-service';
 import { AzureAppServiceUtility } from '../common/RestUtilities/AzureAppServiceUtility';
-import tl = require('azure-pipelines-task-lib/task');
 import { addAnnotation } from '../common/RestUtilities/AnnotationUtility';
+import * as core from '@actions/core';
 
 export class WebAppDeploymentProvider implements IWebAppDeploymentProvider {
     protected taskParams:TaskParameters;
@@ -34,12 +34,12 @@ export class WebAppDeploymentProvider implements IWebAppDeploymentProvider {
             await addAnnotation(this.taskParams.endpoint, this.appService, isDeploymentSuccess);
             if(updateStatus) {
                 this.activeDeploymentID = await this.kuduServiceUtility.updateDeploymentStatus(isDeploymentSuccess, null, {'type': 'Deployment', slotName: this.appService.getSlot()});
-                tl.debug('Active DeploymentId :'+ this.activeDeploymentID);
+                core.debug('Active DeploymentId :'+ this.activeDeploymentID);
             }
         }
         
         let appServiceApplicationUrl: string = await this.appServiceUtility.getApplicationURL();
-        console.log(tl.loc('AppServiceApplicationURL', appServiceApplicationUrl));
-        tl.setVariable('AppServiceApplicationUrl', appServiceApplicationUrl);
+        console.log('AppServiceApplicationURL' + appServiceApplicationUrl);
+        core.exportVariable('AppServiceApplicationUrl', appServiceApplicationUrl);
     }
 }
