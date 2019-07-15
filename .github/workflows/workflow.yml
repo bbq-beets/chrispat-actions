@@ -9,12 +9,10 @@ jobs:
     
     - uses: ./hello-world-action
       with:
-        who-to-greet: ${{ secrets.greet_me }}
+        who-to-greet: 'Roopesh Nair'
       id: hello
       
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
-    
-    - run: echo "nested secret is ${{ secrets.FOO }}"
     
     - name: Login Azure
       run: |
