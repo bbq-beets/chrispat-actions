@@ -11,6 +11,7 @@ jobs:
         who-to-greet: 'Stephen'
       id: hello
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
+    - run: echo "${{ secrets.TEST_SECRET }} sdasdsd ${{ HOME }}"
     
     - name: Login Azure
       run: |
