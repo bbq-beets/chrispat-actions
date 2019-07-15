@@ -8,8 +8,10 @@ jobs:
     - run: echo Hello World change
     - uses: ./hello-world-action
       with:
-        who-to-greet: 'Stephen'
+        who-to-greet: ${{ greet-me }}
       id: hello
+      env:
+       greet-me: 'Roopesh'
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
     
     - name: Login Azure
