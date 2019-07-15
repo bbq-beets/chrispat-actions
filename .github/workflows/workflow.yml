@@ -22,4 +22,4 @@ jobs:
 
     - name: Deploy WebApp
       run: |
-        az webapp config container set -i ronacr.azurecr.io/roopeshnair/roopeshnairexpressaks:25 --resource-group ronai-dnd --name ronailinux 
+        az webapp config container set --docker-custom-image-name roopeshnairexpressaks:25 --name ronailinux --resource-group ronai-dnd
