@@ -5,23 +5,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-    - run: echo Hello World change
-    
-    - uses: ./hello-world-action
-      with:
-        who-to-greet: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
-      id: hello
-      
-    - run: echo "The time was ${{ actions.hello.outputs.time }}"
-    
-    - name: Login Azure
-      run: |
-        az login --service-principal --username ${{ secrets.AZURE_SERVICE_APP_ID }} --password ${{ secrets.AZURE_SERVICE_APP_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
-
-    - name: Show WebApp details
-      run: |
-        az webapp show --resource-group ronai-dnd --name ronailinux
-
-    - name: Deploy WebApp
-      run: |
-        az webapp config container set --docker-custom-image-name roopeshnairexpressaks:25 --docker-registry-server-password ${{ secrets.DOCKER_REGISTRY_PASSWORD }} --docker-registry-server-url https://ronacr.azurecr.io --docker-registry-server-user ronacr --name ronailinux --resource-group ronai-dnd
+    - uses: ./webapp-deploy
+      with: 
+        azure-service-app-id: ${{ secrets.AZURE_SERVICE_APP_ID }}
+        azure-service-app-key: ${{ secrets.AZURE_SERVICE_APP_KEY }}
+        azure-service-tenant-id: ${{ secrets.AZURE_SERVICE_TENANT_ID }}
+        azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        app-name: winWebAppTest
+        package: './webapp-deploy/TestResources/AspCore.zip'

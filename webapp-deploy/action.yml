@@ -1,0 +1,30 @@
+# web app action
+name: 'Azure WebApp'
+description: 'Deploy Web Apps to Azure'
+inputs: 
+  app-name: # id of input
+    description: 'Name of the Azure Web App'
+    required: true
+  package: # id of input
+    description: 'Path to package or folder. *.zip, *.war, *.jar or a folder to deploy'
+    required: false
+    default: '/artifacts/*.zip'
+  azure-service-app-id:
+    description: 'Azure service principal client ID'
+    required: true
+  azure-service-app-key:
+    description: 'Azure service principal client key'
+    required: true
+  azure-service-tenant-id:
+    description: 'Azure Tenant ID'
+    required: true
+  azure-subscription: 
+    description: 'Azure subscription ID'
+outputs:
+  webapp-url: # id of output
+    description: 'URL to work with your webapp'
+branding:
+  icon: 'webapp.svg'
+runs:
+  using: 'node'
+  main: 'lib/main.js'
