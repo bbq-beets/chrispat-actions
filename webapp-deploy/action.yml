@@ -20,6 +20,7 @@ inputs:
     required: true
   azure-subscription: 
     description: 'Azure subscription ID'
+    required: true
 outputs:
   webapp-url: # id of output
     description: 'URL to work with your webapp'
