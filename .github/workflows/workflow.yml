@@ -8,6 +8,8 @@ jobs:
     - run: echo Hello World change
     
     - uses: ./hello-world-action
+      with:
+        who-to-greet: '${{ secrets.AZURE_SERVICE_TENANT_ID }}'
       id: hello
       
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
