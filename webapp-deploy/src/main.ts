@@ -9,10 +9,10 @@ async function main() {
   var deploymentProvider = await deploymentFactory.GetDeploymentProvider();
 
   console.log("Predeployment Step Started");
-  //await deploymentProvider.PreDeploymentStep();
+  await deploymentProvider.PreDeploymentStep();
 
   console.log("Deployment Step Started");
-  //await deploymentProvider.DeployWebAppStep();
+  await deploymentProvider.DeployWebAppStep();
 }
 
 try {

@@ -1,11 +1,7 @@
 import { Kudu } from '../KuduRest/azure-app-kudu-service';
 import path = require('path');
 import { KUDU_DEPLOYMENT_CONSTANTS } from '../constants';
-import webClient = require('../webClient');
 import fs = require('fs');
-var deployUtility = require('../webdeployment-common/utility.js');
-var zipUtility = require('../webdeployment-common/ziputility.js');
-const physicalRootPath: string = '/site/wwwroot';
 const deploymentFolder: string = 'site/deployments';
 const manifestFileName: string = 'manifest';
 const VSTS_ZIP_DEPLOY: string = 'VSTS_ZIP_DEPLOY';

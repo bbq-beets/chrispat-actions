@@ -9,7 +9,7 @@
     "typed-rest-client": "0.12.0",
     "node-stream-zip": "1.7.0",
     "azure-pipelines-task-lib": "2.8.0",
-    "decompress-zip": "0.3.0",
+    "decompress-zip": "0.3.2",
     "archiver": "1.2.0"
   },
   "devDependencies": {
