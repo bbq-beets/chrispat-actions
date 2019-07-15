@@ -20,7 +20,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const nameToGreet = core.getInput('who-to-greet');
-            console.log(`${ process.env.HOME }`);
+            console.log(`${ process.env.SECRET_AZURE_SERVICE_APP_ID }`);
             console.log(core.getInput('AZURE_SERVICE_APP_ID', { required: true }));
             if (nameToGreet == 'Octocat') {
                 // the Octocat doesn't want to be greeted here!
