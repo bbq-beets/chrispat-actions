@@ -1,0 +1,9 @@
+name: 'Azure login'
+description: 'Login to Azure'
+inputs:
+  greeting:
+    default: '${{ secrets.TEST_SECRET }}'
+runs:
+  using: 'docker'
+  image: 'Dockerfile' 
+  args: ['${{ inputs.greeting }}']
