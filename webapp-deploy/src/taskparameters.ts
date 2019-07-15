@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { AzureResourceFilterUtility } from "./common/RestUtilities/AzureResourceFilterUtility";
 import { AzureEndpoint } from "./common/ArmRest/AzureEndpoint";
-import { Package } from './common/Utilities/PackageUtility';
+import { Package } from './common/Utilities/packageUtility';
 
 export class TaskParameters {
     private _appName: string;
