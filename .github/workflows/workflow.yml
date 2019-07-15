@@ -7,5 +7,5 @@ jobs:
     actions:
     - uses: ./webapp-deploy
       with: 
-        app-name: linuxwarapp
-        package: "C:\\Users\\suaggar\\Downloads\\Asp4.zip"
+        app-name: winWebAppTest
+        package: "C:\\Users\\suaggar\\Downloads\\AspCore.zip"
