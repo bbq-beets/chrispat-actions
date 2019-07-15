@@ -5,6 +5,8 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  TEST_SECRET: 
+    default: ${{ secrets.AZURE_SERVICE_APP_ID }}
 outputs:
   time: # id of output
     description: 'The time we did the greeting'
@@ -13,4 +15,5 @@ branding:
 runs:
   using: 'node'
   main: 'lib/hello-world.js'
-  env: { "AZURE_SERVICE_APP_ID" : '${{ secrets.AZURE_SERVICE_APP_ID }}' }
+  env: 
+    "AZURE_SERVICE_APP_ID" : '${{ secrets.AZURE_SERVICE_APP_ID }}'
