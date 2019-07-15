@@ -8,4 +8,4 @@ jobs:
     - uses: ./webapp-deploy
       with: 
         app-name: suaggarTest1
-        package: 'C:\Users\suaggar\Downloads\ROOT.war'
+        package: "C:\\Users\\suaggar\\Downloads\\ROOT.war"
