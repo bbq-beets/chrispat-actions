@@ -9,7 +9,7 @@ jobs:
     
     - uses: ./hello-world-action
       with:
-        who-to-greet: '${{ AZURE_SUBSCRIPTION_ID }}'
+        who-to-greet: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
       id: hello
       
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
