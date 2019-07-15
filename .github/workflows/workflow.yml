@@ -6,12 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     actions:
     - run: echo Hello World change
+    
     - uses: ./hello-world-action
       with:
         who-to-greet: ${{ greet-me }}
       id: hello
-      env:
-        greet-me: 'Roopesh Nair'
+      
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
     
     - name: Login Azure
