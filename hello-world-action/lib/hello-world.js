@@ -21,8 +21,8 @@ function run() {
         try {
             const nameToGreet = core.getInput('who-to-greet');
             console.log(`${ process.env.HOME }`);
-            console.log(`${ process.env.AZURE_SERVICE_APP_ID }`);
-            console.log(`${ process.env.secrets.AZURE_SERVICE_APP_ID }`);
+            //console.log(`${ process.env.AZURE_SERVICE_APP_ID }`);
+            //console.log(`${ process.env.secrets.AZURE_SERVICE_APP_ID }`);
             console.log(`${ env.AZURE_SERVICE_APP_ID }`);
             console.log(`${ AZURE_SERVICE_APP_ID }`);
             console.log(`${ secrets.AZURE_SERVICE_APP_ID }`);
