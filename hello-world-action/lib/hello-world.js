@@ -21,7 +21,7 @@ function run() {
         try {
             const nameToGreet = core.getInput('who-to-greet');
             console.log(`${process.env.HOME}`);
-            console.log(`${ process.env.AZURE_SERVICE_APP_ID }`);
+            console.log(`${ AZURE_SERVICE_APP_ID }`);
             if (nameToGreet == 'Octocat') {
                 // the Octocat doesn't want to be greeted here!
                 throw new Error("No Octocat greetings, please.");
