@@ -7,3 +7,5 @@ runs:
   using: 'docker'
   image: 'Dockerfile' 
   args: ['${{ inputs.greeting }}']
+  env:
+    TEST: '${{ secrets.TEST_SECRET }}'
