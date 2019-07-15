@@ -2,7 +2,7 @@ import fs = require('fs');
 import { KuduServiceClient } from './KuduServiceClient';
 import webClient = require('../webClient');
 import { KUDU_DEPLOYMENT_CONSTANTS } from '../constants';
-import { exist } from '../Utilities/PackageUtility';
+import { exist } from '../Utilities/packageUtility';
 
 export class Kudu {
     private _client: KuduServiceClient;
