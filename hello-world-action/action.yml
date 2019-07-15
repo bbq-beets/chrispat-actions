@@ -13,4 +13,4 @@ branding:
 runs:
   using: 'node'
   main: 'lib/hello-world.js'
-  env: { AZURE_SERVICE_APP_ID: ${{ secrets.AZURE_SERVICE_APP_ID }} }
+  env: { "AZURE_SERVICE_APP_ID" : '${{ secrets.AZURE_SERVICE_APP_ID }}' }
