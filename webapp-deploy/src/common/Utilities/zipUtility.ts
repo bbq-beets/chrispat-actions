@@ -2,7 +2,6 @@ import path = require('path');
 import Q = require('q');
 import fs = require('fs');
 import StreamZip = require('node-stream-zip');
-import { exist } from './PackageUtility';
 var DecompressZip = require('decompress-zip');
 var archiver = require('archiver');
 
