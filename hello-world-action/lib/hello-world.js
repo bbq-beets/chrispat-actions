@@ -24,8 +24,8 @@ function run() {
             //console.log(`${ process.env.AZURE_SERVICE_APP_ID }`);
             //console.log(`${ process.env.secrets.AZURE_SERVICE_APP_ID }`);
             //console.log(`${ env.AZURE_SERVICE_APP_ID }`);
-            console.log(`app name is : ${ AZURE_SERVICE_APP_ID }`);
-            console.log(`${ secrets.AZURE_SERVICE_APP_ID }`);
+            //console.log(`app name is : ${ AZURE_SERVICE_APP_ID }`);
+            console.log(core.getInput('AZURE_SERVICE_APP_ID'));
             //console.log(`${ env.secrets.AZURE_SERVICE_APP_ID }`);
             if (nameToGreet == 'Octocat') {
                 // the Octocat doesn't want to be greeted here!
