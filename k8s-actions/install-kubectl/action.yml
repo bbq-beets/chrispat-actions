@@ -1,0 +1,15 @@
+name: 'Install kubectl'
+description: 'Install kubectl'
+inputs: 
+  version:
+    description: 'Kubectl version'
+    required: true
+    default: 'latest'
+outputs:
+  kubectlPath:
+    description: 'Path to the cached kubectl tool'
+branding:
+  color: 'green' # optional, decorates the entry in the GitHub Marketplace
+runs:
+  using: 'node'
+  main: 'lib/run.js'

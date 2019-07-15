@@ -1,0 +1,16 @@
+name: 'Kubernetes Login'
+description: 'Login kubernetes'
+inputs: 
+  manifests:
+    description: 'Kubernetes Manifests to deploy'
+    required: true
+    default: ''
+  namespace:
+    description: 'namespace'
+    required: true
+    default: ''
+branding:
+  color: 'green' # optional, decorates the entry in the GitHub Marketplace
+runs:
+  using: 'node'
+  main: 'lib/run.js'
