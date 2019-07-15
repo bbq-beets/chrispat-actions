@@ -9,7 +9,7 @@ jobs:
     
     - uses: ./hello-world-action
       with:
-        who-to-greet: ${{ greet_me }}
+        who-to-greet: ${{ secrets.greet_me }}
       id: hello
       
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
