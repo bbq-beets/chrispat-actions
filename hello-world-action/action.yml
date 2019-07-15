@@ -13,5 +13,5 @@ branding:
 runs:
   using: 'node'
   main: 'lib/hello-world.js'
-env:
-  greet-me: 'who to greet'
+  env:
+    greet-me: 'who to greet'
