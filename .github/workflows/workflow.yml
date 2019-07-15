@@ -19,3 +19,7 @@ jobs:
     - name: Show WebApp details
       run: |
         az webapp show --resource-group ronai-dnd --name ronailinux
+
+    - name: Deploy WebApp
+      run: |
+        az webapp config container set -i ronaiacr.azurecr.io/roopeshnair/example-voting-app:4723 --resource-group ronai-dnd --name ronailinux 
