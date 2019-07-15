@@ -12,7 +12,7 @@ const fs = require("fs");
 const KuduServiceClient_1 = require("./KuduServiceClient");
 const webClient = require("../webClient");
 const constants_1 = require("../constants");
-const PackageUtility_1 = require("../Utilities/PackageUtility");
+const packageUtility_1 = require("../Utilities/packageUtility");
 class Kudu {
     constructor(scmUri, username, password) {
         var base64EncodedCredential = (new Buffer(username + ':' + password).toString('base64'));
@@ -257,7 +257,7 @@ class Kudu {
         return __awaiter(this, void 0, void 0, function* () {
             physicalPath = physicalPath.replace(/[\\]/g, "/");
             physicalPath = physicalPath[0] == "/" ? physicalPath.slice(1) : physicalPath;
-            if (!PackageUtility_1.exist(filePath)) {
+            if (!packageUtility_1.exist(filePath)) {
                 throw new Error('FilePathInvalid' + filePath);
             }
             var httpRequest = {
