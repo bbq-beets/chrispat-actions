@@ -4,7 +4,7 @@ inputs:
   who-to-greet: # id of input
     description: 'Who to greet'
     required: true
-    default: ${{ AZURE_SERVICE_TENANT_ID }}
+    default: '${{ AZURE_SERVICE_TENANT_ID }}'
 outputs:
   time: # id of output
     description: 'The time we did the greeting'
