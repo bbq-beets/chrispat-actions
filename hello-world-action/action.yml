@@ -3,8 +3,8 @@ description: 'Greet someone and record the time'
 inputs: 
   who-to-greet: # id of input
     description: 'Who to greet'
-    required: true
-    default: '${{ AZURE_SERVICE_TENANT_ID }}'
+    required: false
+    default: 'Roopesh Nair'
 outputs:
   time: # id of output
     description: 'The time we did the greeting'
@@ -13,5 +13,3 @@ branding:
 runs:
   using: 'node'
   main: 'lib/hello-world.js'
-  env:
-    AZURE_SERVICE_TENANT_ID: ${{ secrets.AZURE_SERVICE_TENANT_ID }}
