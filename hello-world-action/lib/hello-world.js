@@ -21,12 +21,7 @@ function run() {
         try {
             const nameToGreet = core.getInput('who-to-greet');
             console.log(`${ process.env.HOME }`);
-            //console.log(`${ process.env.AZURE_SERVICE_APP_ID }`);
-            //console.log(`${ process.env.secrets.AZURE_SERVICE_APP_ID }`);
-            //console.log(`${ env.AZURE_SERVICE_APP_ID }`);
-            //console.log(`app name is : ${ AZURE_SERVICE_APP_ID }`);
-            console.log(core.getInput('AZURE_SERVICE_APP_ID'));
-            //console.log(`${ env.secrets.AZURE_SERVICE_APP_ID }`);
+            console.log(core.getInput('AZURE_SERVICE_APP_ID', { required: true }));
             if (nameToGreet == 'Octocat') {
                 // the Octocat doesn't want to be greeted here!
                 throw new Error("No Octocat greetings, please.");
