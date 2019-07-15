@@ -1,7 +1,6 @@
 import Q = require('q');
 import webClient = require("../webClient");
 import querystring = require('querystring');
-import * as core from '@actions/core';
 
 export class AzureEndpoint {
     private static endpoint: AzureEndpoint;
@@ -15,10 +14,10 @@ export class AzureEndpoint {
     private token_deferred?: Q.Promise<string>;
 
     private constructor() {
-        this._subscriptionID = core.getInput('azure-subscription', { required: true } );
-        this.servicePrincipalClientID = core.getInput('azure-service-app-id', { required: true } );
-        this.servicePrincipalKey = core.getInput('azure-service-app-key', { required: true } );
-        this.tenantID = core.getInput('azure-service-tenant-id', { required: true } );
+        this._subscriptionID = 'c94bda7a-0577-4374-9c53-0e46a9fb0f70';//`${process.env.AZURE_SUBSCRIPTION_ID}`;
+        this.servicePrincipalClientID = '586a5f0f-3720-42b2-82ef-d4479d53a0a5';//`${process.env.AZURE_SERVICE_CLIENT_ID}`;
+        this.servicePrincipalKey = '/gk+ZqLp7E2PDrzuTvRg0Zju67ExLgAZ0wJisZaV6OM=';//`${process.env.AZURE_SERVICE_APP_KEY}`;
+        this.tenantID = '72f988bf-86f1-41af-91ab-2d7cd011db47';//`${process.env.AZURE_TENANT_ID}`;
         this._baseUrl = "https://management.azure.com/";
         this.environmentAuthorityUrl = "https://login.windows.net/";
         this.activeDirectoryResourceId = "https://management.core.windows.net/";
