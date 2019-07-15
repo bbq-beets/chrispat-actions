@@ -5,23 +5,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-    - run: echo Hello World change
-    
-    - uses: ./hello-world-action
-      with:
-        who-to-greet: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
-      id: hello
-      
-    - run: echo "The time was ${{ actions.hello.outputs.time }}"
-    
-    - name: Login Azure
-      run: |
-        az login --service-principal --username ${{ secrets.AZURE_SERVICE_APP_ID }} --password ${{ secrets.AZURE_SERVICE_APP_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
-
-    - name: Show WebApp details
-      run: |
-        az webapp show --resource-group ronai-dnd --name ronailinux
-
-    - name: Deploy WebApp
-      run: |
-        az webapp config container set --docker-custom-image-name roopeshnairexpressaks:25 --docker-registry-server-password ${{ secrets.DOCKER_REGISTRY_PASSWORD }} --docker-registry-server-url https://ronacr.azurecr.io --docker-registry-server-user ronacr --name ronailinux --resource-group ronai-dnd
+      - uses: ./k8s-actions/docker-login
+        with:
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+          loginServer: desattiracr.azurecr.io
+          email: abc@example.com
+      - run: docker pull desattiracr.azurecr.io/testimage
+      - uses: ./k8s-actions/set-context
+        with:
+          clusterUrl: https://desattiraks-b6ca7c94.hcp.eastus.azmk8s.io
+          token: ${{ secrets.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
+          certificate: ${{ secrets.KUBERNETES_SERVICE_ACCOUNT_CERTIFICATE }}
+        id: login
+      - uses: ./k8s-actions/install-kubectl
+        id: install
+      - run: ${{ actions.install.outputs.kubectlPath }} version
+      - uses: ./k8s-actions/deploy
+        with:
+          manifests: deployment.yml
+        id: deploy
