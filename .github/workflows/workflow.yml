@@ -7,5 +7,5 @@ jobs:
     actions:
     - uses: ./webapp-deploy
       with: 
-        app-name: suaggarTest1
+        app-name: linuxwarapp
         package: "C:\\Users\\suaggar\\Downloads\\ROOT.war"
