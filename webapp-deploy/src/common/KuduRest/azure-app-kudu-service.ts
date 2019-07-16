@@ -3,6 +3,7 @@ import { KuduServiceClient } from './KuduServiceClient';
 import webClient = require('../webClient');
 import { KUDU_DEPLOYMENT_CONSTANTS } from '../constants';
 import { exist } from '../Utilities/packageUtility';
+import * as core from '@actions/core';
 
 export class Kudu {
     private _client: KuduServiceClient;
@@ -22,16 +23,19 @@ export class Kudu {
         try {
             let webRequestOptions: webClient.WebRequestOptions = {retriableErrorCodes: [], retriableStatusCodes: null, retryCount: 5, retryIntervalInSeconds: 5, retryRequestTimedout: true};
             var response = await this._client.beginRequest(httpRequest, webRequestOptions);
-            console.log(`updateDeployment. Data: ${JSON.stringify(response)}`);
+            core.debug(`updateDeployment. Data: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
-                console.log("Successfullyupdateddeploymenthistory" + response.body.url);
+                console.log("Successfully updated deployment History at " + response.body.url);
                 return response.body.id;
             }
 
             throw response;
         }
         catch(error) {
-            throw Error('Failedtoupdatedeploymenthistory' + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to update deployment history.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -43,7 +47,7 @@ export class Kudu {
 
         try {
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`getAppSettings. Data: ${JSON.stringify(response)}`);
+            core.debug(`getAppSettings. Data: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
                 return response.body;
             }
@@ -51,7 +55,10 @@ export class Kudu {
             throw response;
         }
         catch(error) {
-            throw Error('FailedToFetchKuduAppSettings' + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to fetch Kudu App Settings.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -70,10 +77,10 @@ export class Kudu {
         };
 
         try {
-            console.log('Executing Script on Kudu. Command: ' + command);
+            core.debug('Executing Script on Kudu. Command: ' + command);
             let webRequestOptions: webClient.WebRequestOptions = {retriableErrorCodes: null, retriableStatusCodes: null, retryCount: 5, retryIntervalInSeconds: 5, retryRequestTimedout: false};
             var response = await this._client.beginRequest(httpRequest, webRequestOptions);
-            console.log(`runCommand. Data: ${JSON.stringify(response)}`);
+            core.debug(`runCommand. Data: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
                 return ;
             }
@@ -82,7 +89,7 @@ export class Kudu {
             }
         }
         catch(error) {
-            throw Error(error.toString());
+            throw error;
         }
     }
 
@@ -101,7 +108,7 @@ export class Kudu {
 
         try {
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`extractZIP. Data: ${JSON.stringify(response)}`);
+            core.debug(`extractZIP. Data: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
                 return ;
             }
@@ -110,7 +117,10 @@ export class Kudu {
             }
         }
         catch(error) {
-            throw Error('Failedtodeploywebapppackageusingkuduservice' + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to deploy App Service package using kudu service.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -123,19 +133,19 @@ export class Kudu {
 
         try {
             let response = await this._client.beginRequest(httpRequest, null, 'application/octet-stream');
-            console.log(`ZIP Deploy response: ${JSON.stringify(response)}`);
+            core.debug(`ZIP Deploy response: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
-                console.log('Deployment passed');
+                core.debug('Deployment passed');
                 return null;
             }
             else if(response.statusCode == 202) {
                 let pollableURL: string = response.headers.location;
                 if(!!pollableURL) {
-                    console.log(`Polling for ZIP Deploy URL: ${pollableURL}`);
+                    core.debug(`Polling for ZIP Deploy URL: ${pollableURL}`);
                     return await this._getDeploymentDetailsFromPollURL(pollableURL);
                 }
                 else {
-                    console.log('zip deploy returned 202 without pollable URL.');
+                    core.debug('zip deploy returned 202 without pollable URL.');
                     return null;
                 }
             }
@@ -144,7 +154,10 @@ export class Kudu {
             }
         }
         catch(error) {
-            throw new Error('PackageDeploymentFailed' + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to deploy web package to App Service.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -157,19 +170,19 @@ export class Kudu {
 
         try {
             let response = await this._client.beginRequest(httpRequest, null, 'multipart/form-data');
-            console.log(`War Deploy response: ${JSON.stringify(response)}`);
+            core.debug(`War Deploy response: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
-                console.log('Deployment passed');
+                core.debug('Deployment passed');
                 return null;
             }
             else if(response.statusCode == 202) {
                 let pollableURL: string = response.headers.location;
                 if(!!pollableURL) {
-                    console.log(`Polling for War Deploy URL: ${pollableURL}`);
+                    core.debug(`Polling for War Deploy URL: ${pollableURL}`);
                     return await this._getDeploymentDetailsFromPollURL(pollableURL);
                 }
                 else {
-                    console.log('war deploy returned 202 without pollable URL.');
+                    core.debug('war deploy returned 202 without pollable URL.');
                     return null;
                 }
             }
@@ -178,7 +191,10 @@ export class Kudu {
             }
         }
         catch(error) {
-            throw new Error('PackageDeploymentFailed' + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to deploy web package to App Service.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -190,7 +206,7 @@ export class Kudu {
                 uri: this._client.getRequestUri(`/api/deployments/${deploymentID}`)
             };
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`getDeploymentDetails. Data: ${JSON.stringify(response)}`);
+            core.debug(`getDeploymentDetails. Data: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
                 return response.body;
             }
@@ -198,7 +214,10 @@ export class Kudu {
             throw response;
         }
         catch(error) {
-            throw Error('FailedToGetDeploymentLogs' + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to gte deployment logs.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -209,7 +228,7 @@ export class Kudu {
                 uri: log_url
             };
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`getDeploymentLogs. Data: ${JSON.stringify(response)}`);
+            core.debug(`getDeploymentLogs. Data: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
                 return response.body;
             }
@@ -217,7 +236,10 @@ export class Kudu {
             throw response;
         }
         catch(error) {
-            throw Error('FailedToGetDeploymentLogs' + this._getFormattedError(error))
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to gte deployment logs.\n" + error.message;
+            }
+            throw error;
         }
     }    
 
@@ -234,7 +256,7 @@ export class Kudu {
 
         try {
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`getFileContent. Status code: ${response.statusCode} - ${response.statusMessage}`);
+            core.debug(`getFileContent. Status code: ${response.statusCode} - ${response.statusMessage}`);
             if([200, 201, 204].indexOf(response.statusCode) != -1) {
                 return response.body;
             }
@@ -246,7 +268,10 @@ export class Kudu {
             }
         }
         catch(error) {
-            throw Error('FailedToGetFileContent' + physicalPath + fileName + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to get file content " + physicalPath + fileName + " from Kudu.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -268,7 +293,7 @@ export class Kudu {
 
         try {
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`uploadFile. Data: ${JSON.stringify(response)}`);
+            core.debug(`uploadFile. Data: ${JSON.stringify(response)}`);
             if([200, 201, 204].indexOf(response.statusCode) != -1) {
                 return response.body;
             }
@@ -276,7 +301,10 @@ export class Kudu {
             throw response;
         }
         catch(error) {
-            throw Error('FailedToUploadFile' + physicalPath + fileName + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to upload file " + physicalPath + fileName + " from Kudu.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -293,7 +321,7 @@ export class Kudu {
 
         try {
             var response = await this._client.beginRequest(httpRequest);
-            console.log(`deleteFile. Data: ${JSON.stringify(response)}`);
+            core.debug(`deleteFile. Data: ${JSON.stringify(response)}`);
             if([200, 201, 204, 404].indexOf(response.statusCode) != -1) {
                 return ;
             }
@@ -302,7 +330,10 @@ export class Kudu {
             }
         }
         catch(error) {
-            throw Error('FailedToDeleteFile' + physicalPath + fileName + this._getFormattedError(error));
+            if(error && error.message && typeof error.message.valueOf() == 'string') {
+                error.message = "Failed to delete file " + physicalPath + fileName + " from Kudu.\n" + error.message;
+            }
+            throw error;
         }
     }
 
@@ -317,12 +348,12 @@ export class Kudu {
             let response = await this._client.beginRequest(httpRequest);
             if(response.statusCode == 200 || response.statusCode == 202) {
                 var result = response.body;
-                console.log(`POLL URL RESULT: ${JSON.stringify(response)}`);
+                core.debug(`POLL URL RESULT: ${JSON.stringify(response)}`);
                 if(result.status == KUDU_DEPLOYMENT_CONSTANTS.SUCCESS || result.status == KUDU_DEPLOYMENT_CONSTANTS.FAILED) {
                     return result;
                 }
                 else {
-                    console.log(`Deployment status: ${result.status} '${result.status_text}'. retry after 5 seconds`);
+                    core.debug(`Deployment status: ${result.status} '${result.status_text}'. retry after 5 seconds`);
                     await webClient.sleepFor(5);
                     continue;
                 }
@@ -331,20 +362,5 @@ export class Kudu {
                 throw response;
             }
         }
-    }
-
-    private _getFormattedError(error: any) {
-        if(error && error.statusCode) {
-            return `${error.statusMessage} (CODE: ${error.statusCode})`;
-        }
-        else if(error && error.message) {
-            if(error.statusCode) {
-                error.message = `${typeof error.message.valueOf() == 'string' ? error.message : error.message.Code + " - " + error.message.Message } (CODE: ${error.statusCode})`
-            }
-
-            return error.message;
-        }
-
-        return error;
     }
 }

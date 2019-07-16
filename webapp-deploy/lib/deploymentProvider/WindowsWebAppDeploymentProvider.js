@@ -20,6 +20,7 @@ const packageUtility_1 = require("../common/Utilities/packageUtility");
 const parameterParserUtility_1 = require("../common/Utilities/parameterParserUtility");
 const utility = __importStar(require("../common/Utilities/utility.js"));
 const zipUtility = __importStar(require("../common/Utilities/ziputility.js"));
+const core = __importStar(require("@actions/core"));
 const removeRunFromZipAppSetting = '-WEBSITE_RUN_FROM_PACKAGE 0';
 const runFromZipAppSetting = '-WEBSITE_RUN_FROM_PACKAGE 1';
 class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDeploymentProvider {
@@ -34,7 +35,7 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
             let deploymentMethodtelemetry;
             switch (packageType) {
                 case packageUtility_1.PackageType.war:
-                    console.log("Initiated deployment via kudu service for webapp war package : " + webPackage);
+                    core.debug("Initiated deployment via kudu service for webapp war package : " + webPackage);
                     deploymentMethodtelemetry = '{"deploymentMethod":"War Deploy"}';
                     console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                     yield this.kuduServiceUtility.warmpUp();
@@ -43,7 +44,7 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
                     this.updateStatus = true;
                     break;
                 case packageUtility_1.PackageType.jar:
-                    console.log("Initiated deployment via kudu service for webapp jar package : " + webPackage);
+                    core.debug("Initiated deployment via kudu service for webapp jar package : " + webPackage);
                     deploymentMethodtelemetry = '{"deploymentMethod":"Zip Deploy"}';
                     console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                     var updateApplicationSetting = parameterParserUtility_1.parse(removeRunFromZipAppSetting);
@@ -57,9 +58,9 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
                 case packageUtility_1.PackageType.folder:
                     let tempPackagePath = utility.generateTemporaryFolderOrZipPath(`${process.env.TEMPDIRECTORY}`, false);
                     webPackage = (yield zipUtility.archiveFolder(webPackage, "", tempPackagePath));
-                    console.log("Compressed folder into zip " + webPackage);
+                    core.debug("Compressed folder into zip " + webPackage);
                 case packageUtility_1.PackageType.zip:
-                    console.log("Initiated deployment via kudu service for webapp package : " + webPackage);
+                    core.debug("Initiated deployment via kudu service for webapp package : " + webPackage);
                     deploymentMethodtelemetry = '{"deploymentMethod":"Run from Package"}';
                     console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                     var addCustomApplicationSetting = parameterParserUtility_1.parse(runFromZipAppSetting);
@@ -71,7 +72,7 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
                     this.updateStatus = false;
                     break;
                 default:
-                    throw new Error('Invalidwebapppackageorfolderpathprovided' + webPackage);
+                    throw new Error('Invalid App Service package or folder path provided: ' + webPackage);
             }
         });
     }

@@ -51,7 +51,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToGetAppServicePublishingCredentials' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to fetch publishing credentials for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -81,7 +84,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToUpdateAppServiceApplicationSettings' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to update application settings for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -144,7 +150,10 @@ class AzureAppService {
                 }
             }
             catch (error) {
-                throw Error('FailedToSyncTriggers' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to sync triggers for function app " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -165,7 +174,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToGetAppServiceConfiguration' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to get configuration settings for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -187,7 +199,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToUpdateAppServiceConfiguration' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to update configuration settings for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -209,7 +224,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToPatchAppServiceConfiguration' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to patch configuration settings for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -230,7 +248,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToGetAppServiceMetadata' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to get app service Meta data for " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -252,7 +273,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToUpdateAppServiceMetadata' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to update app serviceMeta data for " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -286,7 +310,10 @@ class AzureAppService {
                 return publishingProfile;
             }
             catch (error) {
-                throw Error('FailedToGetAppServicePublishingProfile' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to fetch publishing profile for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -307,7 +334,10 @@ class AzureAppService {
                 return response.body;
             }
             catch (error) {
-                throw Error('FailedToGetAppServiceApplicationSettings' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to get application settings for app service " + this._getFormattedName() + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -329,7 +359,10 @@ class AzureAppService {
                 return appDetails;
             }
             catch (error) {
-                throw Error('FailedToGetAppServiceDetails' + this._getFormattedName() + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to fetch app service " + this._getFormattedName() + " details.\n" + error.message;
+                }
+                throw error;
             }
         });
     }

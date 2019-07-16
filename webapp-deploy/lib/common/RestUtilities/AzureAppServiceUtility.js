@@ -7,11 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const webClient = require("../webClient");
 var parseString = require('xml2js').parseString;
 const Q = require("q");
 const azure_app_kudu_service_1 = require("../KuduRest/azure-app-kudu-service");
+const core = __importStar(require("@actions/core"));
 class AzureAppServiceUtility {
     constructor(appService) {
         this._appService = appService;
@@ -48,20 +56,20 @@ class AzureAppServiceUtility {
             try {
                 var applicationUrl = yield this.getApplicationURL();
                 if (!applicationUrl) {
-                    console.log("Application Url not found.");
+                    core.debug("Application Url not found.");
                     return;
                 }
                 yield AzureAppServiceUtility.pingApplication(applicationUrl);
             }
             catch (error) {
-                console.log("Unable to ping App Service. Error: ${error}");
+                core.debug("Unable to ping App Service. Error: ${error}");
             }
         });
     }
     static pingApplication(applicationUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!applicationUrl) {
-                console.log('Application Url empty.');
+                core.debug('Application Url empty.');
                 return;
             }
             try {
@@ -71,10 +79,10 @@ class AzureAppServiceUtility {
                 };
                 let webRequestOptions = { retriableErrorCodes: [], retriableStatusCodes: [], retryCount: 1, retryIntervalInSeconds: 5, retryRequestTimedout: true };
                 var response = yield webClient.sendRequest(webRequest, webRequestOptions);
-                console.log(`App Service status Code: '${response.statusCode}'. Status Message: '${response.statusMessage}'`);
+                core.debug(`App Service status Code: '${response.statusCode}'. Status Message: '${response.statusMessage}'`);
             }
             catch (error) {
-                console.log(`Unable to ping App Service. Error: ${error}`);
+                core.debug(`Unable to ping App Service. Error: ${error}`);
             }
         });
     }
@@ -82,6 +90,7 @@ class AzureAppServiceUtility {
         return __awaiter(this, void 0, void 0, function* () {
             var publishingCredentials = yield this._appService.getPublishingCredentials();
             if (publishingCredentials.properties["scmUri"]) {
+                core.exportSecret(`AZURE_APP_SERVICE_KUDU_${this._appService.getSlot()}_PASSWORD`, publishingCredentials.properties["publishingPassword"]);
                 return new azure_app_kudu_service_1.Kudu(publishingCredentials.properties["scmUri"], publishingCredentials.properties["publishingUserName"], publishingCredentials.properties["publishingPassword"]);
             }
             throw Error('KuduSCMDetailsAreEmpty');
@@ -94,9 +103,9 @@ class AzureAppServiceUtility {
                     properties[property] = properties[property].value;
                 }
             }
-            console.log('UpdatingAppServiceConfigurationSettings' + JSON.stringify(properties));
+            console.log('Updating App Service Configuration settings. Data: ' + JSON.stringify(properties));
             yield this._appService.patchConfiguration({ 'properties': properties });
-            console.log('UpdatedAppServiceConfigurationSettings');
+            console.log('Updated App Service Configuration settings.');
         });
     }
     updateAndMonitorAppSettings(addProperties, deleteProperties) {
@@ -106,41 +115,41 @@ class AzureAppServiceUtility {
                     addProperties[property] = addProperties[property].value;
                 }
             }
-            console.log('UpdatingAppServiceApplicationSettings', JSON.stringify(addProperties), JSON.stringify(deleteProperties));
+            console.log('Updating App Service Application settings. Adding: %s. Deleting : %s', JSON.stringify(addProperties), JSON.stringify(deleteProperties));
             var isNewValueUpdated = yield this._appService.patchApplicationSettings(addProperties, deleteProperties);
             if (!isNewValueUpdated) {
-                console.log('UpdatedAppServiceApplicationSettings');
+                console.log('Updated App Service Application settings and Kudu Application settings.');
                 return isNewValueUpdated;
             }
             var kuduService = yield this.getKuduService();
             var noOftimesToIterate = 12;
-            console.log('retrieving values from Kudu service to check if new values are updated');
+            core.debug('retrieving values from Kudu service to check if new values are updated');
             while (noOftimesToIterate > 0) {
                 var kuduServiceAppSettings = yield kuduService.getAppSettings();
                 var propertiesChanged = true;
                 for (var property in addProperties) {
                     if (kuduServiceAppSettings[property] != addProperties[property]) {
-                        console.log('New properties are not updated in Kudu service :(');
+                        core.debug('New properties are not updated in Kudu service :(');
                         propertiesChanged = false;
                         break;
                     }
                 }
                 for (var property in deleteProperties) {
                     if (kuduServiceAppSettings[property]) {
-                        console.log('Deleted properties are not reflected in Kudu service :(');
+                        core.debug('Deleted properties are not reflected in Kudu service :(');
                         propertiesChanged = false;
                         break;
                     }
                 }
                 if (propertiesChanged) {
-                    console.log('New properties are updated in Kudu service.');
-                    console.log('UpdatedAppServiceApplicationSettings');
+                    core.debug('New properties are updated in Kudu service.');
+                    console.log('Updated App Service Application settings and Kudu Application settings.');
                     return isNewValueUpdated;
                 }
                 noOftimesToIterate -= 1;
                 yield webClient.sleepFor(5);
             }
-            console.log('Timing out from app settings check');
+            core.debug('Timing out from app settings check');
             return isNewValueUpdated;
         });
     }

@@ -7,9 +7,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const util = require("util");
 const webClient = require("../webClient");
+const core = __importStar(require("@actions/core"));
 class KuduServiceClient {
     constructor(scmUri, accessToken) {
         this._accesssToken = accessToken;
@@ -21,7 +29,7 @@ class KuduServiceClient {
             request.headers["Authorization"] = "Basic " + this._accesssToken;
             request.headers['Content-Type'] = contentType || 'application/json; charset=utf-8';
             if (!!this._cookie) {
-                console.log(`setting affinity cookie ${JSON.stringify(this._cookie)}`);
+                core.debug(`setting affinity cookie ${JSON.stringify(this._cookie)}`);
                 request.headers['Cookie'] = this._cookie;
             }
             let retryCount = reqOptions && util.isNumber(reqOptions.retryCount) ? reqOptions.retryCount : 5;
@@ -30,7 +38,7 @@ class KuduServiceClient {
                     let httpResponse = yield webClient.sendRequest(request, reqOptions);
                     if (httpResponse.headers['set-cookie'] && !this._cookie) {
                         this._cookie = httpResponse.headers['set-cookie'];
-                        console.log(`loaded affinity cookie ${JSON.stringify(this._cookie)}`);
+                        core.debug(`loaded affinity cookie ${JSON.stringify(this._cookie)}`);
                     }
                     return httpResponse;
                 }
@@ -39,10 +47,10 @@ class KuduServiceClient {
                     if (exceptionString.indexOf("Hostname/IP doesn't match certificates's altnames") != -1
                         || exceptionString.indexOf("unable to verify the first certificate") != -1
                         || exceptionString.indexOf("unable to get local issuer certificate") != -1) {
-                        console.log('ASE_SSLIssueRecommendation');
+                        core.warning('ASE_SSLIssueRecommendation');
                     }
                     if (retryCount > 0 && exceptionString.indexOf('Request timeout') != -1 && (!reqOptions || reqOptions.retryRequestTimedout)) {
-                        console.log('encountered request timedout issue in Kudu. Retrying again');
+                        core.debug('encountered request timedout issue in Kudu. Retrying again');
                         retryCount -= 1;
                         continue;
                     }

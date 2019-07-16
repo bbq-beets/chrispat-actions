@@ -34,7 +34,10 @@ class AzureApplicationInsights {
                 throw AzureServiceClient_1.ToError(response);
             }
             catch (error) {
-                throw Error('FailedToUpdateApplicationInsightsResource' + this._name + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to update Application Insights for resource " + this._name + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }
@@ -69,7 +72,10 @@ class ApplicationInsightsResources {
                 throw AzureServiceClient_1.ToError(response);
             }
             catch (error) {
-                throw Error('FailedToGetApplicationInsightsResource' + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to get Application Insights Resource.\n" + error.message;
+                }
+                throw error;
             }
         });
     }

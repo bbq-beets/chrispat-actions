@@ -7,10 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const constants_1 = require("../constants");
 const fs = require("fs");
+const core = __importStar(require("@actions/core"));
 const deploymentFolder = 'site/deployments';
 const manifestFileName = 'manifest';
 const VSTS_ZIP_DEPLOY = 'VSTS_ZIP_DEPLOY';
@@ -26,7 +34,7 @@ class KuduServiceUtility {
                 return yield this._webAppKuduService.updateDeployment(requestBody);
             }
             catch (error) {
-                console.log(error);
+                core.warning(error);
             }
         });
     }
@@ -40,44 +48,44 @@ class KuduServiceUtility {
     deployUsingZipDeploy(packagePath) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('PackageDeploymentInitiated');
+                console.log('Package deployment using ZIP Deploy initiated.');
                 let queryParameters = [
                     'isAsync=true',
                     'deployer=' + VSTS_ZIP_DEPLOY
                 ];
                 let deploymentDetails = yield this._webAppKuduService.zipDeploy(packagePath, queryParameters);
                 yield this._processDeploymentResponse(deploymentDetails);
-                console.log('PackageDeploymentSuccess');
+                console.log('Successfully deployed web package to App Service.');
                 return deploymentDetails.id;
             }
             catch (error) {
-                console.log('PackageDeploymentFailed');
-                throw Error(error);
+                core.error('Failed to deploy web package to App Service.');
+                throw error;
             }
         });
     }
     deployUsingRunFromZip(packagePath, customMessage) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('PackageDeploymentInitiated');
+                console.log('Package deployment using ZIP Deploy initiated.');
                 let queryParameters = [
                     'deployer=' + VSTS_DEPLOY
                 ];
                 var deploymentMessage = this._getUpdateHistoryRequest(null, null, customMessage).message;
                 queryParameters.push('message=' + encodeURIComponent(deploymentMessage));
                 yield this._webAppKuduService.zipDeploy(packagePath, queryParameters);
-                console.log('PackageDeploymentSuccess');
+                console.log('Successfully deployed web package to App Service.');
             }
             catch (error) {
-                console.log('PackageDeploymentFailed');
-                throw Error(error);
+                core.error('Failed to deploy web package to App Service.');
+                throw error;
             }
         });
     }
     deployUsingWarDeploy(packagePath, customMessage, targetFolderName) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('WarPackageDeploymentInitiated');
+                console.log('Package deployment using WAR Deploy initiated.');
                 let queryParameters = [
                     'isAsync=true'
                 ];
@@ -88,41 +96,41 @@ class KuduServiceUtility {
                 queryParameters.push('message=' + encodeURIComponent(deploymentMessage));
                 let deploymentDetails = yield this._webAppKuduService.warDeploy(packagePath, queryParameters);
                 yield this._processDeploymentResponse(deploymentDetails);
-                console.log('PackageDeploymentSuccess');
+                console.log('Successfully deployed web package to App Service.');
                 return deploymentDetails.id;
             }
             catch (error) {
-                console.log('PackageDeploymentFailed');
-                throw Error(error);
+                core.error('Failed to deploy web package to App Service.');
+                throw error;
             }
         });
     }
     postZipDeployOperation(oldDeploymentID, activeDeploymentID) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(`ZIP DEPLOY - Performing post zip-deploy operation: ${oldDeploymentID} => ${activeDeploymentID}`);
+                core.debug(`ZIP DEPLOY - Performing post zip-deploy operation: ${oldDeploymentID} => ${activeDeploymentID}`);
                 let manifestFileContent = yield this._webAppKuduService.getFileContent(`${deploymentFolder}/${oldDeploymentID}`, manifestFileName);
                 if (!!manifestFileContent) {
                     let tempManifestFile = path.join(`${process.env.TEMPDIRECTORY}`, manifestFileName);
                     fs.writeFileSync(tempManifestFile, manifestFileContent);
                     yield this._webAppKuduService.uploadFile(`${deploymentFolder}/${activeDeploymentID}`, manifestFileName, tempManifestFile);
                 }
-                console.log('ZIP DEPLOY - Performed post-zipdeploy operation.');
+                core.debug('ZIP DEPLOY - Performed post-zipdeploy operation.');
             }
             catch (error) {
-                console.log(`Failed to execute post zip-deploy operation: ${JSON.stringify(error)}.`);
+                core.debug(`Failed to execute post zip-deploy operation: ${JSON.stringify(error)}.`);
             }
         });
     }
     warmpUp() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('warming up Kudu Service');
+                core.debug('warming up Kudu Service');
                 yield this._webAppKuduService.getAppSettings();
-                console.log('warmed up Kudu Service');
+                core.debug('warmed up Kudu Service');
             }
             catch (error) {
-                console.log('Failed to warm-up Kudu: ' + error.toString());
+                core.debug('Failed to warm-up Kudu: ' + error.toString());
             }
         });
     }
@@ -130,16 +138,16 @@ class KuduServiceUtility {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 var kuduDeploymentDetails = yield this._webAppKuduService.getDeploymentDetails(deploymentDetails.id);
-                console.log(`logs from kudu deploy: ${kuduDeploymentDetails.log_url}`);
+                core.debug(`logs from kudu deploy: ${kuduDeploymentDetails.log_url}`);
                 if (deploymentDetails.status == constants_1.KUDU_DEPLOYMENT_CONSTANTS.FAILED) {
                     yield this._printZipDeployLogs(kuduDeploymentDetails.log_url);
                 }
                 else {
-                    console.log('DeployLogsURL', kuduDeploymentDetails.log_url);
+                    console.log('Zip Deploy logs can be viewed at %s', kuduDeploymentDetails.log_url);
                 }
             }
             catch (error) {
-                console.log(`Unable to fetch logs for kudu Deploy: ${JSON.stringify(error)}`);
+                core.debug(`Unable to fetch logs for kudu Deploy: ${JSON.stringify(error)}`);
             }
             if (deploymentDetails.status == constants_1.KUDU_DEPLOYMENT_CONSTANTS.FAILED) {
                 throw 'PackageDeploymentUsingZipDeployFailed';
@@ -156,30 +164,6 @@ class KuduServiceUtility {
                 console.log(`${deploymentLog.message}`);
                 if (deploymentLog.details_url) {
                     yield this._printZipDeployLogs(deploymentLog.details_url);
-                }
-            }
-        });
-    }
-    _printPostDeploymentLogs(physicalPath) {
-        return __awaiter(this, void 0, void 0, function* () {
-            var stdoutLog = yield this._webAppKuduService.getFileContent(physicalPath, 'stdout.txt');
-            var stderrLog = yield this._webAppKuduService.getFileContent(physicalPath, 'stderr.txt');
-            var scriptReturnCode = yield this._webAppKuduService.getFileContent(physicalPath, 'script_result.txt');
-            if (scriptReturnCode == null) {
-                throw new Error('File not found in Kudu Service. ' + 'script_result.txt');
-            }
-            if (stdoutLog) {
-                console.log('stdoutFromScript');
-                console.log(stdoutLog);
-            }
-            if (stderrLog) {
-                console.log('stderrFromScript');
-                if (scriptReturnCode != '0') {
-                    console.log(stderrLog);
-                    throw Error('ScriptExecutionOnKuduFailed' + scriptReturnCode + stderrLog);
-                }
-                else {
-                    console.log(stderrLog);
                 }
             }
         });

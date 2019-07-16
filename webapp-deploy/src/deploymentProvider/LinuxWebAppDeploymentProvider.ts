@@ -2,6 +2,7 @@ import { WebAppDeploymentProvider } from './WebAppDeploymentProvider';
 import { PackageType } from '../common/Utilities/packageUtility';
 import * as utility from '../common/Utilities/utility.js';
 import * as zipUtility from '../common/Utilities/ziputility.js';
+import * as core from '@actions/core';
 
 export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
     private zipDeploymentID: string;
@@ -11,7 +12,7 @@ export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
         let deploymentMethodtelemetry = packageType === PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
         console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
         
-        console.log('Performing Linux web app deployment');
+        core.debug('Performing Linux web app deployment');
         
         await this.kuduServiceUtility.warmpUp();
         
@@ -19,7 +20,7 @@ export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
             case PackageType.folder:
                 let tempPackagePath = utility.generateTemporaryFolderOrZipPath(`${process.env.TEMPDIRECTORY}`, false);
                 let archivedWebPackage = await zipUtility.archiveFolder(this.taskParams.package.getPath(), "", tempPackagePath) as string;
-                console.log("Compressed folder into zip " +  archivedWebPackage);
+                core.debug("Compressed folder into zip " +  archivedWebPackage);
                 this.zipDeploymentID = await this.kuduServiceUtility.deployUsingZipDeploy(archivedWebPackage);
             break;
 
@@ -28,23 +29,23 @@ export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
             break;
 
             case PackageType.jar:
-                console.log("Initiated deployment via kudu service for webapp jar package : "+ this.taskParams.package.getPath());
+                core.debug("Initiated deployment via kudu service for webapp jar package : "+ this.taskParams.package.getPath());
                 let folderPath = await utility.generateTemporaryFolderForDeployment(false, this.taskParams.package.getPath(), PackageType.jar);
                 let output = await utility.archiveFolderForDeployment(false, folderPath);
                 let webPackage = output.webDeployPkg;
-                console.log("Initiated deployment via kudu service for webapp jar package : "+ webPackage);
+                core.debug("Initiated deployment via kudu service for webapp jar package : "+ webPackage);
                 this.zipDeploymentID = await this.kuduServiceUtility.deployUsingZipDeploy(webPackage);
             break;
 
             case PackageType.war:
-                console.log("Initiated deployment via kudu service for webapp war package : "+ this.taskParams.package.getPath());
+                core.debug("Initiated deployment via kudu service for webapp war package : "+ this.taskParams.package.getPath());
                 let warName = utility.getFileNameFromPath(this.taskParams.package.getPath(), ".war");
                 this.zipDeploymentID = await this.kuduServiceUtility.deployUsingWarDeploy(this.taskParams.package.getPath(), 
                 { slotName: this.appService.getSlot() }, warName);
             break;
 
             default:
-                throw new Error('Invalidwebapppackageorfolderpathprovided' + this.taskParams.package.getPath());
+                throw new Error('Invalid App Service package or folder path provided: ' + this.taskParams.package.getPath());
         }
     }
 

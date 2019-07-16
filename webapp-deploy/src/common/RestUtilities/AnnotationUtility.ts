@@ -1,6 +1,7 @@
 import { AzureEndpoint } from "../ArmRest/AzureEndpoint";
 import { AzureAppService } from "../ArmRest/azure-app-service";
 import { ApplicationInsightsResources, AzureApplicationInsights } from "../ArmRest/azure-arm-appinsights";
+import * as core from '@actions/core';
 var uuidV4 = require("uuid/v4");
 
 export async function addAnnotation(endpoint: AzureEndpoint, azureAppService: AzureAppService, isDeploymentSuccess: boolean): Promise<void> {
@@ -14,18 +15,19 @@ export async function addAnnotation(endpoint: AzureEndpoint, azureAppService: Az
                 var appInsights: AzureApplicationInsights = new AzureApplicationInsights(endpoint, appInsightsResources[0].id.split('/')[4], appInsightsResources[0].name);
                 var releaseAnnotationData = getReleaseAnnotation(isDeploymentSuccess);
                 await appInsights.addReleaseAnnotation(releaseAnnotationData);
-                console.log("SuccessfullyAddedReleaseAnnotation" + appInsightsResources[0].name);
+                console.log("Successfully added release annotation to the Application Insight :" + appInsightsResources[0].name);
             }
             else {
-                console.log(`Unable to find Application Insights resource with Instrumentation key ${instrumentationKey}. Skipping adding release annotation.`);
+                core.debug(`Unable to find Application Insights resource with Instrumentation key ${instrumentationKey}. Skipping adding release annotation.`);
             }
         }
         else {
-            console.log(`Application Insights is not configured for the App Service. Skipping adding release annotation.`);
+            core.debug(`Application Insights is not configured for the App Service. Skipping adding release annotation.`);
         }
     }
     catch(error) {
-        console.log("FailedAddingReleaseAnnotation" + error);
+        error.exception = "FailedAddingReleaseAnnotation";
+        throw error;
     }
 }
 

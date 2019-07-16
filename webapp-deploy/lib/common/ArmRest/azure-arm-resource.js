@@ -36,7 +36,10 @@ class Resources {
                 return result;
             }
             catch (error) {
-                throw Error('FailedToGetResourceID' + this._client.getFormattedError(error));
+                if (error && error.message && typeof error.message.valueOf() == 'string') {
+                    error.message = "Failed to get resource ID for resource type " + resourceType + " and resource name " + resourceName + ".\n" + error.message;
+                }
+                throw error;
             }
         });
     }

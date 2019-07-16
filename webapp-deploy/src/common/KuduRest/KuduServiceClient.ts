@@ -1,5 +1,6 @@
 import util = require('util');
 import webClient = require('../webClient');
+import * as core from '@actions/core';
 
 export class KuduServiceClient {
     private _scmUri;
@@ -17,7 +18,7 @@ export class KuduServiceClient {
         request.headers['Content-Type'] = contentType || 'application/json; charset=utf-8';
         
         if(!!this._cookie) {
-            console.log(`setting affinity cookie ${JSON.stringify(this._cookie)}`);
+            core.debug(`setting affinity cookie ${JSON.stringify(this._cookie)}`);
             request.headers['Cookie'] = this._cookie;
         }
 
@@ -28,7 +29,7 @@ export class KuduServiceClient {
                 let httpResponse = await webClient.sendRequest(request, reqOptions);
                 if(httpResponse.headers['set-cookie'] && !this._cookie) {
                     this._cookie = httpResponse.headers['set-cookie'];
-                    console.log(`loaded affinity cookie ${JSON.stringify(this._cookie)}`);
+                    core.debug(`loaded affinity cookie ${JSON.stringify(this._cookie)}`);
                 }
                 
                 return httpResponse;
@@ -38,11 +39,11 @@ export class KuduServiceClient {
                 if(exceptionString.indexOf("Hostname/IP doesn't match certificates's altnames") != -1
                     || exceptionString.indexOf("unable to verify the first certificate") != -1
                     || exceptionString.indexOf("unable to get local issuer certificate") != -1) {
-                        console.log('ASE_SSLIssueRecommendation');
+                        core.warning('ASE_SSLIssueRecommendation');
                 }
 
                 if(retryCount > 0 && exceptionString.indexOf('Request timeout') != -1 && (!reqOptions || reqOptions.retryRequestTimedout)) {
-                    console.log('encountered request timedout issue in Kudu. Retrying again');
+                    core.debug('encountered request timedout issue in Kudu. Retrying again');
                     retryCount -= 1;
                     continue;
                 }
