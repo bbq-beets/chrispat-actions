@@ -19,4 +19,6 @@ jobs:
 
     actions:
     - run: echo Hello World change
+    - run: docker ps -a
+    - run: echo ${{ github.ref }}
     
