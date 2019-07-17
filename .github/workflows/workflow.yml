@@ -9,3 +9,11 @@ jobs:
       with: 
         app-name: linuxwarapp
         package: 'C:/Users/suaggar/Downloads/ROOT.war'
+    - uses: ./webapp-deploy
+      with: 
+        app-name: linuxjarapp
+        package: 'C:/Users/suaggar/Downloads/ROOT.jar'
+    - uses: ./webapp-deploy
+      with: 
+        app-name: linuxappsuaggar
+        package: 'C:/Users/suaggar/Downloads/phpLaravel'
