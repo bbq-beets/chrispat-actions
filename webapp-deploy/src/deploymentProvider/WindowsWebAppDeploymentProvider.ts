@@ -1,12 +1,15 @@
 import { WebAppDeploymentProvider } from "./WebAppDeploymentProvider";
 import { PackageType } from "../common/Utilities/packageUtility";
 import { parse } from "../common/Utilities/parameterParserUtility";
+import { FileTransformUtility} from "../common/Utilities/fileTransformationUtility";
 import * as utility from '../common/Utilities/utility.js';
 import * as zipUtility from '../common/Utilities/ziputility.js';
 import * as core from '@actions/core';
 
 const removeRunFromZipAppSetting: string = '-WEBSITE_RUN_FROM_PACKAGE 0';
 const runFromZipAppSetting: string = '-WEBSITE_RUN_FROM_PACKAGE 1';
+const appType: string = "-appType java_springboot";
+const jarPath: string = " -JAR_PATH ";
 
 export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
     private zipDeploymentID: string;
@@ -42,6 +45,10 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
                 if(!isNewValueUpdated) {
                     await this.kuduServiceUtility.warmpUp();
                 }
+
+                var jarFile = utility.getFileNameFromPath(webPackage);
+                webPackage = await FileTransformUtility.applyTransformations(webPackage, appType + jarPath + jarFile, this.taskParams.package.getPackageType());
+
                 this.zipDeploymentID = await this.kuduServiceUtility.deployUsingZipDeploy(webPackage);
                 this.updateStatus = true;
                 break;
