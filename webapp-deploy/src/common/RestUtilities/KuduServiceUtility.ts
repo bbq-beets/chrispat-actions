@@ -138,7 +138,7 @@ export class KuduServiceUtility {
                 await this._printZipDeployLogs(kuduDeploymentDetails.log_url);
             }
             else {
-                console.log('Zip Deploy logs can be viewed at %s', kuduDeploymentDetails.log_url);
+                console.log('Deploy logs can be viewed at %s', kuduDeploymentDetails.log_url);
             }
         }
         catch(error) {

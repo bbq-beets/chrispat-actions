@@ -29,17 +29,17 @@ export class WebAppDeploymentProvider implements IWebAppDeploymentProvider {
 
     public async DeployWebAppStep() {}
 
-    public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus: boolean) {
+    public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus?: boolean) {
         if(this.kuduServiceUtility) {
             await addAnnotation(this.taskParams.endpoint, this.appService, isDeploymentSuccess);
-            if(updateStatus) {
+            if(!!updateStatus && updateStatus == true) {
                 this.activeDeploymentID = await this.kuduServiceUtility.updateDeploymentStatus(isDeploymentSuccess, null, {'type': 'Deployment', slotName: this.appService.getSlot()});
                 core.debug('Active DeploymentId :'+ this.activeDeploymentID);
             }
         }
         
         let appServiceApplicationUrl: string = await this.appServiceUtility.getApplicationURL();
-        console.log('AppServiceApplicationURL' + appServiceApplicationUrl);
+        console.log('App Service Application URL: ' + appServiceApplicationUrl);
         core.exportVariable('AppServiceApplicationUrl', appServiceApplicationUrl);
     }
 }

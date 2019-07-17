@@ -20,19 +20,28 @@ const DeploymentFactory_1 = require("./deploymentProvider/DeploymentFactory");
 const core = __importStar(require("@actions/core"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        var taskParams = new taskparameters_1.TaskParameters();
-        yield taskParams.getResourceDetails();
-        var deploymentFactory = new DeploymentFactory_1.DeploymentFactory(taskParams);
-        var deploymentProvider = yield deploymentFactory.GetDeploymentProvider();
-        console.log("Predeployment Step Started");
-        yield deploymentProvider.PreDeploymentStep();
-        console.log("Deployment Step Started");
-        yield deploymentProvider.DeployWebAppStep();
+        let isDeploymentSuccess = true;
+        try {
+            var taskParams = new taskparameters_1.TaskParameters();
+            yield taskParams.getResourceDetails();
+            var deploymentFactory = new DeploymentFactory_1.DeploymentFactory(taskParams);
+            var deploymentProvider = yield deploymentFactory.GetDeploymentProvider();
+            console.log("Predeployment Step Started");
+            yield deploymentProvider.PreDeploymentStep();
+            console.log("Deployment Step Started");
+            yield deploymentProvider.DeployWebAppStep();
+        }
+        catch (error) {
+            core.debug("Deployment Failed with Error: " + error);
+            isDeploymentSuccess = false;
+            core.setFailed(error);
+        }
+        finally {
+            if (deploymentProvider != null) {
+                yield deploymentProvider.UpdateDeploymentStatus(isDeploymentSuccess);
+            }
+            core.debug(isDeploymentSuccess ? "Deployment Succeeded" : "Deployment failed");
+        }
     });
 }
-try {
-    main();
-}
-catch (ex) {
-    core.setFailed(ex);
-}
+main();

@@ -39,13 +39,13 @@ class WebAppDeploymentProvider {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.kuduServiceUtility) {
                 yield AnnotationUtility_1.addAnnotation(this.taskParams.endpoint, this.appService, isDeploymentSuccess);
-                if (updateStatus) {
+                if (!!updateStatus && updateStatus == true) {
                     this.activeDeploymentID = yield this.kuduServiceUtility.updateDeploymentStatus(isDeploymentSuccess, null, { 'type': 'Deployment', slotName: this.appService.getSlot() });
                     core.debug('Active DeploymentId :' + this.activeDeploymentID);
                 }
             }
             let appServiceApplicationUrl = yield this.appServiceUtility.getApplicationURL();
-            console.log('AppServiceApplicationURL' + appServiceApplicationUrl);
+            console.log('App Service Application URL: ' + appServiceApplicationUrl);
             core.exportVariable('AppServiceApplicationUrl', appServiceApplicationUrl);
         });
     }

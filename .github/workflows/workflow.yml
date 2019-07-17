@@ -8,7 +8,7 @@ jobs:
     - uses: ./webapp-deploy
       with: 
         app-name: winWebAppTest
-        package: './webapp-deploy/TestResources/AspCore'
+        package: 'C:/Users/suaggar/Downloads/AspCore'
     - uses: ./webapp-deploy
       with: 
         app-name: winJavaApp

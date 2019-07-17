@@ -76,7 +76,7 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
             }
         });
     }
-    UpdateDeploymentStatus(isDeploymentSuccess) {
+    UpdateDeploymentStatus(isDeploymentSuccess, updateStatus) {
         const _super = Object.create(null, {
             UpdateDeploymentStatus: { get: () => super.UpdateDeploymentStatus }
         });

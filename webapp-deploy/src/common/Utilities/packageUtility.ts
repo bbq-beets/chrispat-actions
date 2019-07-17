@@ -13,11 +13,11 @@ export class PackageUtility {
     public static getPackagePath(packagePath: string): string {
         var availablePackages: string[] = utility.findfiles(packagePath);
         if(availablePackages.length == 0) {
-            throw new Error('Nopackagefoundwithspecifiedpattern' + packagePath);
+            throw new Error('No package found with specified pattern: ' + packagePath);
         }
 
         if(availablePackages.length > 1) {
-            throw new Error('MorethanonepackagematchedwithspecifiedpatternPleaserestrainthesearchpattern' + packagePath);
+            throw new Error('More than one package matched with specified pattern: ' + packagePath + '. Please restrain the search pattern.');
         }
 
         return availablePackages[0];
