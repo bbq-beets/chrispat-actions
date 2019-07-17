@@ -5,20 +5,7 @@ jobs:
     runs-on:
       pool: default
     actions:
-    # - uses: ./webapp-deploy
-    #   with: 
-    #     app-name: linuxwarapp
-    #     package: 'C:/Users/suaggar/Downloads/ROOT.war'
-    # - uses: ./webapp-deploy
-    #   with: 
-    #     app-name: winJavaApp
-    #     package: 'C:/Users/suaggar/Downloads/ROOT.war'
     - uses: ./webapp-deploy
       with: 
-        app-name: winjarapp
-        package: 'C:/Users/suaggar/Downloads/ROOT.jar'
-    # - uses: ./webapp-deploy
-    #   with:
-    #     app-name: linuxappsuaggar
-    #     package: 'C:/Users/suaggar/Downloads/pythonDjango.zip'
-    
+        app-name: linuxwarapp
+        package: 'C:/Users/suaggar/Downloads/ROOT.war'
