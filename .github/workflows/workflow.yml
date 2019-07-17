@@ -17,7 +17,7 @@ jobs:
       with: 
         app-name: winJavaApp
         package: 'C:/Users/suaggar/Downloads/ROOT.jar'
-    - users: ./webapp-deploy
+    - uses: ./webapp-deploy
       with:
         app-name: linuxappsuaggar
         package: 'C:/Users/suaggar/Downloads/pythonDjango.zip'
