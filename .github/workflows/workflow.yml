@@ -7,15 +7,11 @@ jobs:
     actions:
     - uses: ./webapp-deploy
       with: 
-        app-name: winWebAppTest
-        package: 'C:/Users/suaggar/Downloads/AspCore'
-    - uses: ./webapp-deploy
-      with: 
-        app-name: winJavaApp
+        app-name: linuxwarapp
         package: 'C:/Users/suaggar/Downloads/ROOT.war'
     - uses: ./webapp-deploy
       with: 
-        app-name: winJavaApp
+        app-name: winjarapp
         package: 'C:/Users/suaggar/Downloads/ROOT.jar'
     - uses: ./webapp-deploy
       with:
