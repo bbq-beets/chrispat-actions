@@ -7,9 +7,9 @@ jobs:
     actions:
     - uses: ./webapp-deploy
       with: 
-        # azure-service-app-id: ${{ secrets.AZURE_SERVICE_APP_ID }}
-        # azure-service-app-key: ${{ secrets.AZURE_SERVICE_APP_KEY }}
-        # azure-service-tenant-id: ${{ secrets.AZURE_SERVICE_TENANT_ID }}
-        # azure-subscription: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         app-name: winWebAppTest
-        package: './webapp-deploy/TestResources/AspCore.zip'
+        package: './webapp-deploy/TestResources/AspCore'
+    - uses: ./webapp-deploy
+      with: 
+        app-name: winJavaApp
+        package: 'C:\USers\suaggar\Downloads\ROOT.war'
