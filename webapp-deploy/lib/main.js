@@ -38,7 +38,7 @@ function main() {
         }
         finally {
             if (deploymentProvider != null) {
-                yield deploymentProvider.UpdateDeploymentStatus(isDeploymentSuccess);
+                yield deploymentProvider.UpdateDeploymentStatus(isDeploymentSuccess, true);
             }
             core.debug(isDeploymentSuccess ? "Deployment Succeeded" : "Deployment failed");
         }

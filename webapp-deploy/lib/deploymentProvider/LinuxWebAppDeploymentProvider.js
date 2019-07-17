@@ -56,7 +56,7 @@ class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDep
             }
         });
     }
-    UpdateDeploymentStatus(isDeploymentSuccess) {
+    UpdateDeploymentStatus(isDeploymentSuccess, updateStatus) {
         const _super = Object.create(null, {
             UpdateDeploymentStatus: { get: () => super.UpdateDeploymentStatus }
         });

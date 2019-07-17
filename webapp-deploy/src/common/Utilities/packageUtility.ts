@@ -56,7 +56,7 @@ export class Package {
                 } else if (this._path.toLowerCase().endsWith('.zip')){
                     this._packageType = PackageType.zip;
                     console.log("This is zip package ");
-                } else if(!fs.statSync(this._path).isDirectory()){
+                } else if(fs.statSync(this._path).isDirectory()){
                     this._packageType = PackageType.folder;
                     console.log("This is folder package ");
                 } else{

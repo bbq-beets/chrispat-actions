@@ -49,7 +49,7 @@ export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
         }
     }
 
-    public async UpdateDeploymentStatus(isDeploymentSuccess: boolean) {
+    public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus: boolean) {
         if(this.kuduServiceUtility) {
             if(this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
                 await this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);

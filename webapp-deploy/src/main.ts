@@ -24,7 +24,7 @@ async function main() {
   }
   finally {
       if(deploymentProvider != null) {
-          await deploymentProvider.UpdateDeploymentStatus(isDeploymentSuccess);
+          await deploymentProvider.UpdateDeploymentStatus(isDeploymentSuccess, true);
       }
       
       core.debug(isDeploymentSuccess ? "Deployment Succeeded" : "Deployment failed");
