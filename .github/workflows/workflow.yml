@@ -11,6 +11,10 @@ jobs:
         package: 'C:/Users/suaggar/Downloads/ROOT.war'
     - uses: ./webapp-deploy
       with: 
+        app-name: winJavaApp
+        package: 'C:/Users/suaggar/Downloads/ROOT.war'
+    - uses: ./webapp-deploy
+      with: 
         app-name: winjarapp
         package: 'C:/Users/suaggar/Downloads/ROOT.jar'
     - uses: ./webapp-deploy

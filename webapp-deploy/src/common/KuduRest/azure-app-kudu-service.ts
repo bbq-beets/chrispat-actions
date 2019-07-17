@@ -169,7 +169,7 @@ export class Kudu {
         };
 
         try {
-            let response = await this._client.beginRequest(httpRequest, null, 'multipart/form-data');
+            let response = await this._client.beginRequest(httpRequest, null, 'application/octet-stream');
             core.debug(`War Deploy response: ${JSON.stringify(response)}`);
             if(response.statusCode == 200) {
                 core.debug('Deployment passed');
