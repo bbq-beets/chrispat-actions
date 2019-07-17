@@ -98,7 +98,7 @@ function addMissingParametersValue(appType, webConfigParameters) {
 }
 function generateWebConfigFile(webConfigTargetPath, appType, substitutionParameters) {
     // Get the template path for the given appType
-    var webConfigTemplatePath = path.join(__dirname, '../WebConfigTemplates', appType.toLowerCase());
+    var webConfigTemplatePath = path.join(__dirname, './WebConfigTemplates', appType.toLowerCase());
     var webConfigContent = fs.readFileSync(webConfigTemplatePath, 'utf8');
     webConfigContent = replaceMultiple(webConfigContent, substitutionParameters);
     fs.writeFileSync(webConfigTargetPath, webConfigContent, { encoding: "utf8" });
