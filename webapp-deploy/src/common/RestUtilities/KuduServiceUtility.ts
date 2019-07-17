@@ -165,6 +165,8 @@ export class KuduServiceUtility {
     }
 
     private _getUpdateHistoryRequest(isDeploymentSuccess: boolean, deploymentID?: string, customMessage?: any): any {    
+        deploymentID = !!deploymentID ? deploymentID : this.getDeploymentID();
+        
         var message = {
             type : "deployment",
             sha : `${process.env.GITHUB_SHA}`,

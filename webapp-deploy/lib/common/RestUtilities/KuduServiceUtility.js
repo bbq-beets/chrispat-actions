@@ -169,6 +169,7 @@ class KuduServiceUtility {
         });
     }
     _getUpdateHistoryRequest(isDeploymentSuccess, deploymentID, customMessage) {
+        deploymentID = !!deploymentID ? deploymentID : this.getDeploymentID();
         var message = {
             type: "deployment",
             sha: `${process.env.GITHUB_SHA}`,

@@ -29,7 +29,7 @@ export class WebAppDeploymentProvider implements IWebAppDeploymentProvider {
 
     public async DeployWebAppStep() {}
 
-    public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus?: boolean) {
+    public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus: boolean) {
         if(this.kuduServiceUtility) {
             await addAnnotation(this.taskParams.endpoint, this.appService, isDeploymentSuccess);
             if(!!updateStatus && updateStatus == true) {
