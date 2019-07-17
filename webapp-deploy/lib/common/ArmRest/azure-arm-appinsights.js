@@ -52,11 +52,11 @@ class ApplicationInsightsResources {
     }
     list(resourceGroupName, filter) {
         return __awaiter(this, void 0, void 0, function* () {
+            resourceGroupName = resourceGroupName ? `resourceGroups/${resourceGroupName}` : '';
             var httpRequest = {
                 method: 'GET',
                 uri: this._client.getRequestUri(`//subscriptions/{subscriptionId}/${resourceGroupName}/providers/microsoft.insights/components`, {}, filter, '2015-05-01')
             };
-            resourceGroupName = resourceGroupName ? `resourceGroups/${resourceGroupName}` : '';
             try {
                 var response = yield this._client.beginRequest(httpRequest);
                 if (response.statusCode == 200) {

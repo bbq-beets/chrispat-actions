@@ -66,13 +66,12 @@ export class ApplicationInsightsResources {
     }
 
     public async list(resourceGroupName?: string, filter?: string[]): Promise<ApplicationInsights[]> {
+        resourceGroupName = resourceGroupName ? `resourceGroups/${resourceGroupName}` : '';
         var httpRequest: webClient.WebRequest = {
             method: 'GET',
             uri: this._client.getRequestUri(`//subscriptions/{subscriptionId}/${resourceGroupName}/providers/microsoft.insights/components`,
             {}, filter, '2015-05-01')
         };
-
-        resourceGroupName = resourceGroupName ? `resourceGroups/${resourceGroupName}` : '';
 
         try {
             var response = await this._client.beginRequest(httpRequest);
