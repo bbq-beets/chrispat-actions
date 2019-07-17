@@ -12,4 +12,13 @@ jobs:
     - uses: ./webapp-deploy
       with: 
         app-name: winJavaApp
-        package: 'C:\USers\suaggar\Downloads\ROOT.war'
+        package: 'C:/Users/suaggar/Downloads/ROOT.war'
+    - uses: ./webapp-deploy
+      with: 
+        app-name: winJavaApp
+        package: 'C:/Users/suaggar/Downloads/ROOT.jar'
+    - users: ./webapp-deploy
+      with:
+        app-name: linuxappsuaggar
+        package: 'C:/Users/suaggar/Downloads/pythonDjango.zip'
+    

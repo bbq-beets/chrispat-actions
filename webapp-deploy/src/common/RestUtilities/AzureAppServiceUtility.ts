@@ -74,7 +74,6 @@ export class AzureAppServiceUtility {
     public async getKuduService(): Promise<Kudu> {
         var publishingCredentials = await this._appService.getPublishingCredentials();
         if(publishingCredentials.properties["scmUri"]) {
-            core.exportSecret(`AZURE_APP_SERVICE_KUDU_${this._appService.getSlot()}_PASSWORD`, publishingCredentials.properties["publishingPassword"]);
             return new Kudu(publishingCredentials.properties["scmUri"], publishingCredentials.properties["publishingUserName"], publishingCredentials.properties["publishingPassword"]);
         }
 

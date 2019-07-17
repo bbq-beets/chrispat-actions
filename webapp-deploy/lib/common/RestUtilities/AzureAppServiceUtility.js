@@ -90,7 +90,6 @@ class AzureAppServiceUtility {
         return __awaiter(this, void 0, void 0, function* () {
             var publishingCredentials = yield this._appService.getPublishingCredentials();
             if (publishingCredentials.properties["scmUri"]) {
-                core.exportSecret(`AZURE_APP_SERVICE_KUDU_${this._appService.getSlot()}_PASSWORD`, publishingCredentials.properties["publishingPassword"]);
                 return new azure_app_kudu_service_1.Kudu(publishingCredentials.properties["scmUri"], publishingCredentials.properties["publishingUserName"], publishingCredentials.properties["publishingPassword"]);
             }
             throw Error('KuduSCMDetailsAreEmpty');
