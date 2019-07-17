@@ -127,7 +127,7 @@ function archiveFolderForDeployment(isFolderBasedDeployment, folderPath) {
             webDeployPkg = folderPath;
         }
         else {
-            var tempWebPackageZip = generateTemporaryFolderOrZipPath(`${process.env.DefaultWorkingDirectory}`, false);
+            var tempWebPackageZip = generateTemporaryFolderOrZipPath(`${process.env.RUNNER_WORKFOLDER}`, false);
             webDeployPkg = yield zipUtility.archiveFolder(folderPath, "", tempWebPackageZip);
         }
         return {
