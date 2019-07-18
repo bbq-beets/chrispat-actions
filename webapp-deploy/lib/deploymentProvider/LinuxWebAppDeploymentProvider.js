@@ -56,8 +56,8 @@ class LinuxWebAppDeploymentProvider {
                 case packageUtility_1.PackageType.war:
                     core.debug("Initiated deployment via kudu service for webapp war package : " + packagePath);
                     let warName = utility.getFileNameFromPath(packagePath, ".war");
-                    // Todo: pass slotName: this.appService.getSlot()  in customMessage
-                    this.zipDeploymentID = yield this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(packagePath, {}, warName);
+                    let customMessage = this.deploymentHelper.AzureAppService ? { slotName: this.deploymentHelper.AzureAppService.getSlot() } : {};
+                    this.zipDeploymentID = yield this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(packagePath, customMessage, warName);
                     break;
                 default:
                     throw new Error('Invalid App Service package or folder path provided: ' + packagePath);

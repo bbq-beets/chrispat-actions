@@ -7,7 +7,9 @@ async function main() {
 
   try {
     var taskParams = TaskParameters.getTaskParams();
-    await taskParams.getResourceDetails();
+    if(!!taskParams.endpoint) {
+      await taskParams.getResourceDetails();
+    }
     var deploymentProvider = DeploymentFactory.GetDeploymentProvider();
 
     console.log("Predeployment Step Started");

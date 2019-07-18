@@ -52,9 +52,8 @@ export class LinuxWebAppDeploymentProvider implements IWebAppDeploymentProvider 
             case PackageType.war:
                 core.debug("Initiated deployment via kudu service for webapp war package : "+ packagePath);
                 let warName = utility.getFileNameFromPath(packagePath, ".war");
-                // Todo: pass slotName: this.appService.getSlot()  in customMessage
-                this.zipDeploymentID = await this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(packagePath, 
-                { }, warName);
+                let customMessage = this.deploymentHelper.AzureAppService ? {slotName: this.deploymentHelper.AzureAppService.getSlot()} : {};
+                this.zipDeploymentID = await this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(packagePath, customMessage, warName);
             break;
 
             default:

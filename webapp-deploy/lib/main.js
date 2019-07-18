@@ -23,7 +23,9 @@ function main() {
         let isDeploymentSuccess = true;
         try {
             var taskParams = taskparameters_1.TaskParameters.getTaskParams();
-            yield taskParams.getResourceDetails();
+            if (!!taskParams.endpoint) {
+                yield taskParams.getResourceDetails();
+            }
             var deploymentProvider = DeploymentFactory_1.DeploymentFactory.GetDeploymentProvider();
             console.log("Predeployment Step Started");
             yield deploymentProvider.PreDeploymentStep();

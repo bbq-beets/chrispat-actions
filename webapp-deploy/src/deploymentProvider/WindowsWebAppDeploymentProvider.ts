@@ -34,7 +34,8 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
         } 
         let packageType = TaskParameters.getTaskParams().package.getPackageType();
         let deploymentMethodtelemetry: string;
-        
+        let customMessage;
+
         switch(packageType){
             case PackageType.war:
                 core.debug("Initiated deployment via kudu service for webapp war package : "+ webPackage);        
@@ -42,8 +43,9 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 await this.deploymentHelper.KuduServiceUtility.warmpUp();
                 var warName = utility.getFileNameFromPath(webPackage, ".war");
+                customMessage = this.deploymentHelper.AzureAppService ? {slotName: this.deploymentHelper.AzureAppService.getSlot()} : {};
                 this.zipDeploymentID = await this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(webPackage, 
-                    { slotName: this.deploymentHelper.AzureAppService.getSlot() }, warName);
+                    customMessage, warName);
                 this.updateStatus = true;
                 break;
 
@@ -52,7 +54,7 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
                 deploymentMethodtelemetry = '{"deploymentMethod":"Zip Deploy"}';
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 var updateApplicationSetting = parse(removeRunFromZipAppSetting)
-                var isNewValueUpdated: boolean = await this.deploymentHelper.AzureAppServiceUtility.updateAndMonitorAppSettings(updateApplicationSetting);
+                var isNewValueUpdated: boolean = this.deploymentHelper.AzureAppServiceUtility ? await this.deploymentHelper.AzureAppServiceUtility.updateAndMonitorAppSettings(updateApplicationSetting) : false;
                 if(!isNewValueUpdated) {
                     await this.deploymentHelper.KuduServiceUtility.warmpUp();
                 }
@@ -74,12 +76,12 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
                 deploymentMethodtelemetry = '{"deploymentMethod":"Run from Package"}';
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 var addCustomApplicationSetting = parse(runFromZipAppSetting);
-                var isNewValueUpdated: boolean = await this.deploymentHelper.AzureAppServiceUtility.updateAndMonitorAppSettings(addCustomApplicationSetting);
+                var isNewValueUpdated: boolean = this.deploymentHelper.AzureAppServiceUtility ? await this.deploymentHelper.AzureAppServiceUtility.updateAndMonitorAppSettings(addCustomApplicationSetting) : false;
                 if(!isNewValueUpdated) {
                     await this.deploymentHelper.KuduServiceUtility.warmpUp();
                 }
-                await this.deploymentHelper.KuduServiceUtility.deployUsingRunFromZip(webPackage, 
-                    { slotName: this.deploymentHelper.AzureAppService.getSlot() });
+                customMessage = this.deploymentHelper.AzureAppService ? {slotName: this.deploymentHelper.AzureAppService.getSlot()} : {};
+                await this.deploymentHelper.KuduServiceUtility.deployUsingRunFromZip(webPackage, customMessage);
                 this.updateStatus = false;
                 break;
 
