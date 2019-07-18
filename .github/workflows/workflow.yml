@@ -27,7 +27,9 @@ jobs:
         version: latest
       id: install
 
-    - run: ${{ actions.install.outputs.kubectlPath }} create secret docker-registry desattiracr --docker-server=desattiracr.azurecr.io --docker-username ${{ secrets.SPN_ID }} --docker-password ${{ secrets.SPN_KEY }} --docker-email=abc@example.com
+    - run: |
+        ${{ actions.install.outputs.kubectlPath }} delete secret desattiracr
+        ${{ actions.install.outputs.kubectlPath }} create secret docker-registry desattiracr --docker-server=desattiracr.azurecr.io --docker-username ${{ secrets.SPN_ID }} --docker-password ${{ secrets.SPN_KEY }} --docker-email=abc@example.com
 
     - uses: azure/actions/aks-deploy@master
       with:
