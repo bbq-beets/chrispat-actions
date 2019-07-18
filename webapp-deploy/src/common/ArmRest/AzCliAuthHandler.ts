@@ -6,7 +6,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
     private static endpoint: AzCliAuthHandler;
     private _subscriptionID: string;
     private _baseUrl: string;
-    private token: string;
+    private token;
 
     private constructor(subscriptionID: string) {
         this._subscriptionID = JSON.stringify(subscriptionID.replace(/-/g,""));
@@ -35,7 +35,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
             }
-            this.token = resultOfExec.stdout;
+            this.token = encodeURIComponent(resultOfExec.stdout);
         }
         return this.token;
     }
