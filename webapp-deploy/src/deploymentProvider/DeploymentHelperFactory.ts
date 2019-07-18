@@ -9,12 +9,12 @@ export class DeploymentHelperFactory {
         {
             case DeploymentHelperConstants.SPN :
             {
-                new SpnBasedDeploymentHelper()
+                return new SpnBasedDeploymentHelper()
             }
 
             case DeploymentHelperConstants.PublishProfile :
             {
-                new PublishProfileBasedDeploymentHelper()
+                return new PublishProfileBasedDeploymentHelper()
             }
 
             default :

@@ -7,11 +7,11 @@ class DeploymentHelperFactory {
         switch (type) {
             case DeploymentHelperConstants.SPN:
                 {
-                    new SpnBasedDeploymentHelper_1.SpnBasedDeploymentHelper();
+                    return new SpnBasedDeploymentHelper_1.SpnBasedDeploymentHelper();
                 }
             case DeploymentHelperConstants.PublishProfile:
                 {
-                    new PublishProfileBasedDeploymentHelper_1.PublishProfileBasedDeploymentHelper();
+                    return new PublishProfileBasedDeploymentHelper_1.PublishProfileBasedDeploymentHelper();
                 }
             default:
                 {
