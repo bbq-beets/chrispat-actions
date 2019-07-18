@@ -35,6 +35,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
             }
+            console.log(resultOfExec.stdout);
             this.token = resultOfExec.stdout.replace("-","");
         }
         return this.token;
