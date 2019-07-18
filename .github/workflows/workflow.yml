@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     actions:
     - run: | 
-        az login --service-principal --username ${{ secrets.AZURE_SERVICE_APP_ID }} --password ${{ secrets.AZURE_SERVICE_APP_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
+        az login --service-principal --username ${{ secrets.SPN_ID }} --password ${{ secrets.SPN_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
         az account -s RMDev
 
     - uses: azure/actions/acr-login@master
@@ -13,8 +13,8 @@ jobs:
         acr-name: desattiracr
     
     - run: |
-        docker build . -t desattiracr.azurecr.io/sampleapp:$Env:GITHUB_SHA
-        docker push desattiracr.azurecr.io/sampleapp:$Env:GITHUB_SHA
+        docker build . -t desattiracr.azurecr.io/sampleapp:$GITHUB_SHA
+        docker push desattiracr.azurecr.io/sampleapp:$GITHUB_SHA
 
     - uses: azure/actions/aks-set-context@users/desattir/aks-set-context
       with:
@@ -28,7 +28,7 @@ jobs:
       id: install
 
     - run: ${{ actions.install.outputs.kubectlPath }} delete secret desattiracr
-    - run: ${{ actions.install.outputs.kubectlPath }} create secret docker-registry desattiracr --docker-server=desattiracr.azurecr.io --docker-username ${{ secrets.AZURE_SERVICE_APP_ID }} --docker-password ${{ secrets.AZURE_SERVICE_APP_KEY }} --docker-email=abc@example.com
+    - run: ${{ actions.install.outputs.kubectlPath }} create secret docker-registry desattiracr --docker-server=desattiracr.azurecr.io --docker-username ${{ secrets.SPN_ID }} --docker-password ${{ secrets.SPN_KEY }} --docker-email=abc@example.com
 
     - uses: azure/actions/deploy@master
       with:
