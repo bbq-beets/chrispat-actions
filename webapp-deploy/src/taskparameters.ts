@@ -1,20 +1,32 @@
 import * as core from '@actions/core';
 import { AzureResourceFilterUtility } from "./common/RestUtilities/AzureResourceFilterUtility";
 import { IAuthorizationHandler } from "./common/ArmRest/IAuthorizationHandler";
-import { Package } from './common/Utilities/packageUtility';
+import { Package, exist } from './common/Utilities/packageUtility';
 import { getHandler } from './common/AuthorizationHandlerFactory';
 
 export class TaskParameters {
-    private _appName: string;
+    private static taskparams: TaskParameters;
+    private _appName?: string;
     private _package: Package;
     private _resourceGroupName?: string;
     private _kind?: string;
     private _endpoint: IAuthorizationHandler;
+    private _publishProfilePath: string;
 
-    constructor() {
-        this._appName = core.getInput('app-name', { required: true });
+    private constructor() {
+        this._publishProfilePath = core.getInput('publish-prifile-path');
         this._package = new Package(core.getInput('package', { required: true }));
-        this._endpoint = getHandler();
+        if(!exist(this._publishProfilePath)) {
+            this._endpoint = getHandler();
+            this._appName = core.getInput('app-name', {required: true});
+        }
+    }
+
+    public static getTaskParams() {
+        if(!this.taskparams) {
+            this.taskparams = new TaskParameters();
+        }
+        return this.taskparams;
     }
 
     public get appName() {
@@ -35,6 +47,10 @@ export class TaskParameters {
 
     public get endpoint() {
         return this._endpoint;
+    }
+
+    public get publishProfilePath() {
+        return this._publishProfilePath;
     }
 
     public async getResourceDetails() {

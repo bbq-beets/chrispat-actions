@@ -6,10 +6,9 @@ async function main() {
   let isDeploymentSuccess: boolean = true;
 
   try {
-    var taskParams = new TaskParameters();
+    var taskParams = TaskParameters.getTaskParams();
     await taskParams.getResourceDetails();
-    var deploymentFactory: DeploymentFactory = new DeploymentFactory(taskParams);
-    var deploymentProvider = await deploymentFactory.GetDeploymentProvider();
+    var deploymentProvider = DeploymentFactory.GetDeploymentProvider();
 
     console.log("Predeployment Step Started");
     await deploymentProvider.PreDeploymentStep();

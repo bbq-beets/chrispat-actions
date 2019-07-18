@@ -21,9 +21,18 @@ const packageUtility_1 = require("./common/Utilities/packageUtility");
 const AuthorizationHandlerFactory_1 = require("./common/AuthorizationHandlerFactory");
 class TaskParameters {
     constructor() {
-        this._appName = core.getInput('app-name', { required: true });
+        this._publishProfilePath = core.getInput('publish-prifile-path');
         this._package = new packageUtility_1.Package(core.getInput('package', { required: true }));
-        this._endpoint = AuthorizationHandlerFactory_1.getHandler();
+        if (!packageUtility_1.exist(this._publishProfilePath)) {
+            this._endpoint = AuthorizationHandlerFactory_1.getHandler();
+            this._appName = core.getInput('app-name', { required: true });
+        }
+    }
+    static getTaskParams() {
+        if (!this.taskparams) {
+            this.taskparams = new TaskParameters();
+        }
+        return this.taskparams;
     }
     get appName() {
         return this._appName;
@@ -39,6 +48,9 @@ class TaskParameters {
     }
     get endpoint() {
         return this._endpoint;
+    }
+    get publishProfilePath() {
+        return this._publishProfilePath;
     }
     getResourceDetails() {
         return __awaiter(this, void 0, void 0, function* () {

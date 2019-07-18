@@ -15,57 +15,62 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const WebAppDeploymentProvider_1 = require("./WebAppDeploymentProvider");
 const packageUtility_1 = require("../common/Utilities/packageUtility");
 const utility = __importStar(require("../common/Utilities/utility.js"));
 const zipUtility = __importStar(require("../common/Utilities/ziputility.js"));
 const core = __importStar(require("@actions/core"));
-class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDeploymentProvider {
+const taskparameters_1 = require("../taskparameters");
+class LinuxWebAppDeploymentProvider {
+    constructor(deplHelper) {
+        this.deploymentHelper = deplHelper;
+    }
+    PreDeploymentStep() {
+        this.deploymentHelper.PreDeploymentStep();
+    }
     DeployWebAppStep() {
         return __awaiter(this, void 0, void 0, function* () {
-            let packageType = this.taskParams.package.getPackageType();
+            let packageType = taskparameters_1.TaskParameters.getTaskParams().package.getPackageType();
             let deploymentMethodtelemetry = packageType === packageUtility_1.PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
             console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
             core.debug('Performing Linux web app deployment');
-            yield this.kuduServiceUtility.warmpUp();
+            let packagePath = taskparameters_1.TaskParameters.getTaskParams().package.getPath();
+            yield this.deploymentHelper.KuduServiceUtility.warmpUp();
             switch (packageType) {
                 case packageUtility_1.PackageType.folder:
                     let tempPackagePath = utility.generateTemporaryFolderOrZipPath(`${process.env.RUNNER_TEMPDIRECTORY}`, false);
-                    let archivedWebPackage = yield zipUtility.archiveFolder(this.taskParams.package.getPath(), "", tempPackagePath);
+                    let archivedWebPackage = yield zipUtility.archiveFolder(packagePath, "", tempPackagePath);
                     core.debug("Compressed folder into zip " + archivedWebPackage);
-                    this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingZipDeploy(archivedWebPackage);
+                    this.zipDeploymentID = yield this.deploymentHelper.KuduServiceUtility.deployUsingZipDeploy(archivedWebPackage);
                     break;
                 case packageUtility_1.PackageType.zip:
-                    this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingZipDeploy(this.taskParams.package.getPath());
+                    this.zipDeploymentID = yield this.deploymentHelper.KuduServiceUtility.deployUsingZipDeploy(packagePath);
                     break;
                 case packageUtility_1.PackageType.jar:
-                    core.debug("Initiated deployment via kudu service for webapp jar package : " + this.taskParams.package.getPath());
-                    let folderPath = yield utility.generateTemporaryFolderForDeployment(false, this.taskParams.package.getPath(), packageUtility_1.PackageType.jar);
+                    core.debug("Initiated deployment via kudu service for webapp jar package : " + packagePath);
+                    let folderPath = yield utility.generateTemporaryFolderForDeployment(false, packagePath, packageUtility_1.PackageType.jar);
                     let output = yield utility.archiveFolderForDeployment(false, folderPath);
                     let webPackage = output.webDeployPkg;
                     core.debug("Initiated deployment via kudu service for webapp jar package : " + webPackage);
-                    this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingZipDeploy(webPackage);
+                    this.zipDeploymentID = yield this.deploymentHelper.KuduServiceUtility.deployUsingZipDeploy(webPackage);
                     break;
                 case packageUtility_1.PackageType.war:
-                    core.debug("Initiated deployment via kudu service for webapp war package : " + this.taskParams.package.getPath());
-                    let warName = utility.getFileNameFromPath(this.taskParams.package.getPath(), ".war");
-                    this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingWarDeploy(this.taskParams.package.getPath(), { slotName: this.appService.getSlot() }, warName);
+                    core.debug("Initiated deployment via kudu service for webapp war package : " + packagePath);
+                    let warName = utility.getFileNameFromPath(packagePath, ".war");
+                    // Todo: pass slotName: this.appService.getSlot()  in customMessage
+                    this.zipDeploymentID = yield this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(packagePath, {}, warName);
                     break;
                 default:
-                    throw new Error('Invalid App Service package or folder path provided: ' + this.taskParams.package.getPath());
+                    throw new Error('Invalid App Service package or folder path provided: ' + packagePath);
             }
         });
     }
     UpdateDeploymentStatus(isDeploymentSuccess, updateStatus) {
-        const _super = Object.create(null, {
-            UpdateDeploymentStatus: { get: () => super.UpdateDeploymentStatus }
-        });
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.kuduServiceUtility) {
-                if (this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
-                    yield this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
+            if (this.deploymentHelper.KuduServiceUtility) {
+                if (this.zipDeploymentID && this.deploymentHelper.ActiveDeploymentID && isDeploymentSuccess) {
+                    yield this.deploymentHelper.KuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.deploymentHelper.ActiveDeploymentID);
                 }
-                yield _super.UpdateDeploymentStatus.call(this, isDeploymentSuccess, true);
+                yield this.deploymentHelper.UpdateDeploymentStatus(isDeploymentSuccess, true);
             }
         });
     }

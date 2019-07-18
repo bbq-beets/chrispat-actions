@@ -1,21 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Q = require("q");
+const fs = require("fs");
 const webClient = require("../webClient");
 const querystring = require("querystring");
 class AzureEndpoint {
-    constructor() {
-        this._subscriptionID = 'c94bda7a-0577-4374-9c53-0e46a9fb0f70'; //`${process.env.AZURE_SUBSCRIPTION_ID}`;
-        this.servicePrincipalClientID = '586a5f0f-3720-42b2-82ef-d4479d53a0a5'; //`${process.env.AZURE_SERVICE_CLIENT_ID}`;
-        this.servicePrincipalKey = '/gk+ZqLp7E2PDrzuTvRg0Zju67ExLgAZ0wJisZaV6OM='; //`${process.env.AZURE_SERVICE_APP_KEY}`;
-        this.tenantID = '72f988bf-86f1-41af-91ab-2d7cd011db47'; //`${process.env.AZURE_TENANT_ID}`;
+    constructor(authFilePath) {
+        let content = fs.readFileSync(authFilePath).toString();
+        let jsonObj = JSON.parse(content);
+        this._subscriptionID = jsonObj.subscriptionId;
+        this.servicePrincipalClientID = jsonObj.clientId;
+        this.servicePrincipalKey = jsonObj.clientSecret;
+        this.tenantID = jsonObj.tenantId;
+        if (!this.subscriptionID || !this.servicePrincipalClientID || !this.servicePrincipalKey || !this.tenantID) {
+            throw new Error("Not all credentail details present in file.");
+        }
         this._baseUrl = "https://management.azure.com/";
         this.environmentAuthorityUrl = "https://login.windows.net/";
         this.activeDirectoryResourceId = "https://management.core.windows.net/";
     }
-    static getEndpoint() {
+    static getEndpoint(authFilePath) {
         if (!this.endpoint) {
-            this.endpoint = new AzureEndpoint();
+            this.endpoint = new AzureEndpoint(authFilePath);
         }
         return this.endpoint;
     }

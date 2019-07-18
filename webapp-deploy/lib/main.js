@@ -22,10 +22,9 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         let isDeploymentSuccess = true;
         try {
-            var taskParams = new taskparameters_1.TaskParameters();
+            var taskParams = taskparameters_1.TaskParameters.getTaskParams();
             yield taskParams.getResourceDetails();
-            var deploymentFactory = new DeploymentFactory_1.DeploymentFactory(taskParams);
-            var deploymentProvider = yield deploymentFactory.GetDeploymentProvider();
+            var deploymentProvider = DeploymentFactory_1.DeploymentFactory.GetDeploymentProvider();
             console.log("Predeployment Step Started");
             yield deploymentProvider.PreDeploymentStep();
             console.log("Deployment Step Started");

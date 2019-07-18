@@ -2,8 +2,10 @@ import { AzureEndpoint } from "./ArmRest/AzureEndpoint";
 import { IAuthorizationHandler } from "./ArmRest/IAuthorizationHandler";
 import { AzCliAuthHandler } from "./ArmRest/AzCliAuthHandler";
 import { execSync, IExecSyncResult, IExecSyncOptions } from "./Utilities/utilityHelperFunctions";
-import * as core from '@actions/core';
+import { exist } from "./Utilities/packageUtility";
 import * as Constants from './constants';
+
+export const authFilePath: string = "/home/auth.json"
 
 export function getHandler(): IAuthorizationHandler {
     let resultOfExec: IExecSyncResult = execSync("az", "account show --query \"id\"", { silent: true } as IExecSyncOptions);
@@ -11,10 +13,10 @@ export function getHandler(): IAuthorizationHandler {
         let subscriptionId = resultOfExec.stdout.trim();
         return AzCliAuthHandler.getEndpoint(subscriptionId.substring(1, subscriptionId.length - 1));
     }
-    // else if(!!core.getInput("publish-profile-path")) {
-    //     return PublishProfileAuthHandler.get();
-    // }
+    else if(exist(authFilePath)) {
+        return AzureEndpoint.getEndpoint(authFilePath);
+    }
     else {
-        return AzureEndpoint.getEndpoint();
+        throw new Error("No crdentails found. Please provide Publish Profile path or add a azure login script before this action or put credentiasl file in /home/auth.json.");
     }
 }
