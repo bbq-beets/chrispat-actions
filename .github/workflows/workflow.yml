@@ -6,7 +6,7 @@ jobs:
     actions:
     - run: | 
         az login --service-principal --username ${{ secrets.SPN_ID }} --password ${{ secrets.SPN_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
-        az account -s RMDev
+        az account set -s RMDev
 
     - uses: azure/actions/acr-login@master
       with:
