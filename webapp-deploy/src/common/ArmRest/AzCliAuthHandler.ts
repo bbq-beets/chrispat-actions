@@ -9,7 +9,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
     private token: string;
 
     private constructor(subscriptionID: string) {
-        this._subscriptionID = subscriptionID;
+        this._subscriptionID = subscriptionID.replace("-","");
         this._baseUrl = "https://management.azure.com/";
     }
 
@@ -35,8 +35,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
             }
-            console.log(resultOfExec.stdout);
-            this.token = resultOfExec.stdout.replace("-","");
+            this.token = resultOfExec.stdout;
         }
         return this.token;
     }

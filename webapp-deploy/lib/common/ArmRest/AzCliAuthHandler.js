@@ -11,7 +11,7 @@ const utilityHelperFunctions_1 = require("../Utilities/utilityHelperFunctions");
 const core = __importStar(require("@actions/core"));
 class AzCliAuthHandler {
     constructor(subscriptionID) {
-        this._subscriptionID = subscriptionID;
+        this._subscriptionID = subscriptionID.replace("-", "");
         this._baseUrl = "https://management.azure.com/";
     }
     static getEndpoint(param) {
@@ -33,8 +33,7 @@ class AzCliAuthHandler {
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
             }
-            console.log(resultOfExec.stdout);
-            this.token = resultOfExec.stdout.replace("-", "");
+            this.token = resultOfExec.stdout;
         }
         return this.token;
     }
