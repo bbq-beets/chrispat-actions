@@ -14,7 +14,8 @@ const Constants = __importStar(require("./constants"));
 function getHandler() {
     let resultOfExec = utilityHelperFunctions_1.execSync("az", "account show --query \"id\"", { silent: true });
     if (resultOfExec.code == Constants.TOOL_EXEC_CODE.SUCCESS) {
-        return AzCliAuthHandler_1.AzCliAuthHandler.getEndpoint(resultOfExec.stdout);
+        let subscriptionId = resultOfExec.stdout;
+        return AzCliAuthHandler_1.AzCliAuthHandler.getEndpoint(subscriptionId.substring(0, subscriptionId.length - 1));
     }
     // else if(!!core.getInput("publish-profile-path")) {
     //     return PublishProfileAuthHandler.get();
