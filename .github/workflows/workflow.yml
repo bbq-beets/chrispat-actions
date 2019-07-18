@@ -13,8 +13,8 @@ jobs:
         acr-name: desattiracr
     
     - run: |
-        docker build . -t desattiracr.azurecr.io/sampleapp:latest
-        docker push desattiracr.azurecr.io/sampleapp:latest
+        docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
+        docker push desattiracr.azurecr.io/dsmsgosampleapp:latest
 
     - uses: azure/actions/aks-set-context@users/desattir/aks-set-context
       with:
@@ -37,7 +37,7 @@ jobs:
           manifests/deployment.yml
           manifests/service.yml
         images: |
-          desattiracr.azurecr.io/sampleapp:latest
+          desattiracr.azurecr.io/dsmsgosampleapp:latest
         imagepullsecrets: |
           desattiracr
       id: deploy
