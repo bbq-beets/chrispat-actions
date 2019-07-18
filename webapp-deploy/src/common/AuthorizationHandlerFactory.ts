@@ -9,7 +9,7 @@ export function getHandler(): IAuthorizationHandler {
     let resultOfExec: IExecSyncResult = execSync("az", "account show --query \"id\"", { silent: true } as IExecSyncOptions);
     if(resultOfExec.code == Constants.TOOL_EXEC_CODE.SUCCESS) {
         let subscriptionId = resultOfExec.stdout;
-        return AzCliAuthHandler.getEndpoint(subscriptionId.substring(0, subscriptionId.length - 1));
+        return AzCliAuthHandler.getEndpoint(subscriptionId.trim().substring(1, subscriptionId.length - 1));
     }
     // else if(!!core.getInput("publish-profile-path")) {
     //     return PublishProfileAuthHandler.get();
