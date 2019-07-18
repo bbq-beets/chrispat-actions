@@ -12,7 +12,7 @@ const AzCliAuthHandler_1 = require("./ArmRest/AzCliAuthHandler");
 const utilityHelperFunctions_1 = require("./Utilities/utilityHelperFunctions");
 const Constants = __importStar(require("./constants"));
 function getHandler() {
-    let resultOfExec = utilityHelperFunctions_1.execSync("az", "az account show --query \"id\"");
+    let resultOfExec = utilityHelperFunctions_1.execSync("az", "account show --query \"id\"");
     if (resultOfExec.code == Constants.TOOL_EXEC_CODE.SUCCESS) {
         return AzCliAuthHandler_1.AzCliAuthHandler.getEndpoint(resultOfExec.stdout);
     }

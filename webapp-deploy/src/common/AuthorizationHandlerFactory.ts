@@ -6,7 +6,7 @@ import * as core from '@actions/core';
 import * as Constants from './constants';
 
 export function getHandler(): IAuthorizationHandler {
-    let resultOfExec: IExecSyncResult = execSync("az", "az account show --query \"id\"");
+    let resultOfExec: IExecSyncResult = execSync("az", "account show --query \"id\"");
     if(resultOfExec.code == Constants.TOOL_EXEC_CODE.SUCCESS) {
         return AzCliAuthHandler.getEndpoint(resultOfExec.stdout);
     }

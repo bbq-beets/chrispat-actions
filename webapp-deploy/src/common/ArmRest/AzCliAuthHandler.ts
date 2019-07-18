@@ -30,7 +30,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
 
     public getToken(force?: boolean) {
         if(!this.token || force) {            
-            let resultOfExec: IExecSyncResult = execSync("az", "az account get-access-token --query \"accessToken\"");
+            let resultOfExec: IExecSyncResult = execSync("az", "account get-access-token --query \"accessToken\"");
             if (resultOfExec.code != 0) {
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;

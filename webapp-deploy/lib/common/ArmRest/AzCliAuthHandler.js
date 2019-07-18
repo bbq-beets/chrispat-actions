@@ -28,7 +28,7 @@ class AzCliAuthHandler {
     }
     getToken(force) {
         if (!this.token || force) {
-            let resultOfExec = utilityHelperFunctions_1.execSync("az", "az account get-access-token --query \"accessToken\"");
+            let resultOfExec = utilityHelperFunctions_1.execSync("az", "account get-access-token --query \"accessToken\"");
             if (resultOfExec.code != 0) {
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
