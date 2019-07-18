@@ -21,7 +21,7 @@ const packageUtility_1 = require("./common/Utilities/packageUtility");
 const AuthorizationHandlerFactory_1 = require("./common/AuthorizationHandlerFactory");
 class TaskParameters {
     constructor() {
-        this._publishProfilePath = core.getInput('publish-prifile-path');
+        this._publishProfilePath = core.getInput('publish-profile-path');
         this._package = new packageUtility_1.Package(core.getInput('package', { required: true }));
         if (!packageUtility_1.exist(this._publishProfilePath)) {
             this._endpoint = AuthorizationHandlerFactory_1.getHandler();

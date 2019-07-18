@@ -14,7 +14,7 @@ export class TaskParameters {
     private _publishProfilePath: string;
 
     private constructor() {
-        this._publishProfilePath = core.getInput('publish-prifile-path');
+        this._publishProfilePath = core.getInput('publish-profile-path');
         this._package = new Package(core.getInput('package', { required: true }));
         if(!exist(this._publishProfilePath)) {
             this._endpoint = getHandler();
