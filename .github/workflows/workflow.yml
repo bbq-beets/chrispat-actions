@@ -1,27 +1,42 @@
-
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-    - run: echo Hello World change
-    
-    - uses: ./hello-world-action
-      with:
-        who-to-greet: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
-      id: hello
-      
-    - run: echo "The time was ${{ actions.hello.outputs.time }}"
-    
-    - name: Login Azure
-      run: |
+    - run: | 
         az login --service-principal --username ${{ secrets.AZURE_SERVICE_APP_ID }} --password ${{ secrets.AZURE_SERVICE_APP_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
+        az account -s RMDev
 
-    - name: Show WebApp details
-      run: |
-        az webapp show --resource-group ronai-dnd --name ronailinux
+    - uses: azure/actions/acr-login@master
+      with:
+        acr-name: desattiracr
+    
+    - run: |
+        docker build . -t desattiracr.azurecr.io/sampleapp:$Env:GITHUB_SHA
+        docker push desattiracr.azurecr.io/sampleapp:$Env:GITHUB_SHA
 
-    - name: Deploy WebApp
-      run: |
-        az webapp config container set --docker-custom-image-name roopeshnairexpressaks:25 --docker-registry-server-password ${{ secrets.DOCKER_REGISTRY_PASSWORD }} --docker-registry-server-url https://ronacr.azurecr.io --docker-registry-server-user ronacr --name ronailinux --resource-group ronai-dnd
+    - uses: azure/actions/aks-set-context@users/desattir/aks-set-context
+      with:
+        resourceGroup: desattiraks-rg
+        clusterName: desattiraks
+      id: login
+
+    - uses: azure/actions/install-kubectl@master
+      with:
+        version: latest
+      id: install
+
+    - run: ${{ actions.install.outputs.kubectlPath }} delete secret desattiracr
+    - run: ${{ actions.install.outputs.kubectlPath }} create secret docker-registry desattiracr --docker-server=desattiracr.azurecr.io --docker-username ${{ secrets.AZURE_SERVICE_APP_ID }} --docker-password ${{ secrets.AZURE_SERVICE_APP_KEY }} --docker-email=abc@example.com
+
+    - uses: azure/actions/deploy@master
+      with:
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          desattiracr.azurecr.io/sampleapp:$(GITHUB_SHA)
+        imagepullsecrets: |
+          desattiracr
+      id: deploy
