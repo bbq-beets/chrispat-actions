@@ -33,7 +33,8 @@ class AzCliAuthHandler {
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
             }
-            this.token = encodeURIComponent(resultOfExec.stdout);
+            let tok = resultOfExec.stdout.trim();
+            this.token = tok.substring(1, tok.length - 1);
         }
         return this.token;
     }
