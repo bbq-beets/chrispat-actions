@@ -6,7 +6,6 @@ import (
   "log"
   "net/http"  
   "os"
-  "github.com/Microsoft/ApplicationInsights-Go/appinsights"
 )
 
 type PageVars struct {
