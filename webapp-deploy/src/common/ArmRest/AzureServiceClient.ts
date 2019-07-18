@@ -61,8 +61,6 @@ export class ServiceClient {
 
     public getRequestUriForbaseUrl(baseUrl: string, uriFormat: string, parameters: {}, queryParameters?: string[], apiVersion?: string): string {
         var requestUri = baseUrl + uriFormat;
-        console.log(this.subscriptionId);
-        console.log(encodeURIComponent(this.subscriptionId));
         requestUri = requestUri.replace('{subscriptionId}', encodeURIComponent(this.subscriptionId));
         for (var key in parameters) {
             requestUri = requestUri.replace(key, encodeURIComponent((<any>parameters)[key]));
