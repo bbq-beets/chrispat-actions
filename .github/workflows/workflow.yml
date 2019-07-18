@@ -10,7 +10,7 @@ jobs:
     - uses: ./webapp-deploy
       with: 
         app-name: linuxwarapp
-        publish-profile-path: "C:\Users\suaggar\Downloads\linuxwarapp.PublishSettings"
+        publish-profile-path: 'C:/Users/suaggar/Downloads/linuxwarapp.PublishSettings'
         package: 'C:/Users/suaggar/Downloads/ROOT.war'
     - uses: ./webapp-deploy
       with: 
