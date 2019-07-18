@@ -13,8 +13,8 @@ jobs:
         acr-name: desattiracr
     
     - run: |
-        docker build . -t desattiracr.azurecr.io/sampleapp:$GITHUB_SHA
-        docker push desattiracr.azurecr.io/sampleapp:$GITHUB_SHA
+        docker build . -t desattiracr.azurecr.io/sampleapp:$(GITHUB_SHA)
+        docker push desattiracr.azurecr.io/sampleapp:$(GITHUB_SHA)
 
     - uses: azure/actions/aks-set-context@users/desattir/aks-set-context
       with:
