@@ -1,8 +1,8 @@
-import { AzureEndpoint } from '../ArmRest/AzureEndpoint';
+import { IAuthorizationHandler } from '../ArmRest/IAuthorizationHandler';
 import { Resources } from '../ArmRest/azure-arm-resource';
 
 export class AzureResourceFilterUtility {
-    public static async getAppDetails(endpoint: AzureEndpoint, resourceName: string): Promise<any> {
+    public static async getAppDetails(endpoint: IAuthorizationHandler, resourceName: string): Promise<any> {
         var azureResources: Resources = new Resources(endpoint);
         var filteredResources: Array<any> = await azureResources.getResources('Microsoft.Web/Sites', resourceName);
         let resourceGroupName: string;

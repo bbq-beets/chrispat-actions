@@ -1,5 +1,5 @@
 import webClient = require('../webClient');
-import { AzureEndpoint } from './AzureEndpoint';
+import { IAuthorizationHandler } from './IAuthorizationHandler';
 
 import {
     ServiceClient,
@@ -26,7 +26,7 @@ export class AzureAppService {
     private _appServicePublishingProfile: any;
     private _appServiceApplicationSetings: AzureAppServiceConfigurationDetails;
 
-    constructor(endpoint: AzureEndpoint, resourceGroup: string, name: string, slot?: string, appKind?: string) {
+    constructor(endpoint: IAuthorizationHandler, resourceGroup: string, name: string, slot?: string, appKind?: string) {
         this._client = new ServiceClient(endpoint, 30);
         this._resourceGroup = resourceGroup;
         this._name = name;

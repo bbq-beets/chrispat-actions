@@ -1,8 +1,9 @@
 import Q = require('q');
 import webClient = require("../webClient");
 import querystring = require('querystring');
+import { IAuthorizationHandler } from "./IAuthorizationHandler";
 
-export class AzureEndpoint {
+export class AzureEndpoint implements IAuthorizationHandler {
     private static endpoint: AzureEndpoint;
     private _subscriptionID: string;
     private servicePrincipalClientID: string;

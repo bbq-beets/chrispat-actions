@@ -17,13 +17,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const AzureResourceFilterUtility_1 = require("./common/RestUtilities/AzureResourceFilterUtility");
-const AzureEndpoint_1 = require("./common/ArmRest/AzureEndpoint");
 const packageUtility_1 = require("./common/Utilities/packageUtility");
+const AuthorizationHandlerFactory_1 = require("./common/AuthorizationHandlerFactory");
 class TaskParameters {
     constructor() {
         this._appName = core.getInput('app-name', { required: true });
         this._package = new packageUtility_1.Package(core.getInput('package', { required: true }));
-        this._endpoint = AzureEndpoint_1.AzureEndpoint.getEndpoint();
+        this._endpoint = AuthorizationHandlerFactory_1.getHandler();
     }
     get appName() {
         return this._appName;

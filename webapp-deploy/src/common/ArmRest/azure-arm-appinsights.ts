@@ -1,6 +1,6 @@
 import webClient = require('../webClient');
 import  {ToError, ServiceClient } from './AzureServiceClient';
-import { AzureEndpoint } from './AzureEndpoint';
+import { IAuthorizationHandler } from './IAuthorizationHandler';
 
 export interface ApplicationInsights {
     id?: string;
@@ -18,7 +18,7 @@ export class AzureApplicationInsights {
     private _resourceGroupName: string;
     private _client: ServiceClient;
 
-    constructor(endpoint: AzureEndpoint, resourceGroupName: string, name: string) {
+    constructor(endpoint: IAuthorizationHandler, resourceGroupName: string, name: string) {
         this._client = new ServiceClient(endpoint, 30);
         this._resourceGroupName = resourceGroupName;
         this._name = name;
@@ -61,7 +61,7 @@ export class AzureApplicationInsights {
 export class ApplicationInsightsResources {
     private _client: ServiceClient;
 
-    constructor(endpoint: AzureEndpoint) {
+    constructor(endpoint: IAuthorizationHandler) {
         this._client = new ServiceClient(endpoint, 30);
     }
 

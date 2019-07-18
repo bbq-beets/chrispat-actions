@@ -1,12 +1,12 @@
 import { ToError, ServiceClient } from './AzureServiceClient';
-import { AzureEndpoint } from './AzureEndpoint';
+import { IAuthorizationHandler } from './IAuthorizationHandler';
 import webClient = require('../webClient');
 import Q = require('q');
 
 export class Resources {
     private _client: ServiceClient;
 
-    constructor(endpoint: AzureEndpoint) {
+    constructor(endpoint: IAuthorizationHandler) {
         this._client = new ServiceClient(endpoint, 30);
     }
 

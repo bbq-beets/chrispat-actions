@@ -1,19 +1,20 @@
 import * as core from '@actions/core';
 import { AzureResourceFilterUtility } from "./common/RestUtilities/AzureResourceFilterUtility";
-import { AzureEndpoint } from "./common/ArmRest/AzureEndpoint";
+import { IAuthorizationHandler } from "./common/ArmRest/IAuthorizationHandler";
 import { Package } from './common/Utilities/packageUtility';
+import { getHandler } from './common/AuthorizationHandlerFactory';
 
 export class TaskParameters {
     private _appName: string;
     private _package: Package;
     private _resourceGroupName?: string;
     private _kind?: string;
-    private _endpoint: AzureEndpoint;
+    private _endpoint: IAuthorizationHandler;
 
     constructor() {
         this._appName = core.getInput('app-name', { required: true });
         this._package = new Package(core.getInput('package', { required: true }));
-        this._endpoint = AzureEndpoint.getEndpoint();
+        this._endpoint = getHandler();
     }
 
     public get appName() {

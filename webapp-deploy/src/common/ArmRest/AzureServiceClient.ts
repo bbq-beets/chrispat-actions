@@ -1,4 +1,4 @@
-import { AzureEndpoint } from "./AzureEndpoint";
+import { IAuthorizationHandler } from "./IAuthorizationHandler";
 import webClient = require("../webClient");
 
 export class ApiResult {
@@ -42,13 +42,13 @@ export function ToError(response: webClient.WebResponse): AzureError {
 }
 
 export class ServiceClient {
-    private endpoint: AzureEndpoint;
+    private endpoint: IAuthorizationHandler;
     protected baseUrl: string;
     protected longRunningOperationRetryTimeout: number;
 
     public subscriptionId: string;
 
-    constructor(endpoint: AzureEndpoint, timeout?: number) {
+    constructor(endpoint: IAuthorizationHandler, timeout?: number) {
         this.endpoint = endpoint;
         this.subscriptionId = this.endpoint.subscriptionID;
         this.baseUrl = this.endpoint.baseUrl;
