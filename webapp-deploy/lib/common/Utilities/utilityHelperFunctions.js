@@ -307,7 +307,7 @@ exports.match = match;
  * @param     options  optional exec options.  See IExecSyncOptions
  * @returns   IExecSyncResult
  */
-function execSync(tool, args) {
+function execSync(tool, args, options) {
     let tr = this.tool(tool);
     tr.on('debug', (data) => {
         core.debug(data);
@@ -320,7 +320,7 @@ function execSync(tool, args) {
             tr.line(args);
         }
     }
-    return tr.execSync();
+    return tr.execSync(options);
 }
 exports.execSync = execSync;
 /**

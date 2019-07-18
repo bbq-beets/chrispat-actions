@@ -1,5 +1,5 @@
 import { IAuthorizationHandler } from "./IAuthorizationHandler";
-import { execSync, IExecSyncResult } from "../Utilities/utilityHelperFunctions";
+import { execSync, IExecSyncResult, IExecSyncOptions } from "../Utilities/utilityHelperFunctions";
 import * as core from '@actions/core';
 
 export class AzCliAuthHandler implements IAuthorizationHandler{
@@ -9,7 +9,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
     private token: string;
 
     private constructor(subscriptionID: string) {
-        this._subscriptionID = subscriptionID.replace(/-/g,"");
+        this._subscriptionID = JSON.stringify(subscriptionID.replace(/-/g,""));
         this._baseUrl = "https://management.azure.com/";
     }
 
@@ -30,7 +30,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
 
     public getToken(force?: boolean) {
         if(!this.token || force) {            
-            let resultOfExec: IExecSyncResult = execSync("az", "account get-access-token --query \"accessToken\"");
+            let resultOfExec: IExecSyncResult = execSync("az", "account get-access-token --query \"accessToken\"", { silent: true } as IExecSyncOptions);
             if (resultOfExec.code != 0) {
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;

@@ -360,7 +360,7 @@ export function match(list: string[], patterns: string[] | string, patternRoot?:
  * @param     options  optional exec options.  See IExecSyncOptions
  * @returns   IExecSyncResult
  */
-export function execSync(tool: string, args: string | string[]): IExecSyncResult {
+export function execSync(tool: string, args: string | string[], options?: IExecSyncOptions): IExecSyncResult {
     let tr: ToolRunner = this.tool(tool);
     tr.on('debug', (data: string) => {
         core.debug(data);
@@ -375,7 +375,7 @@ export function execSync(tool: string, args: string | string[]): IExecSyncResult
         }
     }
 
-    return tr.execSync();
+    return tr.execSync(options);
 }
 
 /**
@@ -639,7 +639,7 @@ function isUnixExecutable(stats: fs.Stats) {
 /**
  * Interface for execSync options
  */
-interface IExecSyncOptions {
+export interface IExecSyncOptions {
     /** optional working directory.  defaults to current */
     cwd?: string;
 

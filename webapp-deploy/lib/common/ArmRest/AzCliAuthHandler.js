@@ -11,7 +11,7 @@ const utilityHelperFunctions_1 = require("../Utilities/utilityHelperFunctions");
 const core = __importStar(require("@actions/core"));
 class AzCliAuthHandler {
     constructor(subscriptionID) {
-        this._subscriptionID = subscriptionID.replace(/-/g, "");
+        this._subscriptionID = JSON.stringify(subscriptionID.replace(/-/g, ""));
         this._baseUrl = "https://management.azure.com/";
     }
     static getEndpoint(param) {
@@ -28,7 +28,7 @@ class AzCliAuthHandler {
     }
     getToken(force) {
         if (!this.token || force) {
-            let resultOfExec = utilityHelperFunctions_1.execSync("az", "account get-access-token --query \"accessToken\"");
+            let resultOfExec = utilityHelperFunctions_1.execSync("az", "account get-access-token --query \"accessToken\"", { silent: true });
             if (resultOfExec.code != 0) {
                 core.error("Error Code: [" + resultOfExec.code + "]");
                 throw resultOfExec;
