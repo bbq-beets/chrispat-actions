@@ -7,15 +7,14 @@ jobs:
     - run: | 
         az login --service-principal --username ${{ secrets.SPN_ID }} --password ${{ secrets.SPN_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
         az account set -s RMDev
-        printenv
 
     - uses: azure/actions/acr-login@master
       with:
         acr-name: desattiracr
     
     - run: |
-        docker build . -t desattiracr.azurecr.io/sampleapp:$(GITHUB_SHA)
-        docker push desattiracr.azurecr.io/sampleapp:$(GITHUB_SHA)
+        docker build . -t desattiracr.azurecr.io/sampleapp:latest
+        docker push desattiracr.azurecr.io/sampleapp:latest
 
     - uses: azure/actions/aks-set-context@users/desattir/aks-set-context
       with:
@@ -37,7 +36,7 @@ jobs:
           manifests/deployment.yml
           manifests/service.yml
         images: |
-          desattiracr.azurecr.io/sampleapp:$(GITHUB_SHA)
+          desattiracr.azurecr.io/sampleapp:latest
         imagepullsecrets: |
           desattiracr
       id: deploy
