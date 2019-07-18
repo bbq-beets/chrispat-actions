@@ -11,7 +11,7 @@ const utilityHelperFunctions_1 = require("../Utilities/utilityHelperFunctions");
 const core = __importStar(require("@actions/core"));
 class AzCliAuthHandler {
     constructor(subscriptionID) {
-        this._subscriptionID = JSON.stringify(subscriptionID.replace(/-/g, ""));
+        this._subscriptionID = subscriptionID;
         this._baseUrl = "https://management.azure.com/";
     }
     static getEndpoint(param) {

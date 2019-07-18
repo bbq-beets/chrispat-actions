@@ -9,7 +9,7 @@ export class AzCliAuthHandler implements IAuthorizationHandler{
     private token;
 
     private constructor(subscriptionID: string) {
-        this._subscriptionID = JSON.stringify(subscriptionID.replace(/-/g,""));
+        this._subscriptionID = subscriptionID;
         this._baseUrl = "https://management.azure.com/";
     }
 
