@@ -9,19 +9,9 @@ jobs:
     
     - uses: ./hello-world-action
       with:
-        who-to-greet: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
+        who-to-greet: 'John Doe'
       id: hello
       
     - run: echo "The time was ${{ actions.hello.outputs.time }}"
     
-    - name: Login Azure
-      run: |
-        az login --service-principal --username ${{ secrets.AZURE_SERVICE_APP_ID }} --password ${{ secrets.AZURE_SERVICE_APP_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
-
-    - name: Show WebApp details
-      run: |
-        az webapp show --resource-group ronai-dnd --name ronailinux
-
-    - name: Deploy WebApp
-      run: |
-        az webapp config container set --docker-custom-image-name roopeshnairexpressaks:25 --docker-registry-server-password ${{ secrets.DOCKER_REGISTRY_PASSWORD }} --docker-registry-server-url https://ronacr.azurecr.io --docker-registry-server-user ronacr --name ronailinux --resource-group ronai-dnd
+   
