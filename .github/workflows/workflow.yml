@@ -5,6 +5,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
+    
+    # install dependencies, build, and test
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+    
     - uses: ./webapp-deploy
       with: 
         azure-service-app-id: ${{ secrets.AZURE_SERVICE_APP_ID }}
