@@ -2,6 +2,8 @@
 
 Sample workflow to build and deploy node js app
 
+### Deploy with app-level credentials
+
 ```yaml
 on: [push, pull_request]
 
@@ -24,6 +26,40 @@ jobs:
         publish-profile-xml: '${{ secrets.azureWebAppPublishProfile }}'
       id: myapp-id
     
+    # Web app url to work with
+    - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
+    
+```
+
+### Deploy with user-level credentials
+
+```yaml
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    actions:
+    
+    # install dependencies, build, and test
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+
+    # Login to Azure Subscription. 
+    # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS 
+    - name: Azure login
+      uses: azure/login-action@master
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        
+    - uses: ./webapp-deploy
+      with: 
+        app-name: node-rn
+        package: './myapp'
+
     # Web app url to work with
     - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
     
