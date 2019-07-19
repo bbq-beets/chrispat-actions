@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { parse } from './ParameterParserUtility';
+import { parse } from './parameterParserUtility';
 import { PackageType, exist } from './packageUtility';
 import fs = require('fs');
 import path = require('path');

@@ -16,7 +16,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const ParameterParserUtility_1 = require("./ParameterParserUtility");
+const parameterParserUtility_1 = require("./parameterParserUtility");
 const packageUtility_1 = require("./packageUtility");
 const fs = require("fs");
 const path = require("path");
@@ -30,7 +30,7 @@ class FileTransformUtility {
                 var folderPath = yield deployUtility.generateTemporaryFolderForDeployment(false, webPackage, packageType);
                 if (parameters) {
                     core.debug('parsing web.config parameters');
-                    var webConfigParameters = ParameterParserUtility_1.parse(parameters);
+                    var webConfigParameters = parameterParserUtility_1.parse(parameters);
                     addWebConfigFile(folderPath, webConfigParameters, this.rootDirectoryPath);
                 }
                 var output = yield deployUtility.archiveFolderForDeployment(false, folderPath);
