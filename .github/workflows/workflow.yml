@@ -16,8 +16,8 @@ jobs:
         
     - uses: ./webapp-deploy
       with: 
-        publish-profile-path: './linuxappsuaggar.PublishSettings'
-        app-name: linuxappsuaggar
+        publish-profile-path: './linuxappsuaggar2.PublishSettings'
+        app-name: linuxappsuaggar2
         package: './myapp.zip'
       id: myapp-id
     
