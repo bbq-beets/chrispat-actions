@@ -11,7 +11,7 @@ Sample workflow to build and deploy node js app
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     actions:
     
@@ -43,7 +43,7 @@ jobs:
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     actions:
     
