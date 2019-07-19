@@ -37,7 +37,6 @@ class PublishProfileDeploymentProvider {
             let packageType = taskparameters_1.TaskParameters.getTaskParams().package.getPackageType();
             let deploymentMethodtelemetry = packageType === packageUtility_1.PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
             console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
-            core.debug('Performing Linux web app deployment');
             let packagePath = taskparameters_1.TaskParameters.getTaskParams().package.getPath();
             yield this.kuduServiceUtility.warmpUp();
             switch (packageType) {
@@ -101,6 +100,7 @@ class PublishProfileDeploymentProvider {
             if (creds.uri.indexOf("scm") < 0) {
                 throw new Error("Publish profile does not contain kudu URL");
             }
+            creds.uri = `https://${creds.username}:${creds.password}@${creds.uri}`;
             this.applicationURL = res.destinationAppUrl;
             return creds;
         });

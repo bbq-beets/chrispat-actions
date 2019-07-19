@@ -35,8 +35,6 @@ export class PublishProfileDeploymentProvider implements IWebAppDeploymentProvid
         let deploymentMethodtelemetry = packageType === PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
         console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
         
-        core.debug('Performing Linux web app deployment');
-        
         let packagePath = TaskParameters.getTaskParams().package.getPath();
         await this.kuduServiceUtility.warmpUp();
         
@@ -104,6 +102,7 @@ export class PublishProfileDeploymentProvider implements IWebAppDeploymentProvid
         if(creds.uri.indexOf("scm") < 0) {
             throw new Error("Publish profile does not contain kudu URL");
         }
+        creds.uri = `https://${creds.username}:${creds.password}@${creds.uri}`;
         this.applicationURL = res.destinationAppUrl;
         return creds;
     }
