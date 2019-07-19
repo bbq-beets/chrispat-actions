@@ -17,10 +17,6 @@ jobs:
         npm run build --if-present
         npm run test --if-present
   
-    - name: archive myapp
-      run: |
-        zip -r myapp.zip .
-        
     - uses: ./webapp-deploy
       with: 
         app-name: node-rn
