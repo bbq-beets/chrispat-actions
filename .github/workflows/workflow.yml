@@ -25,5 +25,5 @@ jobs:
         azure-service-app-key: ${{ secrets.AZURE_APP_KEY }}
         azure-service-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         azure-subscription: ${{ secrets.SUBSCRIPTION_ID }}
-        app-name: winWebAppTest
-        package: './webapp-deploy/TestResources/AspCore.zip'
+        app-name: node-rn
+        package: './*'
