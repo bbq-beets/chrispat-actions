@@ -72,6 +72,39 @@ jobs:
     
 ```
 
+### Azure web app action metadata file
+
+The action.yml file contains metadata about the Azure web app action.  
+
+```yaml
+# File: action.yml
+
+name: 'Azure WebApp'
+description: 'Deploy Web Apps to Azure'
+inputs: 
+  app-name: # id of input
+    description: 'Name of the Azure Web App'
+    required: true
+    # in the future we may add 'type', for now assume string
+  package: # id of input
+    description: 'Path to package or folder. *.zip, *.war, *.jar or a folder to deploy'
+    required: true
+  publish-profile-xml: # id of input
+    description: 'Publish profile (*.publishsettings) file contents with Web Deploy secrets'
+    required: false
+outputs:
+  webapp-url: # id of output
+    description: 'URL to work with your webapp'
+branding:
+  icon: 'webapp.svg' # vector art to display in the GitHub Marketplace
+  color: 'blue' # optional, decorates the entry in the GitHub Marketplace
+runs:
+  using: 'node'
+  main: 'main.js'
+```
+
+
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
