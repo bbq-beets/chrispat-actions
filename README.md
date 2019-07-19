@@ -59,7 +59,8 @@ jobs:
       with: 
         app-name: node-rn
         package: './myapp'
-
+      id: myapp-id
+      
     # Web app url to work with
     - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
     
