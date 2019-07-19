@@ -79,7 +79,7 @@ class PublishProfileDeploymentProvider {
                 }
             }
             console.log('App Service Application URL: ' + this.applicationURL);
-            core.exportVariable('AppServiceApplicationUrl', this.applicationURL);
+            core.setOutput('webapp-url', this.applicationURL);
         });
     }
     getCredsFromXml(pubxmlFile) {

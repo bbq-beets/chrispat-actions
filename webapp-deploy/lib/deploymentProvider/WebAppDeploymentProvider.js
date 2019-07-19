@@ -47,7 +47,7 @@ class WebAppDeploymentProvider {
             }
             let appServiceApplicationUrl = yield this.appServiceUtility.getApplicationURL();
             console.log('App Service Application URL: ' + appServiceApplicationUrl);
-            core.exportVariable('AppServiceApplicationUrl', appServiceApplicationUrl);
+            core.setOutput('webapp-url', appServiceApplicationUrl);
         });
     }
 }

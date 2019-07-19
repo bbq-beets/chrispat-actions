@@ -81,6 +81,6 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
         if(this.kuduServiceUtility && this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
             await this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
         }
-        await this.UpdateDeploymentStatus(isDeploymentSuccess, this.updateStatus);
+        await super.UpdateDeploymentStatus(isDeploymentSuccess, this.updateStatus);
     }
 }

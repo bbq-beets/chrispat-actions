@@ -56,7 +56,7 @@ export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
                 await this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
             }
             
-            await this.UpdateDeploymentStatus(isDeploymentSuccess, true);
+            await super.UpdateDeploymentStatus(isDeploymentSuccess, true);
         }
     }
 }

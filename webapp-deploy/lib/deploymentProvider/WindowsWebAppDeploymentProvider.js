@@ -83,11 +83,14 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
         });
     }
     UpdateDeploymentStatus(isDeploymentSuccess, updateStatus) {
+        const _super = Object.create(null, {
+            UpdateDeploymentStatus: { get: () => super.UpdateDeploymentStatus }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             if (this.kuduServiceUtility && this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
                 yield this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
             }
-            yield this.UpdateDeploymentStatus(isDeploymentSuccess, this.updateStatus);
+            yield _super.UpdateDeploymentStatus.call(this, isDeploymentSuccess, this.updateStatus);
         });
     }
 }

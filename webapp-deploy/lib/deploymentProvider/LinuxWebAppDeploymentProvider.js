@@ -59,12 +59,15 @@ class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDep
         });
     }
     UpdateDeploymentStatus(isDeploymentSuccess, updateStatus) {
+        const _super = Object.create(null, {
+            UpdateDeploymentStatus: { get: () => super.UpdateDeploymentStatus }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             if (this.kuduServiceUtility) {
                 if (this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
                     yield this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
                 }
-                yield this.UpdateDeploymentStatus(isDeploymentSuccess, true);
+                yield _super.UpdateDeploymentStatus.call(this, isDeploymentSuccess, true);
             }
         });
     }

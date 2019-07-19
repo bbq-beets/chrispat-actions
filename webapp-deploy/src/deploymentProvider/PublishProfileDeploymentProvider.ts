@@ -82,7 +82,7 @@ export class PublishProfileDeploymentProvider implements IWebAppDeploymentProvid
         }
         
         console.log('App Service Application URL: ' + this.applicationURL);
-        core.exportVariable('AppServiceApplicationUrl', this.applicationURL);
+        core.setOutput('webapp-url', this.applicationURL);
     }
 
     private async getCredsFromXml(pubxmlFile: string): Promise<scmCredentials> {
