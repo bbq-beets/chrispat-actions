@@ -1,21 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const taskparameters_1 = require("../taskparameters");
 const LinuxWebAppDeploymentProvider_1 = require("./LinuxWebAppDeploymentProvider");
 const WindowsWebAppDeploymentProvider_1 = require("./WindowsWebAppDeploymentProvider");
-const DeploymentHelperFactory_1 = require("./DeploymentHelperFactory");
+const PublishProfileDeploymentProvider_1 = require("./PublishProfileDeploymentProvider");
 class DeploymentFactory {
-    static GetDeploymentProvider() {
-        let type = taskparameters_1.TaskParameters.getTaskParams().endpoint ? DeploymentHelperFactory_1.DeploymentHelperConstants.SPN : DeploymentHelperFactory_1.DeploymentHelperConstants.PublishProfile;
-        let deploymentHelper = DeploymentHelperFactory_1.DeploymentHelperFactory.getHelper(type);
-        if (taskparameters_1.TaskParameters.getTaskParams().kind.indexOf("linux") == -1) {
-            console.log("Deployment started for windows app service");
-            return new WindowsWebAppDeploymentProvider_1.WindowsWebAppDeploymentProvider(deploymentHelper);
-        }
-        else {
-            console.log("Deployment started for linux app service");
-            return new LinuxWebAppDeploymentProvider_1.LinuxWebAppDeploymentProvider(deploymentHelper);
+    static GetDeploymentProvider(type) {
+        switch (type) {
+            case DEPLOYMENT_PROVIDER_TYPES.PUBLISHPROFILE:
+                console.log("Deployment started using publish profile crdentials");
+                return new PublishProfileDeploymentProvider_1.PublishProfileDeploymentProvider();
+            case DEPLOYMENT_PROVIDER_TYPES.WINDOWS:
+                console.log("Deployment started for windows app service");
+                return new WindowsWebAppDeploymentProvider_1.WindowsWebAppDeploymentProvider();
+            case DEPLOYMENT_PROVIDER_TYPES.LINUX:
+                console.log("Deployment started for linux app service");
+                return new LinuxWebAppDeploymentProvider_1.LinuxWebAppDeploymentProvider();
+            default:
+                throw new Error("Invalid deployment provider type");
         }
     }
 }
 exports.DeploymentFactory = DeploymentFactory;
+var DEPLOYMENT_PROVIDER_TYPES;
+(function (DEPLOYMENT_PROVIDER_TYPES) {
+    DEPLOYMENT_PROVIDER_TYPES[DEPLOYMENT_PROVIDER_TYPES["WINDOWS"] = 0] = "WINDOWS";
+    DEPLOYMENT_PROVIDER_TYPES[DEPLOYMENT_PROVIDER_TYPES["LINUX"] = 1] = "LINUX";
+    DEPLOYMENT_PROVIDER_TYPES[DEPLOYMENT_PROVIDER_TYPES["PUBLISHPROFILE"] = 2] = "PUBLISHPROFILE";
+})(DEPLOYMENT_PROVIDER_TYPES = exports.DEPLOYMENT_PROVIDER_TYPES || (exports.DEPLOYMENT_PROVIDER_TYPES = {}));

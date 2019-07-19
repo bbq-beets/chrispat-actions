@@ -1,11 +1,10 @@
-import { IWebAppDeploymentProvider } from "./IWebAppDeploymentProvider";
+import { WebAppDeploymentProvider } from "./WebAppDeploymentProvider";
 import { PackageType } from "../common/Utilities/packageUtility";
 import { parse } from "../common/Utilities/parameterParserUtility";
 import { FileTransformUtility} from "../common/Utilities/fileTransformationUtility";
 import * as utility from '../common/Utilities/utility.js';
 import * as zipUtility from '../common/Utilities/ziputility.js';
 import * as core from '@actions/core';
-import { IWebAppDeploymentHelper } from "./IWebAppDeploymentHelper";
 import { TaskParameters } from "../taskparameters";
 
 const removeRunFromZipAppSetting: string = '-WEBSITE_RUN_FROM_PACKAGE 0';
@@ -13,18 +12,9 @@ const runFromZipAppSetting: string = '-WEBSITE_RUN_FROM_PACKAGE 1';
 const appType: string = "-appType java_springboot";
 const jarPath: string = " -JAR_PATH ";
 
-export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvider {
+export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
     private zipDeploymentID: string;
     private updateStatus: boolean;
-    private deploymentHelper: IWebAppDeploymentHelper;
-
-    constructor(deplHelper: IWebAppDeploymentHelper){
-        this.deploymentHelper = deplHelper;
-    }
-    
-    PreDeploymentStep() {
-        this.deploymentHelper.PreDeploymentStep();
-    }
 
     public async DeployWebAppStep() {
         let webPackage = TaskParameters.getTaskParams().package.getPath();
@@ -34,18 +24,16 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
         } 
         let packageType = TaskParameters.getTaskParams().package.getPackageType();
         let deploymentMethodtelemetry: string;
-        let customMessage;
 
         switch(packageType){
             case PackageType.war:
                 core.debug("Initiated deployment via kudu service for webapp war package : "+ webPackage);        
                 deploymentMethodtelemetry = '{"deploymentMethod":"War Deploy"}';
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
-                await this.deploymentHelper.KuduServiceUtility.warmpUp();
+                await this.kuduServiceUtility.warmpUp();
                 var warName = utility.getFileNameFromPath(webPackage, ".war");
-                customMessage = this.deploymentHelper.AzureAppService ? {slotName: this.deploymentHelper.AzureAppService.getSlot()} : {};
-                this.zipDeploymentID = await this.deploymentHelper.KuduServiceUtility.deployUsingWarDeploy(webPackage, 
-                    customMessage, warName);
+                this.zipDeploymentID = await this.kuduServiceUtility.deployUsingWarDeploy(webPackage, 
+                    { slotName: this.appService.getSlot() }, warName);
                 this.updateStatus = true;
                 break;
 
@@ -54,15 +42,15 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
                 deploymentMethodtelemetry = '{"deploymentMethod":"Zip Deploy"}';
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 var updateApplicationSetting = parse(removeRunFromZipAppSetting)
-                var isNewValueUpdated: boolean = this.deploymentHelper.AzureAppServiceUtility ? await this.deploymentHelper.AzureAppServiceUtility.updateAndMonitorAppSettings(updateApplicationSetting) : false;
+                var isNewValueUpdated: boolean = await this.appServiceUtility.updateAndMonitorAppSettings(updateApplicationSetting);
                 if(!isNewValueUpdated) {
-                    await this.deploymentHelper.KuduServiceUtility.warmpUp();
+                    await this.kuduServiceUtility.warmpUp();
                 }
 
                 var jarFile = utility.getFileNameFromPath(webPackage);
                 webPackage = await FileTransformUtility.applyTransformations(webPackage, appType + jarPath + jarFile, TaskParameters.getTaskParams().package.getPackageType());
 
-                this.zipDeploymentID = await this.deploymentHelper.KuduServiceUtility.deployUsingZipDeploy(webPackage);
+                this.zipDeploymentID = await this.kuduServiceUtility.deployUsingZipDeploy(webPackage);
                 this.updateStatus = true;
                 break;
 
@@ -76,12 +64,11 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
                 deploymentMethodtelemetry = '{"deploymentMethod":"Run from Package"}';
                 console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 var addCustomApplicationSetting = parse(runFromZipAppSetting);
-                var isNewValueUpdated: boolean = this.deploymentHelper.AzureAppServiceUtility ? await this.deploymentHelper.AzureAppServiceUtility.updateAndMonitorAppSettings(addCustomApplicationSetting) : false;
+                var isNewValueUpdated: boolean = await this.appServiceUtility.updateAndMonitorAppSettings(addCustomApplicationSetting);
                 if(!isNewValueUpdated) {
-                    await this.deploymentHelper.KuduServiceUtility.warmpUp();
+                    await this.kuduServiceUtility.warmpUp();
                 }
-                customMessage = this.deploymentHelper.AzureAppService ? {slotName: this.deploymentHelper.AzureAppService.getSlot()} : {};
-                await this.deploymentHelper.KuduServiceUtility.deployUsingRunFromZip(webPackage, customMessage);
+                await this.kuduServiceUtility.deployUsingRunFromZip(webPackage, { slotName: this.appService.getSlot() });
                 this.updateStatus = false;
                 break;
 
@@ -91,9 +78,9 @@ export class WindowsWebAppDeploymentProvider implements IWebAppDeploymentProvide
     }
 
     public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus: boolean) {
-        if(this.deploymentHelper.KuduServiceUtility && this.zipDeploymentID && this.deploymentHelper.ActiveDeploymentID && isDeploymentSuccess) {
-            await this.deploymentHelper.KuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.deploymentHelper.ActiveDeploymentID);
+        if(this.kuduServiceUtility && this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
+            await this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
         }
-        await this.deploymentHelper.UpdateDeploymentStatus(isDeploymentSuccess, this.updateStatus);
+        await this.UpdateDeploymentStatus(isDeploymentSuccess, this.updateStatus);
     }
 }

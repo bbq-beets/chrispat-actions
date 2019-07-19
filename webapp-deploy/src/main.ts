@@ -1,5 +1,5 @@
 import { TaskParameters } from "./taskparameters";
-import { DeploymentFactory } from "./deploymentProvider/DeploymentFactory";
+import { DeploymentFactory, DEPLOYMENT_PROVIDER_TYPES } from "./deploymentProvider/DeploymentFactory";
 import * as core from '@actions/core';
 
 async function main() {
@@ -7,10 +7,12 @@ async function main() {
 
   try {
     var taskParams = TaskParameters.getTaskParams();
+    let type = DEPLOYMENT_PROVIDER_TYPES.PUBLISHPROFILE;
     if(!!taskParams.endpoint) {
       await taskParams.getResourceDetails();
+      type = taskParams.kind.indexOf('linux') < 0 ? DEPLOYMENT_PROVIDER_TYPES.WINDOWS : DEPLOYMENT_PROVIDER_TYPES.LINUX;
     }
-    var deploymentProvider = DeploymentFactory.GetDeploymentProvider();
+    var deploymentProvider = DeploymentFactory.GetDeploymentProvider(type);
 
     console.log("Predeployment Step Started");
     await deploymentProvider.PreDeploymentStep();

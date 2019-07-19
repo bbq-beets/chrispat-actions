@@ -1,4 +1,3 @@
-import { IWebAppDeploymentHelper } from './IWebAppDeploymentHelper';
 import { TaskParameters } from '../taskparameters';
 import { KuduServiceUtility } from '../common/RestUtilities/KuduServiceUtility';
 import { AzureAppService } from '../common/ArmRest/azure-app-service';
@@ -6,36 +5,18 @@ import { Kudu } from '../common/KuduRest/azure-app-kudu-service';
 import { AzureAppServiceUtility } from '../common/RestUtilities/AzureAppServiceUtility';
 import { addAnnotation } from '../common/RestUtilities/AnnotationUtility';
 import * as core from '@actions/core';
+import { IWebAppDeploymentProvider } from './IWebAppDeploymentProvider';
 
-export class SpnBasedDeploymentHelper implements IWebAppDeploymentHelper {
-    private taskParams:TaskParameters;
-    private appService: AzureAppService;
-    private kuduService: Kudu;
-    private appServiceUtility: AzureAppServiceUtility;
-    private kuduServiceUtility: KuduServiceUtility;
-    private activeDeploymentID;
+export class WebAppDeploymentProvider implements IWebAppDeploymentProvider {
+    protected taskParams:TaskParameters;
+    protected appService: AzureAppService;
+    protected kuduService: Kudu;
+    protected appServiceUtility: AzureAppServiceUtility;
+    protected kuduServiceUtility: KuduServiceUtility;
+    protected activeDeploymentID;
 
     constructor() {
         this.taskParams = TaskParameters.getTaskParams();
-    }
-
-    public get AzureAppServiceUtility() {
-         return this.appServiceUtility;
-    }
-    public get AzureAppService() {
-        return this.appService;
-    }
-
-    public get KuduServiceUtility(): KuduServiceUtility {
-        return this.kuduServiceUtility;
-    }
-
-    public get TaskParams(): TaskParameters {
-        return this.taskParams;
-    }
-
-    public get ActiveDeploymentID() {
-         return this.activeDeploymentID;
     }
 
     public async PreDeploymentStep() {
@@ -45,6 +26,8 @@ export class SpnBasedDeploymentHelper implements IWebAppDeploymentHelper {
         this.kuduService = await this.appServiceUtility.getKuduService();
         this.kuduServiceUtility = new KuduServiceUtility(this.kuduService);
     }
+
+    public async DeployWebAppStep() {}
 
     public async UpdateDeploymentStatus(isDeploymentSuccess: boolean, updateStatus: boolean) {
         if(this.kuduServiceUtility) {

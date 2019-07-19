@@ -23,10 +23,12 @@ function main() {
         let isDeploymentSuccess = true;
         try {
             var taskParams = taskparameters_1.TaskParameters.getTaskParams();
+            let type = DeploymentFactory_1.DEPLOYMENT_PROVIDER_TYPES.PUBLISHPROFILE;
             if (!!taskParams.endpoint) {
                 yield taskParams.getResourceDetails();
+                type = taskParams.kind.indexOf('linux') < 0 ? DeploymentFactory_1.DEPLOYMENT_PROVIDER_TYPES.WINDOWS : DeploymentFactory_1.DEPLOYMENT_PROVIDER_TYPES.LINUX;
             }
-            var deploymentProvider = DeploymentFactory_1.DeploymentFactory.GetDeploymentProvider();
+            var deploymentProvider = DeploymentFactory_1.DeploymentFactory.GetDeploymentProvider(type);
             console.log("Predeployment Step Started");
             yield deploymentProvider.PreDeploymentStep();
             console.log("Deployment Step Started");

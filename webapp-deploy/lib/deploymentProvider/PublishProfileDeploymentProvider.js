@@ -15,13 +15,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const WebAppDeploymentProvider_1 = require("./WebAppDeploymentProvider");
+const fs = require("fs");
+const taskparameters_1 = require("../taskparameters");
 const packageUtility_1 = require("../common/Utilities/packageUtility");
+const KuduServiceUtility_1 = require("../common/RestUtilities/KuduServiceUtility");
+const azure_app_kudu_service_1 = require("../common/KuduRest/azure-app-kudu-service");
+const core = __importStar(require("@actions/core"));
 const utility = __importStar(require("../common/Utilities/utility.js"));
 const zipUtility = __importStar(require("../common/Utilities/ziputility.js"));
-const core = __importStar(require("@actions/core"));
-const taskparameters_1 = require("../taskparameters");
-class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDeploymentProvider {
+var parseString = require('xml2js').parseString;
+class PublishProfileDeploymentProvider {
+    PreDeploymentStep() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let scmCreds = yield this.getCredsFromXml(taskparameters_1.TaskParameters.getTaskParams().publishProfilePath);
+            this.kuduService = new azure_app_kudu_service_1.Kudu(scmCreds.uri, scmCreds.username, scmCreds.password);
+            this.kuduServiceUtility = new KuduServiceUtility_1.KuduServiceUtility(this.kuduService);
+        });
+    }
     DeployWebAppStep() {
         return __awaiter(this, void 0, void 0, function* () {
             let packageType = taskparameters_1.TaskParameters.getTaskParams().package.getPackageType();
@@ -51,7 +61,7 @@ class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDep
                 case packageUtility_1.PackageType.war:
                     core.debug("Initiated deployment via kudu service for webapp war package : " + packagePath);
                     let warName = utility.getFileNameFromPath(packagePath, ".war");
-                    this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingWarDeploy(packagePath, { slotName: this.appService.getSlot() }, warName);
+                    this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingWarDeploy(packagePath, {}, warName);
                     break;
                 default:
                     throw new Error('Invalid App Service package or folder path provided: ' + packagePath);
@@ -64,9 +74,36 @@ class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppDep
                 if (this.zipDeploymentID && this.activeDeploymentID && isDeploymentSuccess) {
                     yield this.kuduServiceUtility.postZipDeployOperation(this.zipDeploymentID, this.activeDeploymentID);
                 }
-                yield this.UpdateDeploymentStatus(isDeploymentSuccess, true);
+                if (!!updateStatus && updateStatus == true) {
+                    this.activeDeploymentID = yield this.kuduServiceUtility.updateDeploymentStatus(isDeploymentSuccess, null, { 'type': 'Deployment' });
+                    core.debug('Active DeploymentId :' + this.activeDeploymentID);
+                }
             }
+            console.log('App Service Application URL: ' + this.applicationURL);
+            core.exportVariable('AppServiceApplicationUrl', this.applicationURL);
+        });
+    }
+    getCredsFromXml(pubxmlFile) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var publishProfileXML = fs.readFileSync(pubxmlFile);
+            let res;
+            yield parseString(publishProfileXML, (error, result) => {
+                if (!!error) {
+                    throw new Error("Failed XML parsing " + error);
+                }
+                res = result.publishData.publishProfile[0].$;
+            });
+            let creds = {
+                uri: res.publishUrl.split(":")[0],
+                username: res.userName,
+                password: res.userPWD
+            };
+            if (creds.uri.indexOf("scm") < 0) {
+                throw new Error("Publish profile does not contain kudu URL");
+            }
+            this.applicationURL = res.destinationAppUrl;
+            return creds;
         });
     }
 }
-exports.LinuxWebAppDeploymentProvider = LinuxWebAppDeploymentProvider;
+exports.PublishProfileDeploymentProvider = PublishProfileDeploymentProvider;
