@@ -23,7 +23,7 @@ jobs:
         azure-service-app-key: ${{ secrets.AZURE_APP_KEY }}
         azure-service-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         azure-subscription: ${{ secrets.SUBSCRIPTION_ID }}
-        app-name: rnnode-win
+        app-name: node-rn
         package: './myapp.zip'
       id: myapp-id
     
