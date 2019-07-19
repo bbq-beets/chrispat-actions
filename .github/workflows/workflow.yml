@@ -16,12 +16,6 @@ jobs:
     - name: archive myapp
       run: |
         zip -r myapp.zip .
-   
-    #- name: Login Azure
-    # Shell action, will be replaced with first class Azure login action
-    #  run: |
-    #    az login --service-principal -u ${{ secrets.AZURE_APP_ID }} -p ${{ secrets.AZURE_APP_KEY }} - ${{ secrets.AZURE_TENANT_ID }}
-    #    az account set -s ${{ secrets.SUBSCRIPTION_ID }}
         
     - uses: ./webapp-deploy
       with: 
