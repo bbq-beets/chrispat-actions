@@ -12,7 +12,7 @@ jobs:
   
     - name: archive myapp
       run: |
-        7z -r myapp.zip .
+        zip -r myapp.zip .
         
     - uses: ./webapp-deploy
       with: 
