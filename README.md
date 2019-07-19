@@ -1,6 +1,37 @@
 # Sample NodeJS application for GitHub Actions
 
-For more information on building JavaScript or NodeJS applications, see [JavaScript](https://docs.microsoft.com/azure/devops/pipelines/languages/javascript).
+Sample workflow to build and deploy node js app
+
+```yaml
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    actions:
+    
+    # install dependencies, build, and test
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+  
+    - name: archive myapp
+      run: |
+        zip -r myapp.zip .
+        
+    - uses: ./webapp-deploy
+      with: 
+        app-name: node-rn
+        package: './myapp.zip'
+        publish-profile-xml: '${{ secrets.azureWebAppPublishProfile }}'
+      id: myapp-id
+    
+    # Web app url to work with
+    - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
+    
+```
 
 # Contributing
 
