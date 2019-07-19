@@ -15,7 +15,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
 const taskparameters_1 = require("../taskparameters");
 const packageUtility_1 = require("../common/Utilities/packageUtility");
 const KuduServiceUtility_1 = require("../common/RestUtilities/KuduServiceUtility");
@@ -27,7 +26,7 @@ var parseString = require('xml2js').parseString;
 class PublishProfileDeploymentProvider {
     PreDeploymentStep() {
         return __awaiter(this, void 0, void 0, function* () {
-            let scmCreds = yield this.getCredsFromXml(taskparameters_1.TaskParameters.getTaskParams().publishProfilePath);
+            let scmCreds = yield this.getCredsFromXml(taskparameters_1.TaskParameters.getTaskParams().publishProfileContent);
             this.kuduService = new azure_app_kudu_service_1.Kudu(scmCreds.uri, scmCreds.username, scmCreds.password);
             this.kuduServiceUtility = new KuduServiceUtility_1.KuduServiceUtility(this.kuduService);
         });
@@ -84,9 +83,8 @@ class PublishProfileDeploymentProvider {
     }
     getCredsFromXml(pubxmlFile) {
         return __awaiter(this, void 0, void 0, function* () {
-            var publishProfileXML = fs.readFileSync(pubxmlFile);
             let res;
-            yield parseString(publishProfileXML, (error, result) => {
+            yield parseString(pubxmlFile, (error, result) => {
                 if (!!error) {
                     throw new Error("Failed XML parsing " + error);
                 }

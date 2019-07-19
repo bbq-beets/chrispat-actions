@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { AzureResourceFilterUtility } from "./common/RestUtilities/AzureResourceFilterUtility";
 import { IAuthorizationHandler } from "./common/ArmRest/IAuthorizationHandler";
-import { Package, exist } from './common/Utilities/packageUtility';
+import { Package } from './common/Utilities/packageUtility';
 import { getHandler } from './common/AuthorizationHandlerFactory';
 
 export class TaskParameters {
@@ -11,12 +11,12 @@ export class TaskParameters {
     private _resourceGroupName?: string;
     private _kind?: string;
     private _endpoint: IAuthorizationHandler;
-    private _publishProfilePath: string;
+    private _publishProfileContent: string;
 
     private constructor() {
-        this._publishProfilePath = core.getInput('publish-profile-path');
+        this._publishProfileContent = core.getInput('publish-profile');
         this._package = new Package(core.getInput('package', { required: true }));
-        if(!exist(this._publishProfilePath)) {
+        if(!this._publishProfileContent) {
             this._endpoint = getHandler();
             this._appName = core.getInput('app-name', {required: true});
         }
@@ -49,8 +49,8 @@ export class TaskParameters {
         return this._endpoint;
     }
 
-    public get publishProfilePath() {
-        return this._publishProfilePath;
+    public get publishProfileContent() {
+        return this._publishProfileContent;
     }
 
     public async getResourceDetails() {

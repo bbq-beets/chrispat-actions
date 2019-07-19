@@ -2,8 +2,8 @@
 name: 'Azure WebApp'
 description: 'Deploy Web Apps to Azure'
 inputs: 
-  publish-profile-path:
-    description: 'Path to publish profile for app service'
+  publish-profile:
+    description: 'Publish profile for app service'
   app-name: # id of input
     description: 'Name of the Azure Web App'
   package: # id of input

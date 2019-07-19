@@ -16,8 +16,8 @@ jobs:
         
     - uses: ./webapp-deploy
       with: 
-        publish-profile-path: './linuxappsuaggar2.PublishSettings'
-        app-name: linuxappsuaggar2
+        publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+        app-name: node-rn
         package: './myapp.zip'
       id: myapp-id
     

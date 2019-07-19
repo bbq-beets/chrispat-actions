@@ -25,7 +25,7 @@ export class PublishProfileDeploymentProvider implements IWebAppDeploymentProvid
     private zipDeploymentID: string;
 
     public async PreDeploymentStep() {
-        let scmCreds: scmCredentials = await this.getCredsFromXml(TaskParameters.getTaskParams().publishProfilePath);
+        let scmCreds: scmCredentials = await this.getCredsFromXml(TaskParameters.getTaskParams().publishProfileContent);
         this.kuduService = new Kudu(scmCreds.uri, scmCreds.username, scmCreds.password);
         this.kuduServiceUtility = new KuduServiceUtility(this.kuduService);
     }
@@ -86,9 +86,8 @@ export class PublishProfileDeploymentProvider implements IWebAppDeploymentProvid
     }
 
     private async getCredsFromXml(pubxmlFile: string): Promise<scmCredentials> {
-        var publishProfileXML = fs.readFileSync(pubxmlFile);
         let res;
-        await parseString(publishProfileXML, (error, result) => {
+        await parseString(pubxmlFile, (error, result) => {
             if(!!error) {
                 throw new Error("Failed XML parsing " + error);
             }
