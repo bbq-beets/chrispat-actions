@@ -5,6 +5,9 @@ Sample workflow to build and deploy node js app
 ### Deploy with app-level credentials
 
 ```yaml
+
+# File: .github/workflows/workflow.yml
+
 on: [push, pull_request]
 
 jobs:
@@ -34,6 +37,9 @@ jobs:
 ### Deploy with user-level credentials
 
 ```yaml
+
+# File: .github/workflows/workflow.yml
+
 on: [push, pull_request]
 
 jobs:
