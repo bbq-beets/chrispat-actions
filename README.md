@@ -20,7 +20,7 @@ jobs:
     - uses: ./webapp-deploy
       with: 
         app-name: node-rn
-        package: './myapp.zip'
+        package: './myapp'
         publish-profile-xml: '${{ secrets.azureWebAppPublishProfile }}'
       id: myapp-id
     
