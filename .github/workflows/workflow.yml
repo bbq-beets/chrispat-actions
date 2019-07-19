@@ -25,8 +25,4 @@ jobs:
         azure-subscription: ${{ secrets.SUBSCRIPTION_ID }}
         app-name: node-rn
         package: './myapp.zip'
-      id: myapp-id
-    
-    # Web app url to work with
-    - name: Web App url to work with - 
-       run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
+
