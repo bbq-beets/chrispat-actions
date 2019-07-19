@@ -17,12 +17,7 @@ jobs:
       redis:
         image: redis
 
-    actions:
-    - name: Foo
-      usess: actions/setup-node@master
-      with:
-        version: 10.6
-        
+    actions:        
     - run: echo Hello World change
     - run: docker ps -a
     - run: echo ${{ github.ref }}
