@@ -4,22 +4,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-    - run: | 
-        az login --service-principal --username ${{ secrets.SPN_ID }} --password ${{ secrets.SPN_KEY }} --tenant ${{ secrets.AZURE_SERVICE_TENANT_ID }}
-        az account set -s RMDev
 
-    - uses: azure/actions/acr-login@master
+    - uses: azure/actions/docker-login@docker
       with:
-        acr-name: desattiracr
+        acr-name: desattiracr.azurecr.io
+        username: ${{ secrets.SPN_ID }}
+        password: ${{ secrets.SPN_KEY }}
     
     - run: |
-        docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
-        docker push desattiracr.azurecr.io/dsmsgosampleapp:latest
+        docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:${{ event.run_id }} 
+        docker push desattiracr.azurecr.io/dsmsgosampleapp:${{ event.run_id }} 
 
-    - uses: azure/actions/aks-set-context@users/desattir/aks-set-context
+    - uses: azure/actions/k8s-set-context@k8s-context
       with:
-        resourceGroup: desattiraks-rg
-        clusterName: desattiraks
+        kubeconfig: ${{ secrets.KUBECONFIG }}
       id: login
 
     - uses: azure/actions/install-kubectl@master
@@ -31,13 +29,13 @@ jobs:
         ${{ actions.install.outputs.kubectlPath }} delete secret desattiracr
         ${{ actions.install.outputs.kubectlPath }} create secret docker-registry desattiracr --docker-server=desattiracr.azurecr.io --docker-username ${{ secrets.SPN_ID }} --docker-password ${{ secrets.SPN_KEY }} --docker-email=abc@example.com
 
-    - uses: azure/actions/aks-deploy@master
+    - uses: azure/actions/k8s-deploy@k8s-deploy
       with:
         manifests: |
           manifests/deployment.yml
           manifests/service.yml
         images: |
-          desattiracr.azurecr.io/dsmsgosampleapp:latest
+          desattiracr.azurecr.io/dsmsgosampleapp:${{ event.run_id }} 
         imagepullsecrets: |
           desattiracr
       id: deploy
