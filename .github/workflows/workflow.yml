@@ -12,8 +12,8 @@ jobs:
         password: ${{ secrets.SPN_KEY }}
     
     - run: |
-        docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:${{ event.run_id }} 
-        docker push desattiracr.azurecr.io/dsmsgosampleapp:${{ event.run_id }} 
+        docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
+        docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
 
     - uses: azure/actions/k8s-set-context@k8s-context
       with:
@@ -35,7 +35,7 @@ jobs:
           manifests/deployment.yml
           manifests/service.yml
         images: |
-          desattiracr.azurecr.io/dsmsgosampleapp:${{ event.run_id }} 
+          desattiracr.azurecr.io/dsmsgosampleapp:latest
         imagepullsecrets: |
           desattiracr
       id: deploy
