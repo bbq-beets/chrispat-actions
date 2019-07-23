@@ -7,9 +7,10 @@ jobs:
 
     - uses: azure/actions/docker-login@docker
       with:
-        acr-name: desattiracr.azurecr.io
+        loginServer: desattiracr.azurecr.io
         username: ${{ secrets.SPN_ID }}
         password: ${{ secrets.SPN_KEY }}
+        email: desattir@microsoft.com
     
     - run: |
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
