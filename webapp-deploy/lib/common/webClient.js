@@ -12,7 +12,7 @@ const util = require("util");
 const fs = require("fs");
 const httpClient = require("typed-rest-client/HttpClient");
 var requestOptions = {};
-var httpCallbackClient = new httpClient.HttpClient("suaggar_actions", undefined, requestOptions);
+var httpCallbackClient = new httpClient.HttpClient(`${process.env.AZURE_HTTP_USER_AGENT}`, undefined, requestOptions);
 function sendRequest(request, options) {
     return __awaiter(this, void 0, void 0, function* () {
         let i = 0;

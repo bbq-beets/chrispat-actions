@@ -50,7 +50,7 @@ exports.addAnnotation = addAnnotation;
 function getReleaseAnnotation(isDeploymentSuccess) {
     let releaseAnnotationProperties = {
         "Label": isDeploymentSuccess ? "Success" : "Error",
-        "Deployment Uri": `https://github.com/${process.env.GITHUB_REPOSITORY}/actions`
+        "Deployment Uri": `https://github.com/${process.env.GITHUB_REPOSITORY}/commit/${process.env.GITHUB_SHA}/checks`
     };
     let releaseAnnotation = {
         "AnnotationName": "GitHUb Annotation",

@@ -5,7 +5,7 @@ import httpInterfaces = require("typed-rest-client/Interfaces");
 
 var requestOptions: httpInterfaces.IRequestOptions = {};
 
-var httpCallbackClient = new httpClient.HttpClient("suaggar_actions", undefined, requestOptions);
+var httpCallbackClient = new httpClient.HttpClient(`${process.env.AZURE_HTTP_USER_AGENT}`, undefined, requestOptions);
 
 export interface WebRequest {
     method: string;

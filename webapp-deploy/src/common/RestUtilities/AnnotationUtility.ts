@@ -34,7 +34,7 @@ export async function addAnnotation(endpoint: IAuthorizationHandler, azureAppSer
 function getReleaseAnnotation(isDeploymentSuccess: boolean): {[key: string]: any} { 
     let releaseAnnotationProperties = {
         "Label": isDeploymentSuccess ? "Success" : "Error", // Label decides the icon for annotation
-        "Deployment Uri": `https://github.com/${process.env.GITHUB_REPOSITORY}/actions`
+        "Deployment Uri": `https://github.com/${process.env.GITHUB_REPOSITORY}/commit/${process.env.GITHUB_SHA}/checks`
     };
 
     let releaseAnnotation = {
