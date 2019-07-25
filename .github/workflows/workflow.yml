@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
+    - using: actions/checkout@master
+    
     - run: echo Hello World change again
     
     - uses: ./hello-world-action
