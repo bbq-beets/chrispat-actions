@@ -18,6 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(process.env);
         try {
             const nameToGreet = core.getInput('who-to-greet');
             if (nameToGreet == 'Octocat') {
