@@ -21,9 +21,6 @@ export class ContainerDeploymentUtility {
             if(!!images) {
                 updatedMulticontainerConfigFile = this._updateImagesInConfigFile(multiContainerConfigFile, images);
             }
-
-            // uploading transformed file
-            console.log(`##vso[task.uploadfile]${updatedMulticontainerConfigFile}`);
         }
         else {
             core.debug("Deploying image " + images + " to the webapp " + this._appService.getName());
