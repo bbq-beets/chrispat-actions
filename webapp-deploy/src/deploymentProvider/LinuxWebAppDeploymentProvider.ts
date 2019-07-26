@@ -10,8 +10,6 @@ export class LinuxWebAppDeploymentProvider extends WebAppDeploymentProvider {
 
     public async DeployWebAppStep() {
         let packageType = TaskParameters.getTaskParams().package.getPackageType();
-        let deploymentMethodtelemetry = packageType === PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
-        console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
         
         core.debug('Performing Linux web app deployment');
         

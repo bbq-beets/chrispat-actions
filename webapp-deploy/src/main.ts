@@ -11,23 +11,25 @@ async function main() {
     let usrAgentRepo = crypto.createHash('sha256').update(`${process.env.GITHUB_REPOSITORY}`).digest('hex');
     let prefix = "";
     if(!!process.env.AZURE_HTTP_USER_AGENT) {
-      prefix = `${process.env.AZURE_HTTP_USER_AGENT}_`
+      prefix = `${process.env.AZURE_HTTP_USER_AGENT}`
     }
     let actionName = 'Deploy Web Apps to Azure';
-    core.exportVariable('AZURE_HTTP_USER_AGENT', `${prefix}GITHUBACTIONS_${actionName}_${usrAgentRepo}`);
+    core.exportVariable('AZURE_HTTP_USER_AGENT', `${prefix} GITHUBACTIONS_${actionName}_${usrAgentRepo}`);
     
     let taskParams: TaskParameters = TaskParameters.getTaskParams();
     let type = DEPLOYMENT_PROVIDER_TYPES.PUBLISHPROFILE;
+
+    // get app kind
     if(!!taskParams.endpoint) {
       await taskParams.getResourceDetails();
       type = taskParams.kind.indexOf('linux') < 0 ? DEPLOYMENT_PROVIDER_TYPES.WINDOWS : DEPLOYMENT_PROVIDER_TYPES.LINUX;
     }
     var deploymentProvider = DeploymentFactory.GetDeploymentProvider(type);
 
-    console.log("Predeployment Step Started");
+    core.debug("Predeployment Step Started");
     await deploymentProvider.PreDeploymentStep();
 
-    console.log("Deployment Step Started");
+    core.debug("Deployment Step Started");
     await deploymentProvider.DeployWebAppStep();
   }
   catch(error) {

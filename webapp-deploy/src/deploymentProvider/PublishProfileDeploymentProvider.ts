@@ -32,8 +32,6 @@ export class PublishProfileDeploymentProvider implements IWebAppDeploymentProvid
 
     public async DeployWebAppStep() {
         let packageType = TaskParameters.getTaskParams().package.getPackageType();
-        let deploymentMethodtelemetry = packageType === PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
-        console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
         
         let packagePath = TaskParameters.getTaskParams().package.getPath();
         await this.kuduServiceUtility.warmpUp();

@@ -61,7 +61,7 @@ export async function sendRequest(request: WebRequest, options?: WebRequestOptio
             }
             else {
                 if (error.code) {
-                    console.log("##vso[task.logissue type=error;code=" + error.code + ";]");
+                    console.log("##[error]" + error.code);
                 }
 
                 throw error;

@@ -6,8 +6,8 @@ import * as core from '@actions/core';
 
 const deploymentFolder: string = 'site/deployments';
 const manifestFileName: string = 'manifest';
-const VSTS_ZIP_DEPLOY: string = 'VSTS_ZIP_DEPLOY';
-const VSTS_DEPLOY: string = 'VSTS';
+const GITHUB_ZIP_DEPLOY: string = 'GITHUB_ZIP_DEPLOY';
+const GITHUB_DEPLOY: string = 'GITHUB';
 
 export class KuduServiceUtility {
     private _webAppKuduService: Kudu;
@@ -42,7 +42,7 @@ export class KuduServiceUtility {
 
             let queryParameters: Array<string> = [
                 'isAsync=true',
-                'deployer=' + VSTS_ZIP_DEPLOY
+                'deployer=' + GITHUB_ZIP_DEPLOY
             ];
 
             let deploymentDetails = await this._webAppKuduService.zipDeploy(packagePath, queryParameters);
@@ -62,7 +62,7 @@ export class KuduServiceUtility {
             console.log('Package deployment using ZIP Deploy initiated.');
 
             let queryParameters: Array<string> = [
-                'deployer=' +   VSTS_DEPLOY
+                'deployer=' +   GITHUB_DEPLOY
             ];
 
             var deploymentMessage = this._getUpdateHistoryRequest(null, null, customMessage).message;

@@ -28,8 +28,6 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
         switch(packageType){
             case PackageType.war:
                 core.debug("Initiated deployment via kudu service for webapp war package : "+ webPackage);        
-                deploymentMethodtelemetry = '{"deploymentMethod":"War Deploy"}';
-                console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 await this.kuduServiceUtility.warmpUp();
                 var warName = utility.getFileNameFromPath(webPackage, ".war");
                 this.zipDeploymentID = await this.kuduServiceUtility.deployUsingWarDeploy(webPackage, 
@@ -39,8 +37,6 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
 
             case PackageType.jar:
                 core.debug("Initiated deployment via kudu service for webapp jar package : "+ webPackage);    
-                deploymentMethodtelemetry = '{"deploymentMethod":"Zip Deploy"}';
-                console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 var updateApplicationSetting = parse(removeRunFromZipAppSetting)
                 var isNewValueUpdated: boolean = await this.appServiceUtility.updateAndMonitorAppSettings(updateApplicationSetting);
                 if(!isNewValueUpdated) {
@@ -61,8 +57,6 @@ export class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider {
                 
             case PackageType.zip:
                 core.debug("Initiated deployment via kudu service for webapp package : "+ webPackage);    
-                deploymentMethodtelemetry = '{"deploymentMethod":"Run from Package"}';
-                console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                 var addCustomApplicationSetting = parse(runFromZipAppSetting);
                 var isNewValueUpdated: boolean = await this.appServiceUtility.updateAndMonitorAppSettings(addCustomApplicationSetting);
                 if(!isNewValueUpdated) {

@@ -34,8 +34,6 @@ class PublishProfileDeploymentProvider {
     DeployWebAppStep() {
         return __awaiter(this, void 0, void 0, function* () {
             let packageType = taskparameters_1.TaskParameters.getTaskParams().package.getPackageType();
-            let deploymentMethodtelemetry = packageType === packageUtility_1.PackageType.war ? '{"deploymentMethod":"War Deploy"}' : '{"deploymentMethod":"Zip Deploy"}';
-            console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
             let packagePath = taskparameters_1.TaskParameters.getTaskParams().package.getPath();
             yield this.kuduServiceUtility.warmpUp();
             switch (packageType) {

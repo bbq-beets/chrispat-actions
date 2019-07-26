@@ -21,8 +21,8 @@ const fs = require("fs");
 const core = __importStar(require("@actions/core"));
 const deploymentFolder = 'site/deployments';
 const manifestFileName = 'manifest';
-const VSTS_ZIP_DEPLOY = 'VSTS_ZIP_DEPLOY';
-const VSTS_DEPLOY = 'VSTS';
+const GITHUB_ZIP_DEPLOY = 'GITHUB_ZIP_DEPLOY';
+const GITHUB_DEPLOY = 'GITHUB';
 class KuduServiceUtility {
     constructor(kuduService) {
         this._webAppKuduService = kuduService;
@@ -51,7 +51,7 @@ class KuduServiceUtility {
                 console.log('Package deployment using ZIP Deploy initiated.');
                 let queryParameters = [
                     'isAsync=true',
-                    'deployer=' + VSTS_ZIP_DEPLOY
+                    'deployer=' + GITHUB_ZIP_DEPLOY
                 ];
                 let deploymentDetails = yield this._webAppKuduService.zipDeploy(packagePath, queryParameters);
                 yield this._processDeploymentResponse(deploymentDetails);
@@ -69,7 +69,7 @@ class KuduServiceUtility {
             try {
                 console.log('Package deployment using ZIP Deploy initiated.');
                 let queryParameters = [
-                    'deployer=' + VSTS_DEPLOY
+                    'deployer=' + GITHUB_DEPLOY
                 ];
                 var deploymentMessage = this._getUpdateHistoryRequest(null, null, customMessage).message;
                 queryParameters.push('message=' + encodeURIComponent(deploymentMessage));

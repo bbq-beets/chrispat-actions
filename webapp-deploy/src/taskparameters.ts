@@ -6,10 +6,10 @@ import { getHandler } from './common/AuthorizationHandlerFactory';
 
 export class TaskParameters {
     private static taskparams: TaskParameters;
-    private _appName?: string;
+    private _appName: string;
     private _package: Package;
     private _resourceGroupName?: string;
-    private _kind?: string;
+    private _kind: string;
     private _endpoint: IAuthorizationHandler;
     private _publishProfileContent: string;
 

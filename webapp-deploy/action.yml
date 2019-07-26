@@ -4,14 +4,14 @@ description: 'Deploy Web Apps to Azure'
 inputs: 
   publish-profile:
     description: 'Publish profile (*.publishsettings) file contents with Web Deploy secrets'
-  app-name: # id of input
+  app-name:
     description: 'Name of the Azure Web App'
-  package: # id of input
+  package:
     description: 'Path to package or folder. *.zip, *.war, *.jar or a folder to deploy'
     required: false
     default: '/artifacts/*.zip'
 outputs:
-  webapp-url: # id of output
+  webapp-url:
     description: 'URL to work with your webapp'
 branding:
   icon: 'webapp.svg'

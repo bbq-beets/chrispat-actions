@@ -1,8 +1,8 @@
 {
   "name": "webapp-deploy",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Deploy to webapp",
+  "main": "lib/main.js",
   "dependencies": {
     "@actions/core": "file:../tmp/toolkit/actions-core-0.0.0.tgz",
     "@types/q": "^1.5.2",
@@ -24,6 +24,6 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Sumiran Aggarwal",
+  "license": "MIT"
 }

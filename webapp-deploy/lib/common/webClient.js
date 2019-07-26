@@ -43,7 +43,7 @@ function sendRequest(request, options) {
                 }
                 else {
                     if (error.code) {
-                        console.log("##vso[task.logissue type=error;code=" + error.code + ";]");
+                        console.log("##[error]" + error.code);
                     }
                     throw error;
                 }

@@ -29,7 +29,7 @@ function ToError(response) {
         error.code = response.body.error.code;
         error.message = response.body.error.message;
         error.details = response.body.error.details;
-        console.log("##vso[task.logissue type=error;code=" + error.code + ";]");
+        console.log("##[error]" + error.message);
     }
     return error;
 }

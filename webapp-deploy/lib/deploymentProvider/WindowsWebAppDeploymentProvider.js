@@ -40,8 +40,6 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
             switch (packageType) {
                 case packageUtility_1.PackageType.war:
                     core.debug("Initiated deployment via kudu service for webapp war package : " + webPackage);
-                    deploymentMethodtelemetry = '{"deploymentMethod":"War Deploy"}';
-                    console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                     yield this.kuduServiceUtility.warmpUp();
                     var warName = utility.getFileNameFromPath(webPackage, ".war");
                     this.zipDeploymentID = yield this.kuduServiceUtility.deployUsingWarDeploy(webPackage, { slotName: this.appService.getSlot() }, warName);
@@ -49,8 +47,6 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
                     break;
                 case packageUtility_1.PackageType.jar:
                     core.debug("Initiated deployment via kudu service for webapp jar package : " + webPackage);
-                    deploymentMethodtelemetry = '{"deploymentMethod":"Zip Deploy"}';
-                    console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                     var updateApplicationSetting = parameterParserUtility_1.parse(removeRunFromZipAppSetting);
                     var isNewValueUpdated = yield this.appServiceUtility.updateAndMonitorAppSettings(updateApplicationSetting);
                     if (!isNewValueUpdated) {
@@ -67,8 +63,6 @@ class WindowsWebAppDeploymentProvider extends WebAppDeploymentProvider_1.WebAppD
                     core.debug("Compressed folder into zip " + webPackage);
                 case packageUtility_1.PackageType.zip:
                     core.debug("Initiated deployment via kudu service for webapp package : " + webPackage);
-                    deploymentMethodtelemetry = '{"deploymentMethod":"Run from Package"}';
-                    console.log("##vso[telemetry.publish area=TaskDeploymentMethod;feature=AzureWebAppDeployment]" + deploymentMethodtelemetry);
                     var addCustomApplicationSetting = parameterParserUtility_1.parse(runFromZipAppSetting);
                     var isNewValueUpdated = yield this.appServiceUtility.updateAndMonitorAppSettings(addCustomApplicationSetting);
                     if (!isNewValueUpdated) {
