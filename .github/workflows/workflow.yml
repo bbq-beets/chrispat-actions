@@ -35,17 +35,6 @@ jobs:
         secret-name: desattiracrsecret
       id: set-secret
 
-    - run: kubectl get secret desattiracrsecret
-
-    - uses: azure/actions/k8ssetsecret@master
-      with:
-        secret-type: generic       
-        secret-name: testsecret
-        arguments: '--from-literal=key1=value1 --from-literal=key2="top secret" --from-literal=key3=4'
-      id: set-secret
-
-    - run: kubectl get secret testsecret 
-
     - uses: azure/actions/k8s-deploy@k8s-deploy
       with:
         manifests: |
@@ -54,5 +43,5 @@ jobs:
         images: |
           desattiracr.azurecr.io/dsmsgosampleapp:latest
         imagepullsecrets: |
-          desattiracr
+          desattiracrsecret
       id: deploy
