@@ -17,9 +17,9 @@ jobs:
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
 
      - uses: azure/actions/install-kubectl@master
-      with:
+       with:
         version: latest
-      id: install
+       id: install
       
     - uses: azure/actions/k8s-set-context@k8s-context
       with:
