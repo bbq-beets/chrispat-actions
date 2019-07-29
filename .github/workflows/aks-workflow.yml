@@ -5,32 +5,32 @@ jobs:
     runs-on: ubuntu-latest
     actions:
 
-    - uses: azure/actions/docker-login@docker
+    - uses: azure/actions/docker-login@master
       with:
         loginServer: desattiracr.azurecr.io
-        username: ${{ secrets.SPN_ID }}
-        password: ${{ secrets.SPN_KEY }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
         email: desattir@microsoft.com
     
     - run: |
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
 
-    - uses: azure/actions/k8s-set-context@k8s-context
-      with:
-        kubeconfig: ${{ secrets.KUBECONFIG }}
-      id: login
-
     - uses: azure/actions/install-kubectl@master
       with:
         version: latest
       id: install
+      
+    - uses: azure/actions/k8s-set-context@master
+      with:
+        kubeconfig: ${{ secrets.KUBECONFIG }}
+      id: login
 
     - uses: azure/actions/k8ssetsecret@master
       with:
         container-registry-url: desattiracr.azurecr.io
-        container-registry-username: ${{ secrets.SPN_ID }}
-        container-registry-password: ${{ secrets.SPN_KEY }}
+        container-registry-username: ${{ secrets.ACR_USERNAME }}
+        container-registry-password: ${{ secrets.ACR_PASSWORD }}
         container-registry-email: desattir@microsoft.com
         secret-name: desattiracrsecret
       id: set-secret
