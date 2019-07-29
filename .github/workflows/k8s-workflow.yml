@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -13,8 +13,7 @@ jobs:
         email: desattir@microsoft.com
     
     - run: |
-        pwd
-        cd $(pwd)/sampleapp
+        cd ../sampleapp
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
         
