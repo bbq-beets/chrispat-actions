@@ -18,7 +18,7 @@ jobs:
 
      - uses: azure/actions/install-kubectl@master
        with:
-        version: latest
+         version: latest
        id: install
       
     - uses: azure/actions/k8s-set-context@k8s-context
