@@ -1,20 +1,47 @@
-
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    
-    - uses: actions/checkout@master
-    
-    - run: echo Hello World change again
-    
-    - uses: ./hello-world-action
+    - uses: azure/k8s-actions/docker-login@docker
       with:
-        who-to-greet: 'John Doe'
-      id: hello
-      
-    - run: echo "The time was ${{ steps.hello.outputs.time }}"
+        loginServer: desattiracr.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        email: desattir@microsoft.com
     
-   
+    - run: |
+        cd ./sampleapp
+        docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
+        docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
+        
+    - uses: azure/k8s-actions/setup-kubectl@master
+      with:
+        version: latest
+      id: install
+      
+    - uses: azure/k8s-actions/k8s-set-context@k8s-context
+      with:
+        kubeconfig: ${{ secrets.KUBECONFIG }}
+      id: login
+
+    - uses: azure/k8s-actions/k8s-set-secret@master
+      with:
+        container-registry-url: desattiracr.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        container-registry-email: desattir@microsoft.com
+        secret-name: desattiracrsecret
+      id: set-secret
+
+    - uses: azure/k8s-actions/k8s-deploy@k8s-deploy
+      with:
+        manifests: |
+          sampleapp/manifests/deployment.yml
+          sampleapp/manifests/service.yml
+        images: |
+          desattiracr.azurecr.io/dsmsgosampleapp:latest
+        imagepullsecrets: |
+          desattiracrsecret
+      id: deploy
