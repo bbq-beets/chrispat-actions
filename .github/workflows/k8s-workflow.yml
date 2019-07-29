@@ -4,7 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    
+    - uses: actions/checkout@master
     - uses: azure/k8s-actions/docker-login@fixes
       with:
         loginServer: desattiracr.azurecr.io
