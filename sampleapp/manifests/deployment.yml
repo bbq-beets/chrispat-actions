@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: dsmsgosampleapp 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dsmsgosampleapp 
+    spec:
+      containers:
+        - name: dsmsgosampleapp 
+          image: desattiracr.azurecr.io/dsmsgosampleapp 
+          ports:
+          - containerPort: 80
