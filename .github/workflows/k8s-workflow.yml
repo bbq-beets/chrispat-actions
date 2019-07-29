@@ -1,9 +1,11 @@
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
-    - uses: azure/k8s-actions/docker-login@docker
+    
+    - uses: azure/k8s-actions/docker-login@master
       with:
         loginServer: desattiracr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
@@ -11,16 +13,17 @@ jobs:
         email: desattir@microsoft.com
     
     - run: |
-        cd sampleapp
+        pwd
+        cd $(pwd)/sampleapp
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
         
-     - uses: azure/k8s-actions/setup-kubectl@master
-       with:
-         version: latest
-       id: install
+    - uses: azure/k8s-actions/setup-kubectl@master
+      with:
+        version: latest
+      id: install
       
-    - uses: azure/k8s-actions/k8s-set-context@k8s-context
+    - uses: azure/k8s-actions/k8s-set-context@master
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
       id: login
@@ -34,11 +37,11 @@ jobs:
         secret-name: desattiracrsecret
       id: set-secret
 
-    - uses: azure/k8s-actions/k8s-deploy@k8s-deploy
+    - uses: azure/k8s-actions/k8s-deploy@master
       with:
         manifests: |
-          manifests/deployment.yml
-          manifests/service.yml
+          sampleapp/manifests/deployment.yml
+          sampleapp/manifests/service.yml
         images: |
           desattiracr.azurecr.io/dsmsgosampleapp:latest
         imagepullsecrets: |
