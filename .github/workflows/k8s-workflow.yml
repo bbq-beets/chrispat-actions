@@ -1,9 +1,9 @@
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    actions:
+    steps:
 
     - uses: azure/k8s-actions/docker-login@docker
       with:
@@ -17,17 +17,17 @@ jobs:
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
         
-     - uses: azure/actions/install-kubectl@master
+     - uses: azure/k8s-actions/setup-kubectl@master
        with:
          version: latest
        id: install
       
-    - uses: azure/actions/k8s-set-context@k8s-context
+    - uses: azure/k8s-actions/k8s-set-context@k8s-context
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
       id: login
 
-    - uses: azure/actions/k8ssetsecret@master
+    - uses: azure/k8s-actions/k8s-set-secret@master
       with:
         container-registry-url: desattiracr.azurecr.io
         container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
@@ -36,7 +36,7 @@ jobs:
         secret-name: desattiracrsecret
       id: set-secret
 
-    - uses: azure/actions/k8s-deploy@k8s-deploy
+    - uses: azure/k8s-actions/k8s-deploy@k8s-deploy
       with:
         manifests: |
           manifests/deployment.yml
