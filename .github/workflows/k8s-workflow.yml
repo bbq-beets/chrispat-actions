@@ -13,7 +13,7 @@ jobs:
         email: desattir@microsoft.com
     
     - run: |
-        cd ./sampleapp
+        cd sampleapp
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
         
