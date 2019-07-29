@@ -4,7 +4,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
     - uses: azure/k8s-actions/docker-login@docker
       with:
         loginServer: desattiracr.azurecr.io
@@ -13,14 +12,14 @@ jobs:
         email: desattir@microsoft.com
     
     - run: |
-        cd sampleapp
+        cd ./sampleapp
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
         
-     - uses: azure/k8s-actions/setup-kubectl@master
-       with:
-         version: latest
-       id: install
+    - uses: azure/k8s-actions/setup-kubectl@master
+      with:
+        version: latest
+      id: install
       
     - uses: azure/k8s-actions/k8s-set-context@k8s-context
       with:
@@ -39,8 +38,8 @@ jobs:
     - uses: azure/k8s-actions/k8s-deploy@k8s-deploy
       with:
         manifests: |
-          manifests/deployment.yml
-          manifests/service.yml
+          sampleapp/manifests/deployment.yml
+          sampleapp/manifests/service.yml
         images: |
           desattiracr.azurecr.io/dsmsgosampleapp:latest
         imagepullsecrets: |
