@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-    - uses: azure/k8s-actions/docker-login@docker
+    - uses: azure/k8s-actions/docker-login@master
       with:
         loginServer: desattiracr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
@@ -22,7 +22,7 @@ jobs:
         version: latest
       id: install
       
-    - uses: azure/k8s-actions/k8s-set-context@k8s-context
+    - uses: azure/k8s-actions/k8s-set-context@master
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
       id: login
@@ -36,7 +36,7 @@ jobs:
         secret-name: desattiracrsecret
       id: set-secret
 
-    - uses: azure/k8s-actions/k8s-deploy@k8s-deploy
+    - uses: azure/k8s-actions/k8s-deploy@master
       with:
         manifests: |
           sampleapp/manifests/deployment.yml
