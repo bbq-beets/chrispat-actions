@@ -4,7 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     actions:
-
+    
     - uses: azure/actions/docker-login@master
       with:
         loginServer: desattiracr.azurecr.io
@@ -21,9 +21,17 @@ jobs:
         version: latest
       id: install
       
-    - uses: azure/actions/k8s-set-context@master
+    # Login to Azure Subscription. 
+    # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS 
+    - name: Azure login
+      uses: azure/login-action@master
       with:
-        kubeconfig: ${{ secrets.KUBECONFIG }}
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      
+    - uses: azure/actions/aks-set-context@master
+      with:
+        clusterName: desattiraks
+        resourceGroup: desattiraks-rg
       id: login
 
     - uses: azure/actions/k8ssetsecret@master
