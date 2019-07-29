@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-    - uses: azure/k8s-actions/docker-login@master
+    - uses: azure/k8s-actions/docker-login@fixes
       with:
         loginServer: desattiracr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
