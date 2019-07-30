@@ -15,23 +15,13 @@ jobs:
     - run: |
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
-
-    - uses: azure/actions/install-kubectl@master
-      with:
-        version: latest
-      id: install
-      
-    # Login to Azure Subscription. 
-    # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS 
-    - name: Azure login
-      uses: azure/login-action@master
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
       
     - uses: azure/actions/aks-set-context@master
       with:
         clusterName: desattiraks
         resourceGroup: desattiraks-rg
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        SubscriptionId: '${{ secrets.AZURE_SUBSCRIPTION }}'
       id: login
 
     - uses: azure/actions/k8ssetsecret@master
