@@ -3,7 +3,7 @@ jobs:
     runs-on: ubuntu-latest
     actions:
     
-    - uses: azure/k8s-actions/docker-login@master
+    - uses: azure/k8s-actions/docker-login@fixes
       with:
         loginServer: desattiracr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
@@ -14,16 +14,11 @@ jobs:
         cd ./sampleapp
         docker build . -t desattiracr.azurecr.io/dsmsgosampleapp:latest
         docker push desattiracr.azurecr.io/dsmsgosampleapp:latest 
-
-    - uses: azure/k8s-actions/install-kubectl@master
-      with:
-        version: latest
-      id: install        
       
     - uses: azure/k8s-actions/aks-set-context@master
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
-        subscription: ''
+        subscription: 'c00d16c7-6c1f-4c03-9be1-6934a4c49682'
         clusterName: desattiraks
         resourceGroup: desattiraks-rg
       id: login
