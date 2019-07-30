@@ -3,7 +3,8 @@ on: [pull-request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    actions:
+    
+    steps:
     
     - uses: azure/k8s-actions/docker-login@fixes
       with:
