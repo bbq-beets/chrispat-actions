@@ -24,7 +24,7 @@ jobs:
         version: latest
       id: install
       
-    - uses: azure/k8s-actions/k8s-set-context@master
+    - uses: azure/k8s-actions/k8s-set-context@fixes
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
       id: login
