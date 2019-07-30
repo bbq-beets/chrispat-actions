@@ -24,7 +24,7 @@ jobs:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         subscriptionId: 'c00d16c7-6c1f-4c03-9be1-6934a4c49682'
         clusterName: desattiraks
-        resourceGroup: desattiraks-rg
+        resourceGroupName: desattiraks-rg
       id: login
 
     - uses: azure/k8s-actions/k8s-set-secret@master
