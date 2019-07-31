@@ -5,10 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: env
-    # - uses: ./azure-login
-    #   with:
-    #     creds: '${{ secrets.AZURE_CREDENTIALS }}'
-    #     subscription-id: '${{ secrets.SUBSCRIPTION_ID }}'
+    - uses: ./azure-login
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        subscription-id: '${{ secrets.SUBSCRIPTION_ID }}'
     # - name: npm install, build, and test
     #   run: |
     #     npm install
