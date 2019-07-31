@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    actions:
+    steps:
     - run: env
     - uses: ./azure-login
       with:
