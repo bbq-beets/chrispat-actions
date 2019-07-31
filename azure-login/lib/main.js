@@ -29,17 +29,15 @@ function main() {
             catch (ex) {
                 throw new Error('Credentials object is not a valid JSON');
             }
-            let subscriptionId = core.getInput('subscription-id');
-            let servicePrincipalId = credsObject["appId"];
-            let servicePrincipalKey = credsObject["password"];
-            let tenantId = credsObject["tenant"];
-            if (!servicePrincipalId || !servicePrincipalKey || !tenantId) {
-                throw new Error("Not all values are present in the creds object. Ensure appId, password and tenant are supplied");
+            let servicePrincipalId = credsObject["clientId"];
+            let servicePrincipalKey = credsObject["clientSecret"];
+            let tenantId = credsObject["tenantId"];
+            let subscriptionId = credsObject["subscriptionId"];
+            if (!servicePrincipalId || !servicePrincipalKey || !tenantId || !subscriptionId) {
+                throw new Error("Not all values are present in the creds object. Ensure clientId, clientSecret, tenantId and subscriptionId are supplied");
             }
             throwIfError(utility_1.execSync("az", "login --service-principal -u \"" + servicePrincipalId + "\" -p \"" + servicePrincipalKey + "\" --tenant \"" + tenantId + "\""));
-            if (!!subscriptionId) {
-                throwIfError(utility_1.execSync("az", "account set --subscription \"" + subscriptionId + "\""));
-            }
+            throwIfError(utility_1.execSync("az", "account set --subscription \"" + subscriptionId + "\""));
         }
         catch (error) {
             core.debug("Login failed.");
