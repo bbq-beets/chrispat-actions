@@ -12,5 +12,5 @@ branding:
   icon: 'login.svg'
   color: 'blue'
 runs:
-  using: 'node'
+  using: 'node12'
   main: 'lib/main.js'
