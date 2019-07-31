@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  proxy:
+    image: yiliao/proxy:v2
+    ports:
+      - "80:80"
+
+  vote:
+    image: yiliao/vote
+    command: ["python", "app.py"]
+
+  result:
+    image: yiliao/result:v1
+    command: ["nodemon", "server.js"]
+
+  worker:
+    image: yiliao/worker
+
+  redis:
+    image: redis:alpine
+    ports: ["6379"]
+
+  db:
+    image: postgres:9.4
