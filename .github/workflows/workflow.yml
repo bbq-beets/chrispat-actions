@@ -8,15 +8,15 @@ jobs:
     - uses: azure-login
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
-    - run: |
-        npm install
-        npm run build --if-present
-        npm run test --if-present  
-    - run: |
-        zip -r myapp.zip .        
-    - uses: webapp-deploy
-      with: 
-        app-name: node-sa
-        package: './myapp.zip'
-      id: myapp-id    
-    - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
+    # - run: |
+    #     npm install
+    #     npm run build --if-present
+    #     npm run test --if-present  
+    # - run: |
+    #     zip -r myapp.zip .        
+    # - uses: webapp-deploy
+    #   with: 
+    #     app-name: node-sa
+    #     package: './myapp.zip'
+    #   id: myapp-id    
+    # - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
