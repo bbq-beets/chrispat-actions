@@ -8,7 +8,6 @@ jobs:
     - uses: azure-login
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
-        subscription-id: '${{ secrets.SUBSCRIPTION_ID }}'
     - run: |
         npm install
         npm run build --if-present
