@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: env
-    - uses: azure-login
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    # - uses: azure-login
+    #   with:
+    #     creds: '${{ secrets.AZURE_CREDENTIALS }}'
     # - run: |
     #     npm install
     #     npm run build --if-present
