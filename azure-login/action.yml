@@ -1,18 +1,16 @@
-name: 'Azure login'
-description: 'Login to Azure'
-inputs:
-  azureServicePrincipalId:
-    description: 'Azure service app ID'
-    required: 'true'
-  azureServicePrincipalKey:
-    description: 'Azure service password'
-    required: 'true'
-  azureServiceTenantId:
-    description: 'Azure service tenant ID'
-    required: 'true'
-  azureSubscription:
-    description: 'Azure subscription name'
-    required: 'false'
+# Login to Azure subscription
+name: 'Login Azure'
+description: 'Login Azure wraps the az login, allowing for Azure actions to log into Azure'
+inputs: 
+  creds:
+    description: 'Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS'
+    required: true
+  subscription-id:
+    description: 'Subscription to select'
+    required: false
+branding:
+  icon: 'login.svg'
+  color: 'blue'
 runs:
   using: 'node'
-  main: 'lib/azure-login.js'
+  main: 'lib/main.js'
