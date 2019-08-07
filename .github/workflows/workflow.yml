@@ -4,10 +4,10 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    actions:
-    # - run: echo Hello World change
-    # - uses: ./hello-world-action
-    #   with:
-    #     who-to-greet: 'Stephen'
-    #   id: hello
+    steps:
+    - run: echo Hello World change
+    - uses: ./hello-world-action
+      with:
+        who-to-greet: 'Stephen'
+      id: hello
     - uses: ./azure-login-docker
