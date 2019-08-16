@@ -6,10 +6,8 @@ jobs:
     steps:
     - run: env
     - run: |
-        echo "##[set-env name=servicePrincipalId]232312-312312-312321" |
-        echo "##[set-secret name=servicePrincipalKey]232312-312312-312321"
+        echo "##[set-env name=servicePrincipalId]232312-312312-312321"
     - run: |
-        echo $servicePrincipalKey |
         echo $servicePrincipalId
     # - uses: actions/checkout@master
     # - uses: ./azure-login
