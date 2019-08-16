@@ -1,20 +1,29 @@
-
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    
-    - uses: actions/checkout@master
-    
-    - run: echo Hello World change again
-    
-    - uses: ./hello-world-action
-      with:
-        who-to-greet: 'John Doe'
-      id: hello
-      
-    - run: echo "The time was ${{ steps.hello.outputs.time }}"
-    
-   
+    - run: env
+    - run: |
+        echo "##[set-secret name=servicePrincipalId]232312-312312-312321"
+    - run: |
+        echo $servicePrincipalId
+      env:
+        servicePrincipalId: ${{ secrets.servicePrincipalId }}
+    # - uses: actions/checkout@master
+    # - uses: ./azure-login
+    #   with:
+    #     creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    # - run: |
+    #     npm install
+    #     npm run build --if-present
+    #     npm run test --if-present  
+    # - run: |
+    #     zip -r myapp.zip .        
+    # - uses: webapp-deploy
+    #   with: 
+    #     app-name: node-sa
+    #     package: './myapp.zip'
+    #   id: myapp-id    
+    # - run: echo "Deployed the webapp at ${{ actions.myapp-id.outputs.webapp-url}}"
