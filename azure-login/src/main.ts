@@ -19,7 +19,7 @@ async function main() {
       if (!servicePrincipalId || !servicePrincipalKey || !tenantId || !subscriptionId) {
           throw new Error("Not all values are present in the creds object. Ensure clientId, clientSecret, tenantId and subscriptionId are supplied");
       }
-      console.log(`##[set-secret name=servicePrincipalKey]${servicePrincipalKey}`);
+      core.exportSecret("ServicePrincipalKey", servicePrincipalKey);
 
       throwIfError(execSync("az", "login --service-principal -u \"" + servicePrincipalId + "\" -p \"" + servicePrincipalKey + "\" --tenant \"" + tenantId + "\""));
       throwIfError(execSync("az", "account set --subscription \"" + subscriptionId + "\""));
