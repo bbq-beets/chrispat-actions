@@ -5,10 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: env
-    - uses: actions/checkout@master
-    - uses: ./azure-login
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    - run: |
+        echo "##[set-env name=servicePrincipalId]232312-312312-312321" |
+        echo "##[set-secret name=servicePrincipalKey]232312-312312-312321"
+    - run: |
+        echo $servicePrincipalKey |
+        echo $servicePrincipalId
+    # - uses: actions/checkout@master
+    # - uses: ./azure-login
+    #   with:
+    #     creds: '${{ secrets.AZURE_CREDENTIALS }}'
     # - run: |
     #     npm install
     #     npm run build --if-present
