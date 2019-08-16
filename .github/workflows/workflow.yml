@@ -5,7 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: env
-    - uses: azure-login
+    - uses: actions/checkout@master
+    - uses: ./login
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
     # - run: |
