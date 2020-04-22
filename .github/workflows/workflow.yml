@@ -1,20 +1,14 @@
 
 on: [push, pull_request]
 
+env:
+  WORKFLOW_LEVEL: "Hello from workflow"
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      JOB_LEVEL: "Hello from job"
     steps:
-    
-    - uses: actions/checkout@master
-    
-    - run: echo Hello World change again
-    
-    - uses: ./hello-world-action
-      with:
-        who-to-greet: 'John Doe'
-      id: hello
-      
-    - run: echo "The time was ${{ steps.hello.outputs.time }}"
-    
-   
+    - run: env
+      env:
+        STEP_LEVEL: "Hello from step"
