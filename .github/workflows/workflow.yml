@@ -3,6 +3,9 @@ on: [push, pull_request]
 
 env:
   WORKFLOW_LEVEL: "Hello from workflow"
+  
+permissions: none
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,3 +15,8 @@ jobs:
     - run: env
       env:
         STEP_LEVEL: "Hello from step"
+  local-action:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./hello-world-action
